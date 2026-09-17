@@ -4,6 +4,8 @@
 
 * { box-sizing: border-box; }
 html {
+  /* Smooth scrolling for in-page links (nav, "Get in touch", "back to top"). */
+  scroll-behavior: smooth;
   background: var(--bg);
   color-scheme: dark;
 }
@@ -151,6 +153,10 @@ body { margin: 0; }
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 @media (max-width: 640px) {

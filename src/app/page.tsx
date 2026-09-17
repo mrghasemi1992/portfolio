@@ -382,9 +382,9 @@ export default function Home() {
               <span style={{ color: "var(--text)" }}>
                 SnappPay, SADAD, TashilCar, and Fanap Plus
               </span>{" "}
-              — leading a React Query migration, building dev-tools and CLIs for
-              engineers and QA, setting up testing foundations with Vitest and
-              MSW, and turning Figma icons into a React component package.
+              — modernizing live applications through step-by-step migrations,
+              strengthening testing and error reporting, and building the
+              internal tools and shared packages my teams rely on every day.
             </p>
           </div>
         </section>
@@ -818,7 +818,7 @@ export default function Home() {
                 maxWidth: 520,
               }}
             >
-              Have a question or just want to say hi? The best way to reach me
+              Questions, ideas, or just a hello — the fastest way to reach me
               is email.
             </p>
             <div>

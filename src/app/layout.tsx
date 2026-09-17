@@ -18,21 +18,21 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Under Development | Mohammad Reza Ghasemi",
-  description: "Mohammad Reza Ghasemi's portfolio is currently under development.",
+  title: "Mohammad Reza Ghasemi",
+  description: "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
   openGraph: {
     type: "website",
     url: "https://mrghasemi1992.ir/",
-    title: "Under Development | Mohammad Reza Ghasemi",
-    description: "Mohammad Reza Ghasemi's portfolio is currently under development.",
+    title: "Mohammad Reza Ghasemi",
+    description: "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
     images: [
       "https://ik.imagekit.io/mggo9dfob/Mohammad%20Reza/preview-meta-tag.png?updatedAt=1731681334431",
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Under Development | Mohammad Reza Ghasemi",
-    description: "Mohammad Reza Ghasemi's portfolio is currently under development.",
+    title: "Mohammad Reza Ghasemi",
+    description: "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
     images: [
       "https://ik.imagekit.io/mggo9dfob/Mohammad%20Reza/preview-meta-tag.png?updatedAt=1731681334431",
     ],

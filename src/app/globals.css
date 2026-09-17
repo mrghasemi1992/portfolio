@@ -4,7 +4,6 @@
 
 * { box-sizing: border-box; }
 html {
-  scroll-behavior: smooth;
   background: var(--bg);
   color-scheme: dark;
 }
@@ -24,7 +23,8 @@ body { margin: 0; }
   --text-dim: #a1a1aa;
   --text-faint: #71717a;
   --accent: #38bdf8;
-  --dot: rgba(255, 255, 255, 0.10);
+  /* Dot grid as a cached SVG tile; a repeated radial-gradient repaints slowly in WebKit. */
+  --dot-grid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='1.5' fill='rgba(255,255,255,0.10)'/%3E%3C/svg%3E");
   --shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 8px 30px rgba(0,0,0,0.35);
 }
 
@@ -42,23 +42,12 @@ body { margin: 0; }
   --text-dim: #52525b;
   --text-faint: #71717a;
   --accent: #0284c7;
-  --dot: rgba(0, 0, 0, 0.085);
+  --dot-grid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='1.5' fill='rgba(0,0,0,0.085)'/%3E%3C/svg%3E");
   --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 10px 30px rgba(0,0,0,0.06);
 }
 [data-theme="light"][data-accent="lime"]   { --accent: #4d7c0f; }
 [data-theme="light"][data-accent="amber"]  { --accent: #c2410c; }
 [data-theme="light"][data-accent="violet"] { --accent: #7c3aed; }
-
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.75s cubic-bezier(0.2, 0.7, 0.2, 1),
-              transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-[data-reveal].in {
-  opacity: 1;
-  transform: none;
-}
 
 .ul-link {
   position: relative;
@@ -130,6 +119,12 @@ body { margin: 0; }
   color: var(--text) !important;
 }
 
+.site-nav {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  backdrop-filter: saturate(140%) blur(12px);
+}
+
 .nav-center { display: flex; }
 
 .experience-grid {
@@ -149,14 +144,18 @@ body { margin: 0; }
   .nav-center { display: none; }
 }
 
+/* Backdrop blur is costly on phones: use a near-opaque nav instead. */
+@media (max-width: 720px), (hover: none) {
+  .site-nav {
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 @media (max-width: 640px) {
   .experience-grid {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  [data-reveal] { transition: none; }
 }

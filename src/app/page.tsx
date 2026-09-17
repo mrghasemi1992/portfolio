@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   navLinks,
   sectionNum,
@@ -20,7 +20,6 @@ const RESUME_FILENAME = "Mohammad-Reza-Ghasemi-Frontend-Engineer-Resume.pdf";
 
 export default function Home() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const rootRef = useRef<HTMLDivElement>(null);
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
@@ -28,59 +27,18 @@ export default function Home() {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const els = Array.from(
-      root.querySelectorAll("[data-reveal]"),
-    ) as HTMLElement[];
-    const reduce = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (reduce) {
-      els.forEach((el) => el.classList.add("in"));
-      return;
-    }
-
-    const counts = new Map<Element, number>();
-    els.forEach((el) => {
-      const p = el.parentElement!;
-      const i = counts.get(p) ?? 0;
-      el.style.transitionDelay = Math.min(i * 70, 280) + "ms";
-      counts.set(p, i + 1);
-    });
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
-
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   const mono = "var(--font-mono), 'JetBrains Mono', monospace";
   const sans =
     "var(--font-manrope), 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 
   return (
     <div
-      ref={rootRef}
       data-theme={theme}
       data-accent="cyan"
       style={{
         minHeight: "100vh",
         backgroundColor: "var(--bg)",
-        backgroundImage: "radial-gradient(var(--dot) 1.4px, transparent 1.6px)",
+        backgroundImage: "var(--dot-grid)",
         backgroundSize: "24px 24px",
         color: "var(--text)",
         fontFamily: sans,
@@ -90,12 +48,11 @@ export default function Home() {
     >
       {/* ── NAV ── */}
       <nav
+        className="site-nav"
         style={{
           position: "sticky",
           top: 0,
           zIndex: 50,
-          backdropFilter: "saturate(140%) blur(12px)",
-          background: "color-mix(in srgb, var(--bg) 78%, transparent)",
           borderBottom: "1px solid var(--border)",
         }}
       >
@@ -226,7 +183,6 @@ export default function Home() {
           }}
         >
           <h1
-            data-reveal=""
             style={{
               margin: 0,
               fontSize: "clamp(42px,7.5vw,78px)",
@@ -238,7 +194,6 @@ export default function Home() {
             {NAME}
           </h1>
           <p
-            data-reveal=""
             style={{
               margin: "18px 0 0",
               fontSize: "clamp(20px,3vw,30px)",
@@ -252,7 +207,6 @@ export default function Home() {
             Frontend Engineer building web interfaces with React &amp; Next.js.
           </p>
           <p
-            data-reveal=""
             style={{
               margin: "22px 0 0",
               fontSize: 17,
@@ -267,7 +221,6 @@ export default function Home() {
             work easier.
           </p>
           <div
-            data-reveal=""
             style={{
               display: "flex",
               flexWrap: "wrap",
@@ -332,7 +285,6 @@ export default function Home() {
             </a>
           </div>
           <div
-            data-reveal=""
             style={{
               display: "flex",
               flexWrap: "wrap",
@@ -373,7 +325,6 @@ export default function Home() {
           }}
         >
           <div
-            data-reveal=""
             style={{
               fontFamily: mono,
               fontSize: 13,
@@ -392,7 +343,6 @@ export default function Home() {
             }}
           >
             <h2
-              data-reveal=""
               style={{
                 margin: 0,
                 fontSize: "clamp(26px,4vw,38px)",
@@ -404,7 +354,6 @@ export default function Home() {
               A little about me.
             </h2>
             <p
-              data-reveal=""
               style={{
                 margin: 0,
                 fontSize: 17,
@@ -422,7 +371,6 @@ export default function Home() {
               easier for the team.
             </p>
             <p
-              data-reveal=""
               style={{
                 margin: 0,
                 fontSize: 17,
@@ -450,7 +398,6 @@ export default function Home() {
           }}
         >
           <div
-            data-reveal=""
             style={{
               fontFamily: mono,
               fontSize: 13,
@@ -461,7 +408,6 @@ export default function Home() {
             {sectionNum("Experience")} / Experience
           </div>
           <h2
-            data-reveal=""
             style={{
               margin: "0 0 40px",
               fontSize: "clamp(26px,4vw,38px)",
@@ -473,7 +419,7 @@ export default function Home() {
           </h2>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {experience.map((job, i) => (
-              <div key={i} data-reveal="" className="experience-grid">
+              <div key={i} className="experience-grid">
                 <div
                   style={{ display: "flex", flexDirection: "column", gap: 6 }}
                 >
@@ -578,7 +524,6 @@ export default function Home() {
             }}
           >
             <div
-              data-reveal=""
               style={{
                 fontFamily: mono,
                 fontSize: 13,
@@ -589,7 +534,6 @@ export default function Home() {
               {sectionNum("Projects")} / Projects
             </div>
             <h2
-              data-reveal=""
               style={{
                 margin: "0 0 40px",
                 fontSize: "clamp(26px,4vw,38px)",
@@ -609,7 +553,6 @@ export default function Home() {
               {projects.map((p, i) => (
                 <article
                   key={i}
-                  data-reveal=""
                   className="project-card"
                   style={{
                     display: "flex",
@@ -754,7 +697,6 @@ export default function Home() {
           }}
         >
           <div
-            data-reveal=""
             style={{
               fontFamily: mono,
               fontSize: 13,
@@ -765,7 +707,6 @@ export default function Home() {
             {sectionNum("Skills")} / Skills
           </div>
           <h2
-            data-reveal=""
             style={{
               margin: "0 0 40px",
               fontSize: "clamp(26px,4vw,38px)",
@@ -785,7 +726,6 @@ export default function Home() {
             {skillGroups.map((g, i) => (
               <div
                 key={i}
-                data-reveal=""
                 style={{
                   padding: 22,
                   border: "1px solid var(--border)",
@@ -839,7 +779,6 @@ export default function Home() {
           }}
         >
           <div
-            data-reveal=""
             style={{
               fontFamily: mono,
               fontSize: 13,
@@ -858,7 +797,6 @@ export default function Home() {
             }}
           >
             <h2
-              data-reveal=""
               style={{
                 margin: 0,
                 fontSize: "clamp(30px,5.5vw,54px)",
@@ -872,7 +810,6 @@ export default function Home() {
               <span style={{ color: "var(--accent)" }}>worth shipping.</span>
             </h2>
             <p
-              data-reveal=""
               style={{
                 margin: 0,
                 fontSize: 17,
@@ -884,7 +821,7 @@ export default function Home() {
               Have a question or just want to say hi? The best way to reach me
               is email.
             </p>
-            <div data-reveal="">
+            <div>
               <a
                 href={`mailto:${EMAIL}`}
                 className="btn-primary"
@@ -919,7 +856,6 @@ export default function Home() {
               </a>
             </div>
             <div
-              data-reveal=""
               style={{
                 display: "flex",
                 flexWrap: "wrap",

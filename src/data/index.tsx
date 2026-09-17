@@ -1,47 +1,84 @@
-export const navLinks = [
-  { num: "01", label: "About", href: "#about" },
-  { num: "02", label: "Experience", href: "#experience" },
-  { num: "03", label: "Projects", href: "#projects" },
-  { num: "04", label: "Skills", href: "#skills" },
+// Temporarily hide the "Selected work" section. Flip to true to bring it back.
+export const SHOW_PROJECTS = false;
+
+const sections = [
+  { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
+  ...(SHOW_PROJECTS ? [{ label: "Projects", href: "#projects" }] : []),
+  { label: "Skills", href: "#skills" },
 ];
+
+export const navLinks = sections.map((s, i) => ({
+  ...s,
+  num: String(i + 1).padStart(2, "0"),
+}));
+
+export const sectionNum = (label: string) =>
+  String(
+    label === "Contact"
+      ? navLinks.length + 1
+      : navLinks.findIndex((l) => l.label === label) + 1
+  ).padStart(2, "0");
 
 export const socials = [
   { label: "GitHub", href: "https://github.com/luckydevboy", arrow: "↗" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/", arrow: "↗" },
-  { label: "Twitter", href: "https://x.com/luckydevboy", arrow: "↗" },
 ];
 
 export const experience = [
   {
-    period: "2022 — Present",
+    period: "Nov 2024 — Present",
     type: "Full-time",
-    role: "Senior Frontend Developer",
+    role: "Frontend Developer",
     company: "SnappPay",
     bullets: [
-      "Led the development of core financial product features using React and Next.js, serving millions of active users.",
-      "Built scalable UI component libraries and improved front-end architecture across multiple product teams.",
-      "Drove performance optimizations that significantly reduced load times and improved Core Web Vitals scores.",
+      "Led the migration of the Vehicle Insurance app to React Query for server-state management — replacing custom fetch and global-store logic with declarative queries and mutations, cutting redundant API calls through caching and request deduplication, and standardizing loading, error and retry handling.",
+      "Built Pado, a plugin-based internal dev-tools package used by the team's engineers and QA, with an in-app debug console (Eruda), a JWT token fetcher, and a one-click form filler. The token fetcher also ships as a standalone CLI, Tokenizer.",
+      "Built vpnctl, a macOS and Windows CLI (bash and PowerShell) that switches between Fortinet SSL VPN and OpenVPN with one command, generating 2FA codes on-device with a from-scratch TOTP (RFC 6238) implementation and keeping credentials out of plain text.",
+      "Improved frontend error reporting in Sentry: source maps for readable stack traces, noise filtering, release tagging, better grouping and alerts, plus a shared helper for firing custom events.",
+      "Built the testing foundation for one of our apps: unit and integration tests with Vitest and React Testing Library, API mocking with MSW, and coverage reporting.",
+      "Contributed to the incremental JavaScript-to-TypeScript migration of the Vehicle Insurance app, and to moving features and screens from the old app into the new codebase.",
+      "Built a reusable A/B testing component that standardized how experiments are implemented across the app.",
+      "Made AI part of my daily workflow, using Claude with skills and MCP tools to follow code conventions, handle repeated tasks, and find answers in the codebase.",
     ],
   },
   {
-    period: "2021 — 2022",
+    period: "Feb 2024 — Nov 2024",
+    type: "Full-time",
+    role: "Frontend Developer",
+    company: "SADAD",
+    bullets: [
+      "Developed and maintained web applications with Angular.",
+      "Replaced the team's date picker, which was incompatible with the newer Angular version, with one built from scratch — removing a blocker to the framework upgrade.",
+      "Built a permission-driven sidebar navigation with unlimited nesting, rendering menu depth dynamically from user permissions returned by the API.",
+    ],
+  },
+  {
+    period: "Dec 2022 — Nov 2023",
+    type: "Full-time",
+    role: "Frontend Developer",
+    company: "TashilCar",
+    bullets: [
+      "Built production features with React, Next.js, TypeScript and styled-components, using React Query for API state management and caching.",
+      "Built an internal icon package with a Figma-to-React pipeline that imports icons from a Figma file and exports them as React components, keeping design and code icon sets in sync.",
+    ],
+  },
+  {
+    period: "Jan 2021 — Dec 2022",
     type: "Full-time",
     role: "Frontend Developer",
     company: "Fanap Plus",
     bullets: [
-      "Developed dynamic features including recursive comment systems and real-time data flows.",
-      "Created a custom icon package adopted across multiple internal products, streamlining design-to-code handoff.",
-      "Improved data-fetching strategies and state management patterns used across the engineering team.",
+      "Built the frontend of the company's educational platform for children and teenagers from scratch with React, Next.js, TypeScript and Tailwind CSS.",
     ],
   },
   {
-    period: "2020 — 2021",
+    period: "Nov 2019 — Dec 2020",
     type: "Full-time",
     role: "Frontend Developer",
-    company: "Sadad",
+    company: "Arsh",
     bullets: [
-      "Built responsive, accessible web interfaces for payment and banking products used by thousands daily.",
-      "Collaborated closely with design and backend teams to deliver high-quality, user-centric solutions on schedule.",
+      "Built admin panels, e-commerce and map-based web apps with React, Redux, Redux Saga, Formik and styled-components, and maintained the company's WordPress website.",
     ],
   },
 ];
@@ -67,23 +104,36 @@ export const projects = [
 
 export const skillGroups = [
   {
-    title: "Languages",
-    items: ["TypeScript", "JavaScript (ES2023+)", "HTML5", "CSS3"],
+    title: "Languages & Frameworks",
+    items: ["JavaScript", "TypeScript", "HTML", "CSS", "React", "Next.js"],
   },
   {
-    title: "Frameworks & Libraries",
-    items: ["React", "Next.js", "Redux Toolkit", "React Query", "Zustand"],
+    title: "Data & State",
+    items: ["React Query", "Redux", "Redux Toolkit", "Zod"],
   },
   {
-    title: "Styling",
-    items: ["Tailwind CSS", "CSS Modules", "Styled Components", "Framer Motion"],
+    title: "Styling & UI",
+    items: [
+      "Tailwind CSS",
+      "SASS",
+      "MUI",
+      "Ant Design",
+      "shadcn/ui",
+      "Bootstrap",
+      "Framer Motion",
+      "Storybook",
+    ],
   },
   {
     title: "Testing",
-    items: ["Jest", "React Testing Library", "Playwright"],
+    items: ["Vitest", "React Testing Library", "MSW"],
   },
   {
-    title: "Tooling / CI-CD",
-    items: ["Git", "GitHub Actions", "Vite", "Webpack", "Docker", "Figma", "Vercel"],
+    title: "Tools",
+    items: ["Vite", "Git", "GitLab", "GitHub"],
+  },
+  {
+    title: "Backend",
+    items: ["Node.js", "Express"],
   },
 ];

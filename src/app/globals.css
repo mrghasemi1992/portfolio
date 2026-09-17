@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+  color-scheme: dark;
+}
 body { margin: 0; }
 
 ::selection {
@@ -29,6 +33,7 @@ body { margin: 0; }
 [data-accent="violet"] { --accent: #c084fc; }
 
 [data-theme="light"] {
+  color-scheme: light;
   --bg: #fafafa;
   --bg-elev: #ffffff;
   --bg-elev-2: #f4f4f5;
@@ -136,7 +141,7 @@ body { margin: 0; }
 }
 
 ::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { display: none; }
+::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { border-radius: 20px; background: var(--border); }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 

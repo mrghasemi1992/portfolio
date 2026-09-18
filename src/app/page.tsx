@@ -804,9 +804,9 @@ export default function Home() {
                 lineHeight: 1.05,
               }}
             >
-              Let&apos;s build something
+              Got something in mind?
               <br />
-              <span style={{ color: "var(--accent)" }}>worth shipping.</span>
+              <span style={{ color: "var(--accent)" }}>Let&apos;s talk.</span>
             </h2>
             <p
               style={{

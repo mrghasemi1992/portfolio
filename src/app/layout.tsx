@@ -18,24 +18,22 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mrghasemi1992.ir"),
   title: "Mohammad Reza Ghasemi",
-  description: "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
+  description:
+    "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
   openGraph: {
     type: "website",
     url: "https://mrghasemi1992.ir/",
     title: "Mohammad Reza Ghasemi",
-    description: "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
-    images: [
-      "https://ik.imagekit.io/mggo9dfob/Mohammad%20Reza/preview-meta-tag.png?updatedAt=1731681334431",
-    ],
+    description:
+      "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
   },
   twitter: {
     card: "summary_large_image",
     title: "Mohammad Reza Ghasemi",
-    description: "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
-    images: [
-      "https://ik.imagekit.io/mggo9dfob/Mohammad%20Reza/preview-meta-tag.png?updatedAt=1731681334431",
-    ],
+    description:
+      "Mohammad Reza Ghasemi — Frontend Engineer specializing in React & Next.js",
   },
 };
 
@@ -44,7 +42,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body
+        className={`${manrope.variable} ${jetbrainsMono.variable} antialiased`}
+      >
         {children}
         <Analytics />
         <SpeedInsights />

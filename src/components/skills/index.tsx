@@ -1,25 +1,24 @@
 import { skillGroups } from "@/data";
-import Section from "@/components/section";
 import styles from "./styles.module.css";
 
 export default function Skills() {
   return (
-    <Section title="Skills">
-      <h2 className={styles.heading}>Toolkit</h2>
-      <div className={styles.grid}>
-        {skillGroups.map((g, i) => (
-          <div key={i} className={styles.group}>
-            <div className={styles.groupTitle}>{g.title}</div>
-            <div className={styles.items}>
-              {g.items.map((skill) => (
-                <span key={skill} className={styles.skill}>
-                  {skill}
-                </span>
+    <section id="skills" className={styles.skills} aria-labelledby="skills-heading">
+      <h2 id="skills-heading" className={styles.heading}>
+        Skills
+      </h2>
+      <div className={styles.groups}>
+        {skillGroups.map((g) => (
+          <div key={g.title} className={styles.group}>
+            <h3 className={styles.groupTitle}>{g.title}</h3>
+            <ul className={styles.items}>
+              {g.items.map((item) => (
+                <li key={item}>{item}</li>
               ))}
-            </div>
+            </ul>
           </div>
         ))}
       </div>
-    </Section>
+    </section>
   );
 }

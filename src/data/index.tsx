@@ -1,35 +1,47 @@
-// Temporarily hide the "Selected work" section. Flip to true to bring it back.
-export const SHOW_PROJECTS = false;
+// Everything a visitor can read lives here, so copy changes never touch components.
 
-const sections = [
+export const NAME = "Mohammad Reza Ghasemi";
+export const TITLE = "Frontend Engineer";
+export const EMAIL = "mrghasemi1992@gmail.com";
+
+export const RESUME = {
+  href: "/resume-final-2026.09.17-17.23.pdf",
+  filename: "Mohammad-Reza-Ghasemi-Frontend-Engineer-Resume.pdf",
+};
+
+export const navLinks = [
   { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
-  ...(SHOW_PROJECTS ? [{ label: "Projects", href: "#projects" }] : []),
+  { label: "Work", href: "#work" },
   { label: "Skills", href: "#skills" },
+  { label: "Contact", href: "#contact" },
 ];
-
-export const navLinks = sections.map((s, i) => ({
-  ...s,
-  num: String(i + 1).padStart(2, "0"),
-}));
-
-export const sectionNum = (label: string) =>
-  String(
-    label === "Contact"
-      ? navLinks.length + 1
-      : navLinks.findIndex((l) => l.label === label) + 1
-  ).padStart(2, "0");
 
 export const socials = [
-  { label: "GitHub", href: "https://github.com/luckydevboy", arrow: "↗" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/", arrow: "↗" },
+  { label: "GitHub", href: "https://github.com/mrghasemi1992" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/" },
 ];
+
+export const hero = {
+  intro:
+    "Six years of building production React and Next.js apps. I care about the part of an interface people feel before they notice it: the spacing, the timing, the way it responds.",
+};
+
+export const about = {
+  statement:
+    "I build web interfaces for products people rely on every day, in fintech, insurance and e-commerce. Most of my work happens inside live applications: migrating them step by step, strengthening their testing and error reporting, and building the internal tools my teams use daily.",
+  facts: [
+    { label: "Now", value: "Frontend Engineer at SnappPay" },
+    { label: "Stack", value: "React, Next.js, TypeScript" },
+    { label: "Building since", value: "2019" },
+  ],
+};
 
 export const experience = [
   {
     period: "Nov 2024 — Present",
     type: "Full-time",
-    role: "Frontend Developer",
+    role: "Frontend Engineer",
     company: "SnappPay",
     bullets: [
       "Led the migration of the Vehicle Insurance app to React Query for server-state management — replacing custom fetch and global-store logic with declarative queries and mutations, cutting redundant API calls through caching and request deduplication, and standardizing loading, error and retry handling.",
@@ -83,22 +95,40 @@ export const experience = [
   },
 ];
 
-export const projects = [
+export type Project = {
+  title: string;
+  year: string;
+  status: string;
+  description: string;
+  stack: string[];
+  links: { label: string; href: string }[];
+};
+
+// Newest first. Add projects to the top; the Work section renders whatever is here.
+export const projects: Project[] = [
   {
-    num: "01",
-    title: "Nazanin Portfolio",
-    desc: "A multilingual personal portfolio built with Next.js, TailwindCSS, and i18n internationalization — pixel-perfect across all breakpoints.",
-    tags: ["Next.js", "TailwindCSS", "i18n"],
-    demo: "https://nazaninnamjoo.ir",
-    repo: "#",
+    title: "This portfolio",
+    year: "2026",
+    status: "Live",
+    description:
+      "The site you're on, designed and built from scratch: Next.js 16 and React 19 with CSS modules, GSAP and Lenis for motion, and a single dark theme built on one blue.",
+    stack: ["Next.js", "React", "TypeScript", "CSS Modules", "GSAP", "Lenis"],
+    links: [
+      { label: "Live", href: "https://mrghasemi1992.ir" },
+      { label: "Source", href: "https://github.com/mrghasemi1992/portfolio" },
+    ],
   },
   {
-    num: "02",
-    title: "Personal Portfolio",
-    desc: "My own portfolio site — this one — built with Next.js, GSAP scroll animations, and Lenis smooth scrolling for a polished feel.",
-    tags: ["Next.js", "GSAP", "Lenis", "TailwindCSS"],
-    demo: "https://www.mrghasemi1992.ir",
-    repo: "https://github.com/luckydevboy/portfolio",
+    title: "Orange",
+    year: "2026",
+    status: "In progress · design system done, app shell next",
+    description:
+      "A read-only Hacker News client with a modern reader UI, built on its own design system documented in Storybook.",
+    stack: ["Next.js", "TypeScript", "TanStack Query", "Zod", "Storybook"],
+    links: [
+      { label: "Live", href: "https://orange-hn.vercel.app" },
+      { label: "Source", href: "https://github.com/mrghasemi1992/orange" },
+    ],
   },
 ];
 
@@ -121,6 +151,8 @@ export const skillGroups = [
       "shadcn/ui",
       "Bootstrap",
       "Framer Motion",
+      "GSAP",
+      "Lenis",
       "Storybook",
     ],
   },
@@ -137,3 +169,8 @@ export const skillGroups = [
     items: ["Node.js", "Express"],
   },
 ];
+
+export const contact = {
+  heading: ["Got something in mind?", "Let's talk."],
+  text: "Questions, ideas, or just a hello — the fastest way to reach me is email.",
+};

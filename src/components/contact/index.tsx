@@ -1,42 +1,38 @@
-import Section from "@/components/section";
-import SocialLinks from "@/components/social-links";
+import { EMAIL, RESUME, contact, socials } from "@/data";
+import { ArrowUpRight, Download } from "@/components/icons";
+import UnderlineLink from "@/components/underline-link";
 import styles from "./styles.module.css";
-
-const EMAIL = "mrghasemi1992@gmail.com";
 
 export default function Contact() {
   return (
-    <Section title="Contact" spacious>
-      <div className={styles.body}>
-        <h2 className={styles.heading}>
-          Got something in mind?
+    <section id="contact" className={styles.contact} aria-labelledby="contact-heading">
+      <div className={styles.inner}>
+        <h2 id="contact-heading" className={styles.heading}>
+          <span className={styles.lead}>{contact.heading[0]}</span>
           <br />
-          <span className={styles.accent}>Let&apos;s talk.</span>
+          {contact.heading[1]}
         </h2>
-        <p className={styles.text}>
-          Questions, ideas, or just a hello — the fastest way to reach me is
-          email.
-        </p>
-        <div>
-          <a href={`mailto:${EMAIL}`} className={styles.email}>
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
-              <polyline points="3 6 12 13 21 6" />
-            </svg>
+        <div className={styles.body}>
+          <p className={styles.text}>{contact.text}</p>
+          <UnderlineLink className={styles.email} href={`mailto:${EMAIL}`}>
             {EMAIL}
-          </a>
+          </UnderlineLink>
+          <div className={styles.row}>
+            <a className={styles.resume} href={RESUME.href} download={RESUME.filename}>
+              <Download /> Resume (PDF)
+            </a>
+            <ul className={styles.socials}>
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <UnderlineLink className={styles.social} href={s.href} target="_blank" rel="noopener noreferrer">
+                    {s.label} <ArrowUpRight />
+                  </UnderlineLink>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <SocialLinks className={styles.socials} />
       </div>
-    </Section>
+    </section>
   );
 }

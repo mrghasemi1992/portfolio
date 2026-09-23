@@ -1,0 +1,260 @@
+/* ---------- Header ---------- */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  height: var(--header-h);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 0 var(--gutter);
+  box-shadow: 0 1px 0 transparent;
+  transition:
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+/* Once the name has docked, the header takes its own ground to stay readable over content. */
+.header[data-docked] {
+  background-color: var(--bg);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.home {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.logo {
+  flex: none;
+  width: 30px;
+  height: auto;
+  color: var(--ink);
+}
+
+.slot {
+  font-family: var(--display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  visibility: hidden;
+}
+
+/* Same line-height ratio as the hero name, so the flight lands exactly on these boxes. */
+.slot [data-slot-word] {
+  display: inline-block;
+  line-height: 0.92;
+  white-space: pre;
+}
+
+.header[data-docked] .slot {
+  visibility: visible;
+}
+
+.navWrap {
+  position: relative;
+}
+
+.nav {
+  display: flex;
+  gap: 28px;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.nav a {
+  display: block;
+  padding: 8px 0;
+  transition: color 160ms ease;
+}
+
+.nav a[aria-current] {
+  color: var(--ink);
+}
+
+/* One line that travels to the section you're reading. */
+.indicator {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--link-underline);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 280ms var(--ease-out),
+    width 280ms var(--ease-out),
+    opacity 160ms ease;
+}
+
+.indicator[data-visible] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    transition: opacity 160ms ease;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav a:hover {
+    color: var(--ink);
+  }
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  min-height: 100svh;
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  row-gap: 48px;
+  padding: calc(var(--header-h) + 9vh) var(--gutter) clamp(32px, 6vh, 64px);
+}
+
+.name {
+  align-self: end;
+  font-family: var(--display);
+  font-size: clamp(3.25rem, 9.4vw, 10rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.name [data-word] {
+  display: inline-block;
+  transform-origin: 0 0;
+}
+
+.name[data-docked] [data-word] {
+  opacity: 0;
+}
+
+.lower {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 40px;
+  align-items: end;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.intro {
+  grid-column: 1 / 7;
+}
+
+.title {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.text {
+  margin-top: 12px;
+  max-width: 46ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.actions {
+  grid-column: 8 / 13;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 22px;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.primary {
+  background: var(--blue-action);
+  color: var(--on-blue);
+}
+
+.secondary {
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primary:hover {
+    background: var(--blue-action-hover);
+  }
+  .secondary:hover {
+    box-shadow: inset 0 0 0 1px var(--ink-3);
+  }
+}
+
+.primary:active,
+.secondary:active {
+  transform: scale(0.97);
+}
+
+.socials {
+  display: flex;
+  gap: 24px;
+  font-size: 0.9375rem;
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 900px) {
+  .intro,
+  .actions {
+    grid-column: 1 / -1;
+  }
+  .actions {
+    justify-self: start;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 700px) {
+  /* The name owns the top of the screen, so the text below never scrolls over it
+     while it flies to the header. */
+  .name {
+    align-self: start;
+    min-height: 40svh;
+  }
+  .nav li:not(:last-child) {
+    display: none;
+  }
+}

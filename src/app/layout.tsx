@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Manrope, JetBrains_Mono } from "next/font/google";
+import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import SmoothScroll from "@/components/SmoothScroll";
+
 import "./globals.css";
 
-const manrope = Manrope({
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -41,10 +44,15 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${manrope.variable} ${jetbrainsMono.variable} antialiased`}
-      >
+    <html lang="en" className={`${archivo.variable} ${plexMono.variable}`}>
+      <body>
+        <SmoothScroll />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-signal focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-ink"
+        >
+          Skip to content
+        </a>
         {children}
         <Analytics />
         <SpeedInsights />

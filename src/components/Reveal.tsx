@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type ElementType, type ReactNode } from "react";
 
-import { gsap, ScrollTrigger, prefersReducedMotion, registerScroll } from "@/lib/motion";
+import { gsap, prefersReducedMotion, registerScroll } from "@/lib/motion";
 
 type Props = {
   children: ReactNode;

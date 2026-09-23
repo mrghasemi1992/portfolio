@@ -1,33 +1,42 @@
-// Temporarily hide the "Selected work" section. Flip to true to bring it back.
-export const SHOW_PROJECTS = false;
+export const site = {
+  name: "Mohammad Reza Ghasemi",
+  role: "Frontend Engineer",
+  tagline: "I build web interfaces with React & Next.js.",
+  email: "mrghasemi1992@gmail.com",
+  resumeUrl: "/resume-final-2026.09.17-17.23.pdf",
+  resumeFilename: "Mohammad-Reza-Ghasemi-Frontend-Engineer-Resume.pdf",
+};
 
-const sections = [
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  ...(SHOW_PROJECTS ? [{ label: "Projects", href: "#projects" }] : []),
-  { label: "Skills", href: "#skills" },
+export const navLinks = [
+  { label: "About", href: "#about", num: "01" },
+  { label: "Experience", href: "#experience", num: "02" },
+  { label: "Built", href: "#built", num: "03" },
+  { label: "Toolkit", href: "#toolkit", num: "04" },
+  { label: "Contact", href: "#contact", num: "05" },
 ];
-
-export const navLinks = sections.map((s, i) => ({
-  ...s,
-  num: String(i + 1).padStart(2, "0"),
-}));
-
-export const sectionNum = (label: string) =>
-  String(
-    label === "Contact"
-      ? navLinks.length + 1
-      : navLinks.findIndex((l) => l.label === label) + 1
-  ).padStart(2, "0");
 
 export const socials = [
-  { label: "GitHub", href: "https://github.com/luckydevboy", arrow: "↗" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/", arrow: "↗" },
+  { label: "GitHub", href: "https://github.com/luckydevboy" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/" },
 ];
+
+export const about = {
+  heading: "Six years of shipping, mostly under load.",
+  paragraphs: [
+    "I'm a Frontend Engineer with over six years of experience building production React and Next.js apps in fintech, insurance, and e-commerce. I've worked on step-by-step migrations of live applications, and I build internal tools that make daily work easier for the team.",
+    "Along the way I've worked at SnappPay, SADAD, TashilCar, and Fanap Plus — modernizing live applications through step-by-step migrations, strengthening testing and error reporting, and building the internal tools and shared packages my teams rely on every day.",
+  ],
+  stats: [
+    { value: "6+", label: "Years building for the web" },
+    { value: "5", label: "Engineering teams" },
+    { value: "3", label: "Internal tools shipped" },
+  ],
+};
 
 export const experience = [
   {
     period: "Nov 2024 — Present",
+    from: "2024",
     type: "Full-time",
     role: "Frontend Developer",
     company: "SnappPay",
@@ -44,6 +53,7 @@ export const experience = [
   },
   {
     period: "Feb 2024 — Nov 2024",
+    from: "2024",
     type: "Full-time",
     role: "Frontend Developer",
     company: "SADAD",
@@ -55,6 +65,7 @@ export const experience = [
   },
   {
     period: "Dec 2022 — Nov 2023",
+    from: "2022",
     type: "Full-time",
     role: "Frontend Developer",
     company: "TashilCar",
@@ -65,6 +76,7 @@ export const experience = [
   },
   {
     period: "Jan 2021 — Dec 2022",
+    from: "2021",
     type: "Full-time",
     role: "Frontend Developer",
     company: "Fanap Plus",
@@ -74,6 +86,7 @@ export const experience = [
   },
   {
     period: "Nov 2019 — Dec 2020",
+    from: "2019",
     type: "Full-time",
     role: "Frontend Developer",
     company: "Arsh",
@@ -83,22 +96,39 @@ export const experience = [
   },
 ];
 
-export const projects = [
+/** Work pulled out of the experience bullets, where it was getting buried. */
+export const built = [
   {
     num: "01",
-    title: "Nazanin Portfolio",
-    desc: "A multilingual personal portfolio built with Next.js, TailwindCSS, and i18n internationalization — pixel-perfect across all breakpoints.",
-    tags: ["Next.js", "TailwindCSS", "i18n"],
-    demo: "https://nazaninnamjoo.ir",
-    repo: "#",
+    name: "Pado",
+    kind: "Internal dev tools",
+    where: "SnappPay",
+    desc: "A plugin-based dev-tools package used by the team's engineers and QA: an in-app debug console, a JWT token fetcher, and a one-click form filler.",
+    tags: ["TypeScript", "Plugin API", "Eruda"],
   },
   {
     num: "02",
-    title: "Personal Portfolio",
-    desc: "My own portfolio site — this one — built with Next.js, GSAP scroll animations, and Lenis smooth scrolling for a polished feel.",
-    tags: ["Next.js", "GSAP", "Lenis", "TailwindCSS"],
-    demo: "https://www.mrghasemi1992.ir",
-    repo: "https://github.com/luckydevboy/portfolio",
+    name: "vpnctl",
+    kind: "Cross-platform CLI",
+    where: "SnappPay",
+    desc: "Switches between Fortinet SSL VPN and OpenVPN with one command on macOS and Windows, generating 2FA codes on-device with a from-scratch TOTP (RFC 6238) implementation and keeping credentials out of plain text.",
+    tags: ["Bash", "PowerShell", "TOTP / RFC 6238"],
+  },
+  {
+    num: "03",
+    name: "Tokenizer",
+    kind: "Standalone CLI",
+    where: "SnappPay",
+    desc: "The token fetcher from Pado, split out as a CLI so it can be scripted and used outside the browser.",
+    tags: ["CLI", "JWT", "Node.js"],
+  },
+  {
+    num: "04",
+    name: "Icon pipeline",
+    kind: "Shared package",
+    where: "TashilCar",
+    desc: "Imports icons straight from a Figma file and exports them as React components, keeping the design and code icon sets in sync.",
+    tags: ["Figma API", "React", "Codegen"],
   },
 ];
 

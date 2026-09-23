@@ -21,8 +21,10 @@ else on the page is static.
 ### Styling: inline, with CSS variables
 
 The page styles almost entirely through inline `style` objects, not Tailwind
-utility classes. Tailwind is installed for its base layer and config, but you
-won't find `class="flex gap-4"` in the markup.
+utility classes. Tailwind 4 is installed for its base layer — pulled in by the
+single `@import "tailwindcss"` at the top of `globals.css` — but you won't find
+`class="flex gap-4"` in the markup. There is no `tailwind.config.ts`; Tailwind 4
+is configured from CSS, and this project needs no theme extensions.
 
 The exceptions live in `globals.css`, which holds nine real CSS classes —
 `.site-nav`, `.nav-link`, `.ul-link`, `.btn-primary`, `.btn-secondary`,
@@ -111,7 +113,7 @@ the obvious approach was measurably worse:
 
 ```bash
 npm run lint
-npx tsc --noEmit
+npm run type-check
 npm run build
 ```
 

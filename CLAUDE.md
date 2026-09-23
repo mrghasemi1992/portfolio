@@ -8,21 +8,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev     # dev server on port 3002 (not 3000 — see .claude/launch.json)
 npm run build   # production build
 npm run start   # serve the production build
-npm run lint    # next lint
-npx tsc --noEmit  # type-check
+npm run lint       # eslint (flat config; `next lint` was removed in Next 16)
+npm run type-check # tsc --noEmit
 ```
 
-Node 20 (`.nvmrc`). There is no test framework in this project.
+Node 24 (`.nvmrc`); Next 16 requires at least 20.9. There is no test framework in this project.
 
 Running `npm run build` while the dev server is up overwrites `.next` underneath it and the dev server starts throwing `Cannot find module './NNN.js'`. Stop the dev server first, or restart it afterwards.
 
 ## Architecture
 
-A single-page portfolio on Next.js 14 (App Router), deployed on Vercel at mrghasemi1992.ir.
+A single-page portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrghasemi1992.ir.
 
 **The whole UI lives in one client component.** `src/app/page.tsx` renders every section — nav, hero, about, experience, projects, skills, contact — in roughly 900 lines. There is no component directory. Follow that structure when editing rather than half-extracting components.
 
-**Styling is inline, not utility classes.** Tailwind is installed and configured, but `page.tsx` uses inline `style` objects almost exclusively. The only `className` values are the nine hand-written classes in `globals.css` (`.site-nav`, `.nav-link`, `.btn-primary`, `.project-card`, `.experience-grid`, …), which exist for the hover and transition states that inline styles can't express.
+**Styling is inline, not utility classes.** Tailwind 4 is installed for its base layer (one `@import "tailwindcss"` in `globals.css`, no `tailwind.config.ts`), but `page.tsx` uses inline `style` objects almost exclusively. The only `className` values are the nine hand-written classes in `globals.css` (`.site-nav`, `.nav-link`, `.btn-primary`, `.project-card`, `.experience-grid`, …), which exist for the hover and transition states that inline styles can't express.
 
 **Theming runs on CSS custom properties.** `globals.css` defines the palette on `:root`, overrides it under `[data-theme="light"]`, and defines accent variants under `[data-accent="lime"|"amber"|"violet"]`. `page.tsx` holds the theme in React state and writes it to `document.documentElement.dataset.theme`; the wrapper div also carries `data-theme`/`data-accent`. Add colors as variables in both the dark and light blocks — never hardcode a hex in a component.
 

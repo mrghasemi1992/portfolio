@@ -8,16 +8,17 @@ dark/light theme toggle and a downloadable resume.
 
 ## Stack
 
-- **Next.js 14** (App Router) with React 18 and TypeScript
-- **Tailwind CSS** for configuration and resets — the page itself styles with
-  inline styles and CSS custom properties (the developer guide explains why)
+- **Next.js 16** (App Router) with React 19 and TypeScript 5
+- **Tailwind CSS 4** for its base layer, configured in CSS — the page itself
+  styles with inline styles and CSS custom properties (the developer guide
+  explains why)
 - **next/font** for Manrope and JetBrains Mono
 - **next/og** to generate the Open Graph preview at build time
 - **Vercel** for hosting, analytics and speed insights
 
 ## Getting started
 
-Requires Node 20 (see `.nvmrc`).
+Requires Node 24 (see `.nvmrc`); Next 16 needs at least Node 20.9.
 
 ```bash
 npm install
@@ -34,8 +35,8 @@ the usual 3000.
 | `npm run dev` | Dev server on port 3002 |
 | `npm run build` | Production build |
 | `npm run start` | Serve the production build |
-| `npm run lint` | ESLint via `next lint` |
-| `npx tsc --noEmit` | Type-check without emitting |
+| `npm run lint` | ESLint (flat config in `eslint.config.mjs`) |
+| `npm run type-check` | `tsc --noEmit` |
 
 There is no test suite in this project.
 

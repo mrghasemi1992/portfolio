@@ -5,34 +5,39 @@ check before changing it. For setup and scripts, see [README.md](README.md).
 
 ## How the site is put together
 
-### One component, on purpose
+### One component per section
 
-`src/app/page.tsx` is a single client component holding every section — nav,
-hero, about, experience, projects, skills, contact. It's around 900 lines and
-there is no `components/` directory.
+Every section lives in its own folder under `src/components/`, as an
+`index.tsx` next to a `styles.module.css`:
 
-That's a deliberate trade for a site this size: one file to read, one place to
-change, no prop-drilling for the theme. If you start extracting components,
-extract all of them — a half-split codebase is worse than either end state.
+- `nav`, `hero`, `about`, `experience`, `projects`, `skills`, `contact`,
+  `footer` — one per section of the page.
+- `section` — the shared `<section>` wrapper: it sets the `id` anchor, the top
+  border and padding, and the `01 / About` label. Pass `spacious` for the
+  larger padding the contact section uses.
+- `social-links` — the GitHub/LinkedIn row, used by both hero and contact.
+- `underline-link` — an `<a>` with the accent underline that slides in on
+  hover.
 
-The component is a client component because of the theme toggle. Everything
-else on the page is static.
+`src/app/page.tsx` only composes them. It's a client component because it holds
+the theme in state and passes it to `Nav`; everything else on the page is
+static.
 
-### Styling: inline, with CSS variables
+### Styling: CSS modules, with CSS variables
 
-The page styles almost entirely through inline `style` objects, not Tailwind
-utility classes. Tailwind 4 is installed for its base layer — pulled in by the
-single `@import "tailwindcss"` at the top of `globals.css` — but you won't find
-`class="flex gap-4"` in the markup. There is no `tailwind.config.ts`; Tailwind 4
-is configured from CSS, and this project needs no theme extensions.
+Each component styles itself through its own CSS module. There are no inline
+`style` objects and no utility-class framework.
 
-The exceptions live in `globals.css`, which holds nine real CSS classes —
-`.site-nav`, `.nav-link`, `.ul-link`, `.btn-primary`, `.btn-secondary`,
-`.project-card`, `.theme-btn`, `.experience-grid`, `.nav-center`. They exist
-because inline styles can't express `:hover`, `::after` or media queries.
+`src/app/globals.css` holds only what can't be scoped to a component: a small
+reset, the theme variables, the `--sans` and `--mono` font stacks, text
+selection, the scrollbar, and smooth scrolling.
 
-**Rule of thumb:** static styling goes inline; anything needing a pseudo-class,
-pseudo-element or breakpoint goes in `globals.css` as a class.
+**Rule of thumb:** if a style belongs to one component, it goes in that
+component's module. Shared components take a `className` for layout tweaks such
+as margins, but a caller's class should never set a property the component's
+own class sets too. Both classes have the same specificity, and the winner
+would depend on the order the CSS chunks load in. `UnderlineLink` takes its
+color from its parent for this reason.
 
 ### Theming
 
@@ -46,7 +51,8 @@ Colors are CSS custom properties, never hex values in the markup:
 
 `page.tsx` keeps the theme in React state and writes it to
 `document.documentElement.dataset.theme` in an effect; the wrapper div also
-carries `data-theme` and `data-accent`.
+carries `data-theme` and `data-accent`. `Nav` receives the theme and a toggle
+callback as props.
 
 Adding a color means adding it to **both** the `:root` and the
 `[data-theme="light"]` block. A variable defined in only one of them will look
@@ -80,12 +86,15 @@ next deploy.
 ### Fonts
 
 `layout.tsx` loads Manrope and JetBrains Mono through `next/font/google` and
-exposes them as `--font-manrope` and `--font-mono`. `page.tsx` reads them
-through two local constants, `sans` and `mono`, used in the inline styles.
+exposes them as `--font-manrope` and `--font-mono` on `<body>`. `globals.css`
+builds the full stacks from them as `--sans` and `--mono`, also on `body`,
+because a custom property referencing the next/font variables has to be
+declared where they exist. CSS modules use `font-family: var(--mono)`.
 
 ## Performance decisions to leave alone
 
-These are already tuned and commented in `globals.css`. Each one exists because
+These are already tuned and commented, in `globals.css` (dot grid) and
+`src/components/nav/styles.module.css` (backdrop blur). Each one exists because
 the obvious approach was measurably worse:
 
 - **The dot grid is an inline SVG data URI**, not a repeated `radial-gradient`.

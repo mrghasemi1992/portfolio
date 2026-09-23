@@ -20,9 +20,9 @@ Running `npm run build` while the dev server is up overwrites `.next` underneath
 
 A single-page portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrghasemi1992.ir.
 
-**The whole UI lives in one client component.** `src/app/page.tsx` renders every section — nav, hero, about, experience, projects, skills, contact — in roughly 900 lines. There is no component directory. Follow that structure when editing rather than half-extracting components.
+**One component per section.** Each lives in `src/components/<name>/index.tsx` beside a `styles.module.css`: `nav`, `hero`, `about`, `experience`, `projects`, `skills`, `contact`, `footer`, plus three shared ones — `section` (the `<section>` wrapper with its id anchor and `01 / About` label), `social-links` (used by hero and contact) and `underline-link` (the hover-underline `<a>`). `src/app/page.tsx` is a client component that only composes them and holds the theme state, passed to `Nav` as props. Follow the same folder shape for new components.
 
-**Styling is inline, not utility classes.** Tailwind 4 is installed for its base layer (one `@import "tailwindcss"` in `globals.css`, no `tailwind.config.ts`), but `page.tsx` uses inline `style` objects almost exclusively. The only `className` values are the nine hand-written classes in `globals.css` (`.site-nav`, `.nav-link`, `.btn-primary`, `.project-card`, `.experience-grid`, …), which exist for the hover and transition states that inline styles can't express.
+**Styling is CSS modules only.** No inline `style` objects, no Tailwind or other utility framework. `globals.css` keeps just what can't be scoped: a small reset (the parts of Tailwind's old preflight the design relies on), theme variables, the `--sans`/`--mono` font stacks, selection, scrollbar and smooth scrolling. When a shared component accepts `className`, the caller's class must not set a property the component's own class sets, because equal-specificity module classes resolve by chunk order. `UnderlineLink` inherits its color from its parent for this reason.
 
 **Theming runs on CSS custom properties.** `globals.css` defines the palette on `:root`, overrides it under `[data-theme="light"]`, and defines accent variants under `[data-accent="lime"|"amber"|"violet"]`. `page.tsx` holds the theme in React state and writes it to `document.documentElement.dataset.theme`; the wrapper div also carries `data-theme`/`data-accent`. Add colors as variables in both the dark and light blocks — never hardcode a hex in a component.
 
@@ -30,11 +30,11 @@ A single-page portfolio on Next.js 16 (App Router) with React 19, deployed on Ve
 
 **The OG image is generated at build time.** `src/app/opengraph-image.tsx` uses `next/og` `ImageResponse` with the same logo constants, so the social preview and the nav mark never drift apart.
 
-**Fonts** are loaded through `next/font/google` in `layout.tsx` (Manrope, JetBrains Mono) and exposed as CSS variables, which `page.tsx` references through the local `sans` and `mono` string constants.
+**Fonts** are loaded through `next/font/google` in `layout.tsx` (Manrope, JetBrains Mono) and exposed as CSS variables on `<body>`. `globals.css` wraps them into the `--sans` and `--mono` stacks, also on `body`, which modules use as `font-family: var(--mono)`.
 
 ### Performance decisions already made here
 
-These carry comments in `globals.css` and are deliberate — don't undo them without a reason:
+These carry comments in `globals.css` and `src/components/nav/styles.module.css` and are deliberate — don't undo them without a reason:
 
 - The dot-grid background is a cached SVG data URI tile, because a repeated `radial-gradient` repaints slowly in WebKit.
 - `backdrop-filter` on the nav is disabled below 720px and on touch devices, where it costs more than it's worth.

@@ -112,6 +112,7 @@
 /* ---------- Hero ---------- */
 
 .hero {
+  position: relative;
   min-height: 100svh;
   max-width: var(--max);
   margin: 0 auto;
@@ -119,6 +120,37 @@
   grid-template-rows: 1fr auto;
   row-gap: 48px;
   padding: calc(var(--header-h) + 9vh) var(--gutter) clamp(32px, 6vh, 64px);
+}
+
+/* The portrait sits behind the name on the right. Its backdrop is baked to the page
+   ground, and soft masks on the left and bottom edges finish the blend. */
+.portrait {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  aspect-ratio: 2 / 3;
+  max-width: 50%;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 30%),
+    linear-gradient(to bottom, #000 58%, transparent 90%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 30%),
+    linear-gradient(to bottom, #000 58%, transparent 90%);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+.portraitImage {
+  object-fit: cover;
+  object-position: 60% 20%;
+}
+
+.name,
+.lower {
+  position: relative;
+  z-index: 1;
 }
 
 .name {
@@ -250,9 +282,18 @@
 @media (max-width: 700px) {
   /* The name owns the top of the screen, so the text below never scrolls over it
      while it flies to the header. */
+  /* The photo takes the top of the screen; the name starts below the face. */
+  .hero {
+    padding-top: calc(var(--header-h) + 34svh);
+  }
+  .portrait {
+    height: auto;
+    width: 88vw;
+    max-width: none;
+  }
   .name {
     align-self: start;
-    min-height: 40svh;
+    min-height: 26svh;
   }
   .nav li:not(:last-child) {
     display: none;

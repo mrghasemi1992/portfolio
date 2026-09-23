@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Image from "next/image";
+import portrait from "@/assets/portrait.webp";
 import { EMAIL, NAME, RESUME, TITLE, hero, navLinks, socials } from "@/data";
 import { ScrollTrigger, clamp, easeInOut, gsap, lerp, useReducedMotion } from "@/lib/motion";
 import LogoMark from "@/components/logo-mark";
@@ -21,6 +23,7 @@ export default function Masthead({ children }: { children: React.ReactNode }) {
   const headerRef = useRef<HTMLElement>(null);
   const slotRef = useRef<HTMLSpanElement>(null);
   const nameRef = useRef<HTMLHeadingElement>(null);
+  const portraitRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLUListElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
   const [active, setActive] = useState<string | null>(null);
@@ -83,6 +86,7 @@ export default function Masthead({ children }: { children: React.ReactNode }) {
   useLayoutEffect(() => {
     const header = headerRef.current!;
     const name = nameRef.current!;
+    const photo = portraitRef.current!;
     const words = [...name.querySelectorAll<HTMLElement>("[data-word]")];
     const targets = [...slotRef.current!.querySelectorAll<HTMLElement>("[data-slot-word]")];
 
@@ -120,6 +124,8 @@ export default function Masthead({ children }: { children: React.ReactNode }) {
     const render = (y: number) => {
       const p = clamp(y / distance);
       setDocked(p >= 1);
+      // The portrait stays behind as the name leaves, dimming as the hero scrolls away.
+      photo.style.opacity = String(lerp(1, 0.35, easeInOut(p)));
       if (p >= 1) return;
       // Position and size share one curve, so the name keeps its shape as it travels.
       const e = easeInOut(p);
@@ -156,6 +162,7 @@ export default function Masthead({ children }: { children: React.ReactNode }) {
     return () => {
       ctx.revert();
       words.forEach((w) => (w.style.transform = ""));
+      photo.style.opacity = "";
       header.removeAttribute("data-docked");
       name.removeAttribute("data-docked");
     };
@@ -194,6 +201,17 @@ export default function Masthead({ children }: { children: React.ReactNode }) {
 
       <main id="top">
         <section className={styles.hero} aria-labelledby="name">
+          <div ref={portraitRef} className={styles.portrait}>
+            <Image
+              src={portrait}
+              alt="Portrait of Mohammad Reza Ghasemi"
+              fill
+              loading="eager"
+              fetchPriority="high"
+              sizes="(max-width: 700px) 88vw, 45vw"
+              className={styles.portraitImage}
+            />
+          </div>
           <h1 id="name" ref={nameRef} className={styles.name}>
             <span data-word>{WORDS[0]}</span> <span data-word>{WORDS[1]}</span>
             <br />

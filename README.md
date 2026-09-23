@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+Personal site for Mohammad Reza Ghasemi — [mrghasemi1992.ir](https://mrghasemi1992.ir).
 
-First, run the development server:
+Version 3 is a scroll-driven redesign: the hero pins while a Three.js lattice
+scrubs from scattered parts into a monolith and then rebuilds itself as an open
+frame.
+
+## Stack
+
+- Next.js 14 (App Router), React 18, TypeScript
+- Tailwind CSS
+- Three.js for the hero scene
+- GSAP ScrollTrigger for scroll-linked animation, Lenis for smooth scrolling
+- Deployed on Vercel
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The dev server runs on [http://localhost:3002](http://localhost:3002).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build
+npm run lint    # eslint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How the hero works
 
-## Learn More
+`src/three/lattice.ts` builds one `InstancedMesh` and interpolates every
+instance between three keyframe layouts. `LatticeCanvas` maps the pinned
+section's scroll progress onto that timeline through a scrubbed ScrollTrigger,
+and `SmoothScroll` drives Lenis from GSAP's ticker so both share one clock.
 
-To learn more about Next.js, take a look at the following resources:
+The scene is skipped entirely — and three.js is never downloaded — when the
+visitor prefers reduced motion, when WebGL is unavailable, or when the device
+reports too few cores to hold a frame rate. The hero then renders as a static,
+full-height section.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/          layout, page, global styles, OG image
+  components/   nav, reveal, smooth scroll, canvas, sections/
+  data/         all site content
+  lib/          GSAP + reduced-motion helpers
+  three/        the hero scene
+```

@@ -71,7 +71,7 @@ export default function Hero() {
             Phones get a vertical wash, since the copy spans the full width. */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink/40 md:bg-gradient-to-r md:from-ink md:via-ink/60 md:to-transparent"
+          className="absolute inset-0 bg-gradient-to-b from-ink via-ink/75 to-ink/25 md:bg-gradient-to-r md:from-ink md:via-ink/60 md:to-transparent"
         />
 
         <div className="relative mx-auto w-full max-w-shell px-5 sm:px-8">
@@ -124,7 +124,7 @@ export default function Hero() {
 
         <div
           aria-hidden="true"
-          className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 font-mono text-[11px] uppercase tracking-[0.2em] text-bone-faint sm:block"
+          className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 font-mono text-[11px] uppercase tracking-[0.2em] text-bone-faint sm:block group-data-[webgl=false]:sm:hidden"
         >
           Scroll
         </div>

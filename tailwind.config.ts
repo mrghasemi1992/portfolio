@@ -13,7 +13,8 @@ const config: Config = {
         bone: {
           DEFAULT: "#ededea",
           dim: "#9a9a96",
-          faint: "#6a6a67",
+          /* 4.8:1 on the ink background — small mono labels need >= 4.5:1. */
+          faint: "#7d7d79",
         },
         signal: {
           DEFAULT: "#f5a524",

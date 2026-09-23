@@ -132,6 +132,29 @@ export const built = [
   },
 ];
 
+/**
+ * Kept from v2, where the section was switched off behind SHOW_PROJECTS. Not
+ * rendered in v3 either — "Built" covers this ground with stronger material.
+ */
+export const projects = [
+  {
+    num: "01",
+    title: "Nazanin Portfolio",
+    desc: "A multilingual personal portfolio built with Next.js, TailwindCSS, and i18n internationalization — pixel-perfect across all breakpoints.",
+    tags: ["Next.js", "TailwindCSS", "i18n"],
+    demo: "https://nazaninnamjoo.ir",
+    repo: "#",
+  },
+  {
+    num: "02",
+    title: "Personal Portfolio",
+    desc: "My own portfolio site — this one — built with Next.js, GSAP scroll animations, and Lenis smooth scrolling for a polished feel.",
+    tags: ["Next.js", "GSAP", "Lenis", "TailwindCSS"],
+    demo: "https://www.mrghasemi1992.ir",
+    repo: "https://github.com/luckydevboy/portfolio",
+  },
+];
+
 export const skillGroups = [
   {
     title: "Languages & Frameworks",

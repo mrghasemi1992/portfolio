@@ -1,0 +1,50 @@
+.body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  max-width: 680px;
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(30px, 5.5vw, 54px);
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.text {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-dim);
+  max-width: 520px;
+}
+
+.email {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.email:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.socials {
+  margin-top: 6px;
+}

@@ -1,0 +1,25 @@
+.body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 760px;
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(26px, 4vw, 38px);
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.text {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-dim);
+}
+
+.highlight {
+  color: var(--text);
+}

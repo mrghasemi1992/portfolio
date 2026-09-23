@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${manrope.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${manrope.variable} ${jetbrainsMono.variable}`}
       >
         {children}
         <Analytics />

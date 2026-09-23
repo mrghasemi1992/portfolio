@@ -9,9 +9,7 @@ dark/light theme toggle and a downloadable resume.
 ## Stack
 
 - **Next.js 16** (App Router) with React 19 and TypeScript 5
-- **Tailwind CSS 4** for its base layer, configured in CSS — the page itself
-  styles with inline styles and CSS custom properties (the developer guide
-  explains why)
+- **CSS modules**, one per component, themed with CSS custom properties
 - **next/font** for Manrope and JetBrains Mono
 - **next/og** to generate the Open Graph preview at build time
 - **Vercel** for hosting, analytics and speed insights
@@ -45,10 +43,15 @@ There is no test suite in this project.
 ```
 src/
   app/
-    page.tsx             every section of the site
+    page.tsx             composes the sections, holds the theme state
+    page.module.css      page wrapper and main column
     layout.tsx           fonts, metadata, analytics
-    globals.css          theme variables and the few real CSS classes
+    globals.css          reset, theme variables, font stacks
     opengraph-image.tsx  social preview, generated at build time
+  components/
+    <name>/index.tsx     one folder per section (nav, hero, about, …)
+    <name>/styles.module.css
+                         plus shared section, social-links, underline-link
   data/
     index.tsx            all editable content
     logo.ts              the logo path, shared by nav and OG image
@@ -60,7 +63,7 @@ public/
 
 Almost everything readable on the site — experience, projects, skills, nav
 links, socials — lives in `src/data/index.tsx`, so the copy can be updated
-without touching `page.tsx`.
+without touching the components.
 
 ## Deployment
 
@@ -70,8 +73,8 @@ version bump in `package.json`.
 ## Developer guide
 
 [**DEVELOPMENT.md**](DEVELOPMENT.md) covers what the file tree doesn't show:
-how theming works, why the page is one component styled inline, how to add a
-section or an accent color, the performance decisions baked into `globals.css`,
+how theming works, how the components and their CSS modules fit together, how
+to add an accent color, the performance decisions baked into `globals.css`,
 the git conventions this repo follows, and the gotchas worth knowing before
 changing anything.
 

@@ -1,0 +1,22 @@
+.link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1.5px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.link:hover::after {
+  transform: scaleX(1);
+}

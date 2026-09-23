@@ -1,93 +1,87 @@
+.experience {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(64px, 10vh, 112px) var(--gutter);
+}
+
 .heading {
-  margin: 0 0 40px;
-  font-size: clamp(26px, 4vw, 38px);
-  letter-spacing: -0.03em;
-  font-weight: 800;
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: clamp(40px, 6vh, 64px);
 }
 
 .list {
-  display: flex;
-  flex-direction: column;
+  border-top: 1px solid var(--line);
 }
 
-.job {
+.item {
   display: grid;
-  grid-template-columns: 170px 1fr;
-  gap: 28px;
-  padding: 30px 0;
-  border-top: 1px solid var(--border);
-}
-
-.meta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  padding: clamp(32px, 5vh, 48px) 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .period {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--accent);
+  grid-column: 1 / 4;
+  padding-top: 0.55em;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
 }
 
-.type {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text-faint);
-}
-
-.title {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.role {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.separator {
-  color: var(--text-faint);
+.main {
+  grid-column: 4 / 12;
 }
 
 .company {
-  color: var(--accent);
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
   font-weight: 600;
-  font-size: 16px;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.role {
+  margin-top: 6px;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
 }
 
 .bullets {
-  margin: 16px 0 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
+  margin-top: 24px;
+  display: grid;
+  gap: 14px;
+  max-width: 72ch;
 }
 
-.bullet {
-  display: flex;
-  gap: 12px;
-  font-size: 15.5px;
-  line-height: 1.6;
-  color: var(--text-dim);
+.bullets li {
+  position: relative;
+  padding-left: 24px;
+  line-height: 1.65;
+  color: var(--ink-2);
 }
 
-.arrow {
-  color: var(--accent);
-  flex-shrink: 0;
-  font-family: var(--mono);
-  font-size: 13px;
-  padding-top: 2px;
+.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  width: 10px;
+  height: 1px;
+  background: var(--mark);
 }
 
-@media (max-width: 640px) {
-  .job {
-    grid-template-columns: 1fr;
-    gap: 12px;
+@media (max-width: 800px) {
+  .period,
+  .main {
+    grid-column: 1 / -1;
+  }
+  .period {
+    padding-top: 0;
+    margin-bottom: 8px;
   }
 }

@@ -1,22 +1,44 @@
 .link {
   position: relative;
   text-decoration: none;
-  color: inherit;
 }
 
+/* A faint line at rest marks the text as a link; the coloured line slides over it on hover. */
+.link::before,
 .link::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -3px;
-  height: 1.5px;
+  bottom: var(--ul-offset, -3px);
   width: 100%;
-  background: var(--accent);
+  height: var(--ul-weight, 1.5px);
+}
+
+.link::before {
+  background: var(--ul-rest, var(--line-strong));
+}
+
+/* Timing and curve carried over from v2's underline link. */
+.link::after {
+  background: var(--ul-color, var(--link-underline));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.link:hover::after {
+@media (hover: hover) and (pointer: fine) {
+  .link:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Keyboard users get the same line as a hover shows. */
+.link:focus-visible::after {
   transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link::after {
+    transition: none;
+  }
 }

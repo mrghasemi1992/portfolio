@@ -1,4 +1,4 @@
-/* Reset: the parts of Tailwind's preflight the design was built against. */
+/* Reset: the few preflight rules the layout relies on. */
 *,
 ::before,
 ::after {
@@ -10,20 +10,19 @@
 html {
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
-  tab-size: 4;
   -webkit-tap-highlight-color: transparent;
-  /* Smooth scrolling for in-page links (nav, "Get in touch", "back to top"). */
-  scroll-behavior: smooth;
-  background: var(--bg);
   color-scheme: dark;
+  background: var(--bg);
 }
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
   /* Font stacks; declared on body because next/font sets its variables here. */
-  --sans: var(--font-manrope), "Manrope", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
-  --mono: var(--font-mono), "JetBrains Mono", monospace;
+  --display: var(--font-display), "Funnel Display", system-ui, sans-serif;
+  --sans: var(--font-sans), "Funnel Sans", system-ui, sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
   font-size: inherit;
@@ -38,61 +37,67 @@ ol, ul {
 }
 img, svg {
   display: block;
-  vertical-align: middle;
 }
 button {
   font: inherit;
   letter-spacing: inherit;
   color: inherit;
-  border-radius: 0;
-  background-color: transparent;
+  background: none;
+  cursor: pointer;
+}
+
+/* One dark theme, one blue hue. Blue means "you can act here" or "this is the destination";
+   everything else stays neutral. #223BB2 is the brand value and fills the primary button;
+   thin lines (link underlines) and focus rings use lighter steps of the same hue so they
+   stay visible on the dark ground. */
+:root {
+  --bg: #0a0b0f;
+  --line: #1d2029;
+  --line-strong: #2d3140;
+  --ink: #eeeff3;
+  --ink-2: #a3a7b4;
+  --ink-3: #80859a;
+  /* Quiet marks: list dashes and similar guides that shouldn't compete with text. */
+  --mark: #525a70;
+  --blue: #223bb2;
+  --blue-action: #223bb2;
+  --blue-action-hover: #2c48c9;
+  /* Link underlines: the brand hue lifted so a 1.5px line still reads on the dark ground. */
+  --link-underline: #4a67f7;
+  --blue-ink: #8fa0f7;
+  /* The closing field: #223BB2 deepened toward the ground, so it belongs to the dark theme. */
+  --blue-field: #141f57;
+  --blue-field-line: rgba(255, 255, 255, 0.14);
+  --on-blue: #ffffff;
+  --on-blue-2: #dce1fa;
+
+  --header-h: 72px;
+  --gutter: clamp(20px, 4.4vw, 64px);
+  --max: 1440px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 30%, transparent);
-  color: var(--text);
+  background: var(--blue);
+  color: var(--on-blue);
 }
 
-:root {
-  --bg: #09090b;
-  --bg-elev: #121215;
-  --bg-elev-2: #18181c;
-  --border: #26262c;
-  --text: #f4f4f5;
-  --text-dim: #a1a1aa;
-  --text-faint: #71717a;
-  --accent: #38bdf8;
-  /* Dot grid as a cached SVG tile; a repeated radial-gradient repaints slowly in WebKit. */
-  --dot-grid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='1.5' fill='rgba(255,255,255,0.10)'/%3E%3C/svg%3E");
-  --shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 8px 30px rgba(0,0,0,0.35);
+:focus-visible {
+  outline: 2px solid var(--blue-ink);
+  outline-offset: 3px;
 }
 
-[data-accent="lime"]   { --accent: #a3e635; }
-[data-accent="amber"]  { --accent: #fb923c; }
-[data-accent="violet"] { --accent: #c084fc; }
-
-[data-theme="light"] {
-  color-scheme: light;
-  --bg: #fafafa;
-  --bg-elev: #ffffff;
-  --bg-elev-2: #f4f4f5;
-  --border: #e4e4e7;
-  --text: #18181b;
-  --text-dim: #52525b;
-  --text-faint: #71717a;
-  --accent: #0284c7;
-  --dot-grid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='1.5' fill='rgba(0,0,0,0.085)'/%3E%3C/svg%3E");
-  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 10px 30px rgba(0,0,0,0.06);
+/* Anchor targets stop below the fixed header. */
+[id] {
+  scroll-margin-top: var(--header-h);
 }
-[data-theme="light"][data-accent="lime"]   { --accent: #4d7c0f; }
-[data-theme="light"][data-accent="amber"]  { --accent: #c2410c; }
-[data-theme="light"][data-accent="violet"] { --accent: #7c3aed; }
 
-::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { border-radius: 20px; background: var(--border); }
-::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+::-webkit-scrollbar-thumb {
+  border: 3px solid var(--bg);
+  border-radius: 10px;
+  background: var(--line-strong);
 }

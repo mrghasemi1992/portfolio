@@ -1,15 +1,56 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import Logo from "@/components/logo";
 import SocialLinks from "@/components/social-links";
 import { contactLink, navLinks, profile } from "@/data";
 import styles from "./styles.module.css";
 
+// Section ids the nav can mark as active, from the "/#id" hrefs.
+const sectionIds = navLinks.map((link) => link.href.split("#")[1]);
+
+/**
+ * The href of the nav link for the section crossing a line 40% down the
+ * screen, or null at the hero and Contact. Case studies keep Work active.
+ */
+function useActiveHref() {
+  const pathname = usePathname();
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    // The hero (#top) and #contact are watched too, so reaching them clears
+    // the highlight instead of leaving the last section active.
+    const targets = ["top", ...sectionIds, "contact"]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = entry.target.id;
+          setActiveId(sectionIds.includes(id) ? id : null);
+        }
+      },
+      // A 1%-tall band 40% down the viewport: one section crosses it at a time.
+      { rootMargin: "-40% 0px -59% 0px" }
+    );
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  if (pathname.startsWith("/work/")) return "/#work";
+  if (pathname !== "/" || !activeId) return null;
+  return `/#${activeId}`;
+}
+
 export default function Nav() {
   const menuRef = useRef<HTMLDialogElement>(null);
+  const activeHref = useActiveHref();
 
   const openMenu = () => menuRef.current?.showModal();
   const closeMenu = () => menuRef.current?.close();
@@ -24,9 +65,23 @@ export default function Nav() {
           <Logo className={styles.logo} />
         </Link>
 
-        <nav className={styles.pill} aria-label="Primary">
+        <nav
+          className={activeHref ? `${styles.pill} ${styles.hasActive}` : styles.pill}
+          aria-label="Primary"
+        >
+          {/* One highlight that slides to whichever link is active. */}
+          <span className={styles.indicator} aria-hidden="true" />
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className={styles.pillLink}>
+            <Link
+              key={link.href}
+              href={link.href}
+              className={
+                link.href === activeHref
+                  ? `${styles.pillLink} ${styles.active}`
+                  : styles.pillLink
+              }
+              aria-current={link.href === activeHref ? "location" : undefined}
+            >
               {link.label}
             </Link>
           ))}
@@ -58,7 +113,12 @@ export default function Nav() {
             <Link
               key={link.href}
               href={link.href}
-              className={styles.menuLink}
+              className={
+                link.href === activeHref
+                  ? `${styles.menuLink} ${styles.menuActive}`
+                  : styles.menuLink
+              }
+              aria-current={link.href === activeHref ? "location" : undefined}
               onClick={closeMenu}
             >
               {link.label}

@@ -38,11 +38,15 @@ A portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrgh
 
 **Fonts** are loaded through `next/font/google` in `layout.tsx` (Barlow Condensed for headings, set in uppercase, and Barlow for text) and exposed as CSS variables on `<body>`. `globals.css` wraps them into the `--display` and `--sans` stacks.
 
+## Docs
+
+`README.md` (setup, pages, layout), `DEVELOPMENT.md` (the reasoning behind the structure, motion and performance decisions, gotchas) and `docs/building-v3-with-claude.md` (how v3 was designed and built with Claude, step by step). When a change affects what they describe, update them in the same PR.
+
 ## Git conventions
 
 Branches follow **Conventional Branch** (https://conventional-branch.github.io): `feature/`, `bugfix/`, `hotfix/`, `release/`, `chore/` plus a short kebab-case description, e.g. `feature/redesign-v3`. History contains a few older `feat/…` branches; use `feature/` for new ones.
 
-Commits follow **Conventional Commits** (https://www.conventionalcommits.org): `type(optional scope): description`, written in the imperative and lowercase after the colon. Types in use here, by frequency: `chore`, `feat`, `perf`, `fix`, and `content` for copy-only changes.
+Commits follow **Conventional Commits** (https://www.conventionalcommits.org): `type(optional scope): description`, written in the imperative and lowercase after the colon. Types in use here: `chore`, `feat`, `perf`, `fix`, `docs`, and `content` for copy-only changes.
 
 Releases are marked by a version bump in `package.json` with a `chore: bump version to X.Y.Z` commit.
 

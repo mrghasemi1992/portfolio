@@ -133,20 +133,82 @@
   }
 }
 
+/* Desktop pins and pans the row, so the slider is phones-only. */
+.scrollbar {
+  display: none;
+}
+
 @media (max-width: 760px) {
   .track {
     margin: 0 calc(-1 * var(--gutter));
     padding: 0 var(--gutter) 4px;
     scroll-padding: 0 var(--gutter);
   }
+  /* Narrow enough that ~48px of the next card peeks in at the right edge. */
   .card {
-    flex-basis: calc(100vw - 64px);
+    flex-basis: calc(100vw - 88px);
     height: 440px;
     padding: 24px;
     border-radius: 24px;
   }
   .company {
     font-size: 52px;
+  }
+
+  @supports (animation-timeline: view()) {
+    /* The row's sideways scroll, shared with the slider below it. */
+    .pin {
+      timeline-scope: --experience-row;
+    }
+    .track {
+      scroll-timeline: --experience-row inline;
+    }
+
+    /* Slider: the thumb travels the track as the row scrolls. 100cqw is the
+       track's width, so it works for any number of cards. */
+    .scrollbar {
+      display: block;
+      container-type: inline-size;
+      width: 96px;
+      height: 4px;
+      margin-top: 20px;
+      border-radius: 999px;
+      background: var(--line-strong);
+    }
+    .thumb {
+      display: block;
+      width: 32px;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      animation: slide linear both;
+      animation-timeline: --experience-row;
+    }
+  }
+}
+@keyframes slide {
+  to {
+    translate: calc(100cqw - 100%) 0;
+  }
+}
+
+/* Phones: as the row scrolls into view, it slides left and springs back once,
+   showing that it moves sideways before anyone swipes. */
+@media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .track {
+      animation: nudge linear both;
+      animation-timeline: view();
+      animation-range: entry 60% cover 45%;
+    }
+  }
+}
+@keyframes nudge {
+  45% {
+    translate: -56px 0;
+  }
+  55% {
+    translate: -56px 0;
   }
 }
 

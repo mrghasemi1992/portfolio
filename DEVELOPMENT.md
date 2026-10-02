@@ -108,6 +108,12 @@ people who turn motion off, get the static page.
 - On desktop, the Experience row pins and pans sideways, and the Work panels
   stack and sink. On screens 760px wide or narrower, they become a swipeable
   row and plain cards.
+- On phones the Experience row shows that it scrolls sideways in three ways:
+  - the next card peeks in at the right edge;
+  - the row nudges left and back as it scrolls into view;
+  - a small slider under the cards follows the swipe through a named
+    `scroll-timeline`. The slider uses container query units, so it works for
+    any number of jobs.
 - Section headings, skill chips and the Contact block rise or grow into view.
 
 ### Page transitions

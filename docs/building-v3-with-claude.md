@@ -24,8 +24,10 @@ Claude used, and what came out of each step.
 11. [Fixes from my own review](#11-fixes-from-my-own-review)
 12. [A photo for the hero](#12-a-photo-for-the-hero)
 13. [Mobile performance](#13-mobile-performance)
-14. [Skills and tools used](#14-skills-and-tools-used)
-15. [What I learned](#15-what-i-learned)
+14. [Docs](#14-docs)
+15. [Making the swipe obvious](#15-making-the-swipe-obvious)
+16. [Skills and tools used](#16-skills-and-tools-used)
+17. [What I learned](#17-what-i-learned)
 
 ## 1. Ground rules
 
@@ -300,7 +302,36 @@ plus a blur filter in the morph. The fix:
 
 The worst frame went from 350ms to 50ms.
 
-## 14. Skills and tools used
+## 14. Docs
+
+> Update docs: CLAUDE.md, README.md, DEVELOPMENT.md. Describe how I created
+> this website with Claude, step by step: skills, prompts, and so on, in an MD
+> file. I mean the v3. Mention the link in README.md too
+
+Claude rewrote `README.md` and `DEVELOPMENT.md` for v3. It added a Docs section
+to `CLAUDE.md`, with a rule to keep the docs current in the same PR, and wrote
+this file.
+
+## 15. Making the swipe obvious
+
+> in mobile view: the experience section: Use your creativity so the user
+> realizes they need to scroll horizontally here. is it clear?
+
+This time I left the design to Claude. It combined three cues, all in CSS:
+
+- **A bigger peek.** The cards got narrower, so about 48px of the next card
+  shows at the right edge.
+- **A nudge.** As the row scrolls into view, it slides about 56px left and
+  springs back, once.
+- **A slider.** A small track under the cards, with a yellow thumb that
+  follows the swipe through a named `scroll-timeline`.
+
+Browsers without scroll-driven animations still get the peek.
+
+When I asked "did you update all docs?", Claude admitted it had missed this
+file and added this step.
+
+## 16. Skills and tools used
 
 | Skill or tool | What it did |
 | --- | --- |
@@ -315,7 +346,7 @@ The worst frame went from 350ms to 50ms.
 | `gh` CLI and the PR panel | Opened PR #14 and showed its CI status |
 | Memory | Carried my preferences and decisions between sessions |
 
-## 15. What I learned
+## 17. What I learned
 
 - **"Ask, don't guess" pays off.** Every round of questions cost a minute and
   saved a redesign. Claude showed options, like the six fonts and three

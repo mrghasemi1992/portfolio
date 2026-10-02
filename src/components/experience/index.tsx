@@ -44,6 +44,11 @@ export default function Experience() {
               );
             })}
           </ol>
+          {/* Phones only: a small slider that follows the row's sideways
+              scroll, so it's clear there are more cards to the right. */}
+          <div className={styles.scrollbar} aria-hidden="true">
+            <span className={styles.thumb} />
+          </div>
         </div>
       </div>
     </Section>

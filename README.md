@@ -8,11 +8,6 @@ experience, work, skills, contact) and a case-study page for each project.
 Every page is server-rendered: prerendered at build time and rebuilt in the
 background once a day.
 
-> **How this version was made:** v3 was designed and built with Claude, from
-> the first brief to the mobile performance fixes. The whole process (prompts,
-> skills, tools and decisions) is written up step by step in
-> [**docs/building-v3-with-claude.md**](docs/building-v3-with-claude.md).
-
 ## Stack
 
 - **Next.js 16** (App Router) with React 19 and TypeScript 5, statically
@@ -77,8 +72,6 @@ src/
   data/
     index.tsx              all editable content
     logo.ts                the logo path, shared by nav, hero and OG images
-docs/
-  building-v3-with-claude.md
 ```
 
 ## Editing content
@@ -109,5 +102,3 @@ preview deploy. Releases are marked with a version bump in `package.json`.
   motion and performance decisions, gotchas, and the git conventions.
 - [**CLAUDE.md**](CLAUDE.md): the same ground rules in the form Claude Code
   reads.
-- [**docs/building-v3-with-claude.md**](docs/building-v3-with-claude.md): how v3
-  was designed and built with Claude, step by step.

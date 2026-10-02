@@ -40,7 +40,7 @@ A portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrgh
 
 ## Docs
 
-`README.md` (setup, pages, layout), `DEVELOPMENT.md` (the reasoning behind the structure, motion and performance decisions, gotchas) and `docs/building-v3-with-claude.md` (how v3 was designed and built with Claude, step by step). When a change affects what they describe, update them in the same PR.
+`README.md` (setup, pages, layout) and `DEVELOPMENT.md` (the reasoning behind the structure, motion and performance decisions, gotchas). When a change affects what they describe, update them in the same PR.
 
 ## Git conventions
 

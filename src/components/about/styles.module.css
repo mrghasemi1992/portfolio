@@ -8,6 +8,12 @@
   letter-spacing: -0.005em;
 }
 
+/* A box per word: an inline span takes its scroll position from the whole
+   paragraph, which would light every line at once. */
+.word {
+  display: inline-block;
+}
+
 .highlight {
   color: var(--accent);
 }

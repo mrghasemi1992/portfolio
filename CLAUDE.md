@@ -18,7 +18,7 @@ Running `npm run build` while the dev server is up overwrites `.next` underneath
 
 ## Architecture
 
-A portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrghasemi1992.ir. Dark only. Every page is server-rendered and prerendered at build time, for SEO.
+A portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrghasemi1992.ir. Dark only. Every page is server-rendered and prerendered at build time, for SEO, and revalidated daily (`revalidate = 86400` in `layout.tsx`).
 
 **Routes.** `/` is the home page (`src/app/page.tsx`). `/work/[slug]` is a case study per project (`src/app/work/[slug]/page.tsx`), built through `generateStaticParams` with `dynamicParams = false`, so unknown slugs are a 404. `sitemap.ts` and `robots.ts` sit in `src/app`.
 
@@ -30,7 +30,7 @@ A portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrgh
 
 **Colors are tokens.** `globals.css` defines the palette on `:root` (`--bg`, `--surface*`, `--text*`, `--line*`, `--accent` and `--on-accent`). Never hardcode a hex in a component. The OG images are the one exception, because `ImageResponse` can't read CSS variables; they repeat the hexes with a comment.
 
-**Content is separated from markup.** `src/data/index.tsx` holds everything editable: `profile` (name, role, intro, summary, email), `socials`, `navLinks`, `experience` (the full resume, word for word), `projects` (card text and the case-study content), `skillGroups` and `marqueeItems`. `src/data/logo.ts` exports the logo path, shared by the nav, the hero tile and the OG images.
+**Content is separated from markup.** `src/data/index.tsx` holds everything editable: `profile` (name, role, intro, summary, email; the years of experience in the intro and summary are computed from the earliest job in `experience`, and `layout.tsx` sets `revalidate = 86400` so the prerendered pages pick up a new year without a deploy), `socials`, `navLinks`, `experience` (the full resume, word for word), `projects` (card text and the case-study content), `skillGroups` and `marqueeItems`. `src/data/logo.ts` exports the logo path, shared by the nav, the hero tile and the OG images.
 
 **SEO.** `layout.tsx` sets `metadataBase`, the title template, description, canonical, Open Graph and Twitter tags. Each case study adds its own through `generateMetadata`. The home page renders `WebSite` and `Person` structured data and each case study `CreativeWork` and `BreadcrumbList`, linked by `@id`, through `json-ld`. `SITE_URL` in `src/data` is the www host, because the bare domain redirects to it (308); canonicals, the sitemap and OG URLs all derive from it, so keep it on the host that answers 200. OG images are generated at build time: `src/app/opengraph-image.tsx` and one per case study in `src/app/work/[slug]/opengraph-image.tsx`. The hero `h1` keeps the plain name in an `.sr-only` span, because the visible name is split into one span per letter.
 

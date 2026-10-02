@@ -1,19 +1,6 @@
 // The www host is the primary one: the bare domain redirects to it (308).
 export const SITE_URL = "https://www.mrghasemi1992.ir";
 
-export const profile = {
-  name: "Mohammad Reza Ghasemi",
-  role: "Frontend Engineer",
-  stack: "React / Next.js",
-  intro:
-    "Six years building production React and Next.js apps in fintech, insurance and e-commerce.",
-  summary:
-    "Frontend engineer with over six years of experience building production React and Next.js apps in fintech, insurance, and e-commerce. I have worked on step-by-step migrations of live applications, and I build internal tools that make daily work easier for the team.",
-  // Words of the summary drawn in the accent color.
-  summaryHighlight: ["internal", "tools"],
-  email: "mrghasemi1992@gmail.com",
-};
-
 export const socials = [
   { label: "GitHub", href: "https://github.com/mrghasemi1992" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/" },
@@ -88,6 +75,41 @@ export const experience: Job[] = [
     ],
   },
 ];
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
+
+/** The first month of a period such as "Nov 2019 - Dec 2020". */
+function periodStart(period: string) {
+  const [month, year] = period.split(" - ")[0].split(" ");
+  return new Date(Date.UTC(Number(year), MONTHS.indexOf(month), 1));
+}
+
+/** Whole years from the start of the earliest job until today. */
+function yearsOfExperience(now = new Date()) {
+  const start = new Date(Math.min(...experience.map((job) => periodStart(job.period).getTime())));
+  const months =
+    (now.getUTCFullYear() - start.getUTCFullYear()) * 12 + now.getUTCMonth() - start.getUTCMonth();
+  return Math.floor(months / 12);
+}
+
+const years = yearsOfExperience();
+// "six", or digits past twenty.
+const yearsWord = NUMBER_WORDS[years] ?? String(years);
+const yearsWordCapitalized = yearsWord[0].toUpperCase() + yearsWord.slice(1);
+
+// The years count comes from `experience`, so it moves up by itself each
+// anniversary of the first job (the site rebuilds daily; see layout.tsx).
+export const profile = {
+  name: "Mohammad Reza Ghasemi",
+  role: "Frontend Engineer",
+  stack: "React / Next.js",
+  intro: `${yearsWordCapitalized} years building production React and Next.js apps in fintech, insurance and e-commerce.`,
+  summary: `Frontend engineer with over ${yearsWord} years of experience building production React and Next.js apps in fintech, insurance, and e-commerce. I have worked on step-by-step migrations of live applications, and I build internal tools that make daily work easier for the team.`,
+  // Words of the summary drawn in the accent color.
+  summaryHighlight: ["internal", "tools"],
+  email: "mrghasemi1992@gmail.com",
+};
 
 export type Project = {
   slug: string;

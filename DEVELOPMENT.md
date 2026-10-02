@@ -12,7 +12,8 @@ check before changing it. For setup and scripts, see [README.md](README.md).
   them all ahead of time and `dynamicParams = false` turns any other slug into
   a 404.
 
-Every page is a Server Component, prerendered to static HTML at build time.
+Every page is a Server Component, prerendered to static HTML at build time and
+revalidated once a day (`revalidate = 86400` in `layout.tsx`; see Content).
 Search engines get the full text without running JavaScript, and Vercel serves
 the pages from its CDN.
 
@@ -71,6 +72,12 @@ specificity, so the winner would depend on the order the CSS chunks load in.
 - `experience`: the full resume, word for word;
 - `projects`: card text and case-study content;
 - `skillGroups`, `marqueeItems`.
+
+The years of experience in `profile.intro` and `profile.summary` ("over six
+years") aren't typed in. They're counted from the start of the earliest job in
+`experience`, so they go up by themselves on each anniversary. The pages are
+still prerendered, so `layout.tsx` sets `revalidate = 86400` and Vercel rebuilds
+them in the background once a day.
 
 `SITE_URL` is the `www` host, because the bare domain redirects to it (308).
 Canonicals, the sitemap and OG URLs all derive from it.

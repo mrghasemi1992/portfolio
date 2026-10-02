@@ -5,7 +5,8 @@ Personal site for Mohammad Reza Ghasemi, Frontend Engineer. Live at
 
 Version 3: a dark, motion-led portfolio with a home page (hero, about,
 experience, work, skills, contact) and a case-study page for each project.
-Every page is server-rendered and prerendered at build time.
+Every page is server-rendered: prerendered at build time and rebuilt in the
+background once a day.
 
 > **How this version was made:** v3 was designed and built with Claude, from
 > the first brief to the mobile performance fixes. The whole process (prompts,
@@ -15,7 +16,7 @@ Every page is server-rendered and prerendered at build time.
 ## Stack
 
 - **Next.js 16** (App Router) with React 19 and TypeScript 5, statically
-  prerendered
+  prerendered and revalidated daily (ISR)
 - **CSS modules**, one per component, with color tokens as CSS custom
   properties
 - **CSS scroll-driven animations** for scroll motion, with no animation library
@@ -84,7 +85,9 @@ docs/
 
 Everything readable on the site lives in `src/data/index.tsx`:
 
-- `profile`: name, role, intro and summary.
+- `profile`: name, role, intro and summary. The years of experience in them
+  are counted from the earliest job in `experience`, so they update
+  themselves.
 - `experience`: every resume bullet, word for word.
 - `projects`: the card text and the full case study (scope, decisions, stack,
   links).

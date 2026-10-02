@@ -20,6 +20,10 @@ const barlowCondensed = Barlow_Condensed({
   display: "swap",
 });
 
+// Rebuild every page once a day, so the years of experience in the copy
+// (computed from src/data) stay current between deploys.
+export const revalidate = 86400;
+
 const title = `${profile.name}, ${profile.role}`;
 
 export const metadata: Metadata = {

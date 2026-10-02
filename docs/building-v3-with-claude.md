@@ -26,8 +26,9 @@ Claude used, and what came out of each step.
 13. [Mobile performance](#13-mobile-performance)
 14. [Docs](#14-docs)
 15. [Making the swipe obvious](#15-making-the-swipe-obvious)
-16. [Skills and tools used](#16-skills-and-tools-used)
-17. [What I learned](#17-what-i-learned)
+16. [Years of experience that update themselves](#16-years-of-experience-that-update-themselves)
+17. [Skills and tools used](#17-skills-and-tools-used)
+18. [What I learned](#18-what-i-learned)
 
 ## 1. Ground rules
 
@@ -223,7 +224,8 @@ after it went through the same show, approve, commit, push loop.
 
 > Is the app SSR? Did you work on its SEO?
 
-Yes: every page is prerendered as static HTML. Claude then:
+Yes: every page is prerendered as static HTML. (They now also rebuild once a
+day, see step 16.) Claude then:
 
 - Started the production build in a second preview server and ran
   **Lighthouse through the Chrome DevTools MCP** on the home page and a case
@@ -331,7 +333,19 @@ Browsers without scroll-driven animations still get the peek.
 When I asked "did you update all docs?", Claude admitted it had missed this
 file and added this step.
 
-## 16. Skills and tools used
+## 16. Years of experience that update themselves
+
+> make the six (my total experience) to be dynamic. i think its used two times
+
+"Six" was typed into two strings: the hero intro and the summary. The summary
+also feeds the About text, the meta description and the structured data.
+
+Claude now counts the years from the start of my earliest job in the resume
+data (Nov 2019), so it becomes "seven" in November 2026 on its own. The pages
+are still prerendered, so it also set them to rebuild once a day
+(`revalidate = 86400`). That way the new number goes live without a deploy.
+
+## 17. Skills and tools used
 
 | Skill or tool | What it did |
 | --- | --- |
@@ -346,7 +360,7 @@ file and added this step.
 | `gh` CLI and the PR panel | Opened PR #14 and showed its CI status |
 | Memory | Carried my preferences and decisions between sessions |
 
-## 17. What I learned
+## 18. What I learned
 
 - **"Ask, don't guess" pays off.** Every round of questions cost a minute and
   saved a redesign. Claude showed options, like the six fonts and three

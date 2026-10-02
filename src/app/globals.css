@@ -12,7 +12,8 @@ html {
   -webkit-text-size-adjust: 100%;
   tab-size: 4;
   -webkit-tap-highlight-color: transparent;
-  /* Smooth scrolling for in-page links; turned off for reduced motion below. */
+  /* Smooth scrolling for in-page links; turned off for reduced motion below.
+     Pairs with data-scroll-behavior on <html> (layout.tsx). */
   scroll-behavior: smooth;
   /* Keeps anchored sections clear of the sticky nav. */
   scroll-padding-top: 88px;

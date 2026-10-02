@@ -55,7 +55,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    // data-scroll-behavior lets Next.js turn off the smooth scrolling from
+    // globals.css during page changes, so a new page opens at its top.
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${barlow.variable} ${barlowCondensed.variable}`}>
         {children}
         <Analytics />

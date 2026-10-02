@@ -85,6 +85,8 @@ Everything readable on the site lives in `src/data/index.tsx`:
 - `projects`: the card text and the full case study (scope, decisions, stack,
   links).
 - `skillGroups`, `marqueeItems`, `socials` and `navLinks`.
+- `SHOW_HERO_TILE`: shows or hides the yellow logo tile in the hero. It's
+  hidden for now.
 
 Adding a project to `projects` creates its case-study page, its OG image and
 its sitemap entry on the next build.

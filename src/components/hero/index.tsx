@@ -1,5 +1,5 @@
 import Logo from "@/components/logo";
-import { profile } from "@/data";
+import { SHOW_HERO_TILE, profile } from "@/data";
 import styles from "./styles.module.css";
 
 /** One line per word and one span per letter, for the drop-in animation. */
@@ -36,9 +36,11 @@ export default function Hero() {
           <p className={styles.intro}>{profile.intro}</p>
         </div>
       </div>
-      <div className={styles.mark} aria-hidden="true">
-        <Logo className={styles.markLogo} />
-      </div>
+      {SHOW_HERO_TILE && (
+        <div className={styles.mark} aria-hidden="true">
+          <Logo className={styles.markLogo} />
+        </div>
+      )}
     </section>
   );
 }

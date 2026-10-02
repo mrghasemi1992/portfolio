@@ -71,7 +71,9 @@ specificity, so the winner would depend on the order the CSS chunks load in.
 - `profile`, `socials`, `navLinks`;
 - `experience`: the full resume, word for word;
 - `projects`: card text and case-study content;
-- `skillGroups`, `marqueeItems`.
+- `skillGroups`, `marqueeItems`;
+- `SHOW_HERO_TILE`: the flag that currently hides the hero's yellow logo tile.
+  Flip it to `true` to bring the tile back.
 
 The years of experience in `profile.intro` and `profile.summary` ("over six
 years") aren't typed in. They're counted from the start of the earliest job in

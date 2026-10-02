@@ -1,6 +1,10 @@
 // The www host is the primary one: the bare domain redirects to it (308).
 export const SITE_URL = "https://www.mrghasemi1992.ir";
 
+// Temporarily hides the yellow logo tile in the hero. Flip to true to bring it
+// back (it is waiting for a photo to replace the logo).
+export const SHOW_HERO_TILE = false;
+
 export const socials = [
   { label: "GitHub", href: "https://github.com/mrghasemi1992" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/" },

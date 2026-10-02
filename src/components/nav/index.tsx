@@ -1,82 +1,135 @@
-import { navLinks } from "@/data";
-import { LOGO_PATH, LOGO_VIEWBOX } from "@/data/logo";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import Logo from "@/components/logo";
+import SocialLinks from "@/components/social-links";
+import { contactLink, navLinks, profile } from "@/data";
 import styles from "./styles.module.css";
 
-type NavProps = {
-  theme: "dark" | "light";
-  onToggleTheme: () => void;
-};
+// Section ids the nav can mark as active, from the "/#id" hrefs.
+const sectionIds = navLinks.map((link) => link.href.split("#")[1]);
 
-export default function Nav({ theme, onToggleTheme }: NavProps) {
+/**
+ * The href of the nav link for the section crossing a line 40% down the
+ * screen, or null at the hero and Contact. Case studies keep Work active.
+ */
+function useActiveHref() {
+  const pathname = usePathname();
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    // The hero (#top) and #contact are watched too, so reaching them clears
+    // the highlight instead of leaving the last section active.
+    const targets = ["top", ...sectionIds, "contact"]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = entry.target.id;
+          setActiveId(sectionIds.includes(id) ? id : null);
+        }
+      },
+      // A 1%-tall band 40% down the viewport: one section crosses it at a time.
+      { rootMargin: "-40% 0px -59% 0px" }
+    );
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  if (pathname.startsWith("/work/")) return "/#work";
+  if (pathname !== "/" || !activeId) return null;
+  return `/#${activeId}`;
+}
+
+export default function Nav() {
+  const menuRef = useRef<HTMLDialogElement>(null);
+  const activeHref = useActiveHref();
+
+  const openMenu = () => menuRef.current?.showModal();
+  const closeMenu = () => menuRef.current?.close();
+
   return (
-    <nav className={styles.nav}>
+    <header className={styles.nav} data-site-header>
+      <a href="#main" className={styles.skip}>
+        Skip to content
+      </a>
       <div className={styles.inner}>
-        <a href="#top" className={styles.logo}>
-          <svg
-            width="29"
-            height="22"
-            viewBox={LOGO_VIEWBOX}
-            preserveAspectRatio="none"
-            fill="currentColor"
-            role="img"
-            aria-label="Mohammad Reza Ghasemi"
-          >
-            <path d={LOGO_PATH} />
-          </svg>
-        </a>
+        <Link href="/" className={styles.home} aria-label={`${profile.name}, home`}>
+          <Logo className={styles.logo} />
+        </Link>
 
-        <div className={styles.links}>
+        <nav
+          className={activeHref ? `${styles.pill} ${styles.hasActive}` : styles.pill}
+          aria-label="Primary"
+        >
+          {/* One highlight that slides to whichever link is active. */}
+          <span className={styles.indicator} aria-hidden="true" />
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className={styles.link}>
-              <span className={styles.num}>{link.num}</span> {link.label}
-            </a>
+            <Link
+              key={link.href}
+              href={link.href}
+              className={
+                link.href === activeHref
+                  ? `${styles.pillLink} ${styles.active}`
+                  : styles.pillLink
+              }
+              aria-current={link.href === activeHref ? "location" : undefined}
+            >
+              {link.label}
+            </Link>
           ))}
-        </div>
+        </nav>
+
+        <Link href={contactLink.href} className={styles.cta}>
+          {contactLink.label}
+        </Link>
 
         <button
-          onClick={onToggleTheme}
-          aria-label="Toggle color theme"
-          className={styles.themeButton}
+          type="button"
+          className={styles.menuButton}
+          aria-haspopup="dialog"
+          onClick={openMenu}
         >
-          {theme === "dark" ? (
-            <>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <circle cx="12" cy="12" r="4.2" />
-                <line x1="12" y1="2.5" x2="12" y2="5" />
-                <line x1="12" y1="19" x2="12" y2="21.5" />
-                <line x1="2.5" y1="12" x2="5" y2="12" />
-                <line x1="19" y1="12" x2="21.5" y2="12" />
-                <line x1="5.2" y1="5.2" x2="7" y2="7" />
-                <line x1="17" y1="17" x2="18.8" y2="18.8" />
-                <line x1="5.2" y1="18.8" x2="7" y2="17" />
-                <line x1="17" y1="7" x2="18.8" y2="5.2" />
-              </svg>
-              <span>LIGHT</span>
-            </>
-          ) : (
-            <>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                stroke="none"
-              >
-                <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z" />
-              </svg>
-              <span>DARK</span>
-            </>
-          )}
+          Menu
         </button>
       </div>
-    </nav>
+
+      <dialog ref={menuRef} className={styles.menu} aria-label="Menu">
+        <div className={styles.menuTop}>
+          <Logo className={styles.logo} />
+          <button type="button" className={styles.menuButton} onClick={closeMenu}>
+            Close
+          </button>
+        </div>
+        <nav className={styles.menuLinks} aria-label="Menu links">
+          {[...navLinks, contactLink].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={
+                link.href === activeHref
+                  ? `${styles.menuLink} ${styles.menuActive}`
+                  : styles.menuLink
+              }
+              aria-current={link.href === activeHref ? "location" : undefined}
+              onClick={closeMenu}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div className={styles.menuFoot}>
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <SocialLinks />
+        </div>
+      </dialog>
+    </header>
   );
 }

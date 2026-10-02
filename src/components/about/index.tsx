@@ -1,29 +1,30 @@
+import { Fragment } from "react";
+
 import Section from "@/components/section";
+import { profile } from "@/data";
 import styles from "./styles.module.css";
 
 export default function About() {
+  const words = profile.summary.split(" ");
   return (
-    <Section title="About">
-      <div className={styles.body}>
-        <h2 className={styles.heading}>A little about me.</h2>
-        <p className={styles.text}>
-          I&apos;m Mohammad Reza Ghasemi — a Frontend Engineer with{" "}
-          <span className={styles.highlight}>over six years of experience</span>{" "}
-          building production React and Next.js apps in fintech, insurance, and
-          e-commerce. I&apos;ve worked on step-by-step migrations of live
-          applications, and I build internal tools that make daily work easier
-          for the team.
-        </p>
-        <p className={styles.text}>
-          Along the way I&apos;ve worked at{" "}
-          <span className={styles.highlight}>
-            SnappPay, SADAD, TashilCar, and Fanap Plus
-          </span>{" "}
-          — modernizing live applications through step-by-step migrations,
-          strengthening testing and error reporting, and building the internal
-          tools and shared packages my teams rely on every day.
-        </p>
-      </div>
+    <Section title="About" hideTitle>
+      {/* Each line lights up as it scrolls into the middle of the screen. The
+          spaces sit between the word boxes, not inside them, or they collapse. */}
+      <p className={styles.text}>
+        {words.map((word, i) => (
+          <Fragment key={i}>
+            <span
+              className={
+                profile.summaryHighlight.includes(word)
+                  ? `${styles.word} ${styles.highlight}`
+                  : styles.word
+              }
+            >
+              {word}
+            </span>{" "}
+          </Fragment>
+        ))}
+      </p>
     </Section>
   );
 }

@@ -1,17 +1,23 @@
 # Portfolio
 
-Personal site for Mohammad Reza Ghasemi, Frontend Engineer — live at
-**[mrghasemi1992.ir](https://mrghasemi1992.ir)**.
+Personal site for Mohammad Reza Ghasemi, Frontend Engineer. Live at
+**[www.mrghasemi1992.ir](https://www.mrghasemi1992.ir)**.
 
-A single-page portfolio: hero, about, experience, skills and contact, with a
-dark/light theme toggle and a downloadable resume.
+Version 3: a dark, motion-led portfolio with a home page (hero, about,
+experience, work, skills, contact) and a case-study page for each project.
+Every page is server-rendered: prerendered at build time and rebuilt in the
+background once a day.
 
 ## Stack
 
-- **Next.js 16** (App Router) with React 19 and TypeScript 5
-- **CSS modules**, one per component, themed with CSS custom properties
-- **next/font** for Manrope and JetBrains Mono
-- **next/og** to generate the Open Graph preview at build time
+- **Next.js 16** (App Router) with React 19 and TypeScript 5, statically
+  prerendered and revalidated daily (ISR)
+- **CSS modules**, one per component, with color tokens as CSS custom
+  properties
+- **CSS scroll-driven animations** for scroll motion, with no animation library
+- **React `<ViewTransition>`** for page transitions and the project morph
+- **next/font** for Barlow Condensed (headings) and Barlow (text)
+- **next/og** for Open Graph images, generated at build time
 - **Vercel** for hosting, analytics and speed insights
 
 ## Getting started
@@ -32,50 +38,69 @@ the usual 3000.
 | --- | --- |
 | `npm run dev` | Dev server on port 3002 |
 | `npm run build` | Production build |
-| `npm run start` | Serve the production build |
+| `npm run start` | Serve the production build (`.claude/launch.json` runs it on 3003) |
 | `npm run lint` | ESLint (flat config in `eslint.config.mjs`) |
 | `npm run type-check` | `tsc --noEmit` |
 
 There is no test suite in this project.
+
+## Pages
+
+| Route | What it is |
+| --- | --- |
+| `/` | Home: hero, about, experience, work, skills, contact |
+| `/work/orange` | Case study: Orange, a Hacker News reader |
+| `/work/money` | Case study: Money, a Persian personal accounting app |
+| `/work/portfolio` | Case study: this site |
+| `/sitemap.xml`, `/robots.txt` | Generated from `src/app/sitemap.ts` and `robots.ts` |
 
 ## Project layout
 
 ```
 src/
   app/
-    page.tsx             composes the sections, holds the theme state
-    page.module.css      page wrapper and main column
-    layout.tsx           fonts, metadata, analytics
-    globals.css          reset, theme variables, font stacks
-    opengraph-image.tsx  social preview, generated at build time
+    page.tsx               home page, composes the sections
+    work/[slug]/page.tsx   case-study pages, one per project
+    work/[slug]/opengraph-image.tsx
+    layout.tsx             fonts, metadata, analytics
+    globals.css            reset, color tokens, font stacks, page transitions
+    opengraph-image.tsx    home social preview
+    sitemap.ts, robots.ts
   components/
-    <name>/index.tsx     one folder per section (nav, hero, about, …)
+    <name>/index.tsx       one folder per component
     <name>/styles.module.css
-                         plus shared section, social-links, underline-link
   data/
-    index.tsx            all editable content
-    logo.ts              the logo path, shared by nav and OG image
-public/
-  resume-*.pdf           the downloadable resume
+    index.tsx              all editable content
+    logo.ts                the logo path, shared by nav, hero and OG images
 ```
 
 ## Editing content
 
-Almost everything readable on the site — experience, projects, skills, nav
-links, socials — lives in `src/data/index.tsx`, so the copy can be updated
-without touching the components.
+Everything readable on the site lives in `src/data/index.tsx`:
+
+- `profile`: name, role, intro and summary. The years of experience in them
+  are counted from the earliest job in `experience`, so they update
+  themselves.
+- `experience`: every resume bullet, word for word.
+- `projects`: the card text and the full case study (scope, decisions, stack,
+  links).
+- `skillGroups`, `marqueeItems`, `socials` and `navLinks`.
+- `SHOW_HERO_TILE`: shows or hides the yellow logo tile in the hero. It's
+  hidden for now.
+
+Adding a project to `projects` creates its case-study page, its OG image and
+its sitemap entry on the next build.
+
+Project screenshots are placeholders for now (`src/components/screenshot`).
 
 ## Deployment
 
-Pushes to `master` deploy automatically on Vercel. Releases are marked with a
-version bump in `package.json`.
+Pushes to `master` deploy automatically on Vercel, and pull requests get a
+preview deploy. Releases are marked with a version bump in `package.json`.
 
-## Developer guide
+## Docs
 
-[**DEVELOPMENT.md**](DEVELOPMENT.md) covers what the file tree doesn't show:
-how theming works, how the components and their CSS modules fit together, how
-to add an accent color, the performance decisions baked into `globals.css`,
-the git conventions this repo follows, and the gotchas worth knowing before
-changing anything.
-
-`CLAUDE.md` holds the same ground rules in the form Claude Code reads.
+- [**DEVELOPMENT.md**](DEVELOPMENT.md): how the site is put together, the
+  motion and performance decisions, gotchas, and the git conventions.
+- [**CLAUDE.md**](CLAUDE.md): the same ground rules in the form Claude Code
+  reads.

@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev     # dev server on port 3002 (not 3000 — see .claude/launch.json)
 npm run build   # production build
-npm run start   # serve the production build
+npm run start   # serve the production build (the `prod` entry in .claude/launch.json runs it on 3003)
 npm run lint       # eslint (flat config; `next lint` was removed in Next 16)
 npm run type-check # tsc --noEmit
 ```
@@ -18,33 +18,35 @@ Running `npm run build` while the dev server is up overwrites `.next` underneath
 
 ## Architecture
 
-A single-page portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrghasemi1992.ir.
+A portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrghasemi1992.ir. Dark only. Every page is server-rendered and prerendered at build time, for SEO, and revalidated daily (`revalidate = 86400` in `layout.tsx`).
 
-**One component per section.** Each lives in `src/components/<name>/index.tsx` beside a `styles.module.css`: `nav`, `hero`, `about`, `experience`, `projects`, `skills`, `contact`, `footer`, plus three shared ones — `section` (the `<section>` wrapper with its id anchor and `01 / About` label), `social-links` (used by hero and contact) and `underline-link` (the hover-underline `<a>`). `src/app/page.tsx` is a client component that only composes them and holds the theme state, passed to `Nav` as props. Follow the same folder shape for new components.
+**Routes.** `/` is the home page (`src/app/page.tsx`). `/work/[slug]` is a case study per project (`src/app/work/[slug]/page.tsx`), built through `generateStaticParams` with `dynamicParams = false`, so unknown slugs are a 404. `sitemap.ts` and `robots.ts` sit in `src/app`.
 
-**Styling is CSS modules only.** No inline `style` objects, no Tailwind or other utility framework. `globals.css` keeps just what can't be scoped: a small reset (the parts of Tailwind's old preflight the design relies on), theme variables, the `--sans`/`--mono` font stacks, selection, scrollbar and smooth scrolling. When a shared component accepts `className`, the caller's class must not set a property the component's own class sets, because equal-specificity module classes resolve by chunk order. `UnderlineLink` inherits its color from its parent for this reason.
+**One component per folder.** Each lives in `src/components/<name>/index.tsx`, beside a `styles.module.css` when it has styles. Page sections: `nav`, `hero`, `marquee`, `about`, `experience`, `projects` (the Work section), `skills`, `contact`, `footer`, `case-study`. Shared: `section` (the `<section>` with its id anchor and big uppercase heading), `social-links`, `underline-link`, `logo`, `screenshot` (the image slot, a placeholder until real screenshots exist), `role-sheet`, `page-transition`, `json-ld`. Follow the same folder shape for new components.
 
-**Theming runs on CSS custom properties.** `globals.css` defines the palette on `:root`, overrides it under `[data-theme="light"]`, and defines accent variants under `[data-accent="lime"|"amber"|"violet"]`. `page.tsx` holds the theme in React state and writes it to `document.documentElement.dataset.theme`; the wrapper div also carries `data-theme`/`data-accent`. Add colors as variables in both the dark and light blocks — never hardcode a hex in a component.
+**Server Components by default.** Only `nav` (the mobile menu, and the active-section highlight driven by an `IntersectionObserver`) and `role-sheet` (the experience dialog) are client components. The highlight that slides between nav links uses CSS anchor positioning: the active link is the anchor, and browsers without support fall back to filling the active link. Both use the native `<dialog>` with `showModal()`, which gives focus trapping and Escape for free; `globals.css` locks page scroll while one is open.
 
-**Content is separated from markup.** `src/data/index.tsx` holds everything editable: `navLinks`, `socials`, `experience`, `projects`, `skillGroups`, and the `SHOW_PROJECTS` flag that currently hides the projects section. Section numbers (`01`, `02`, …) are derived from `navLinks` order through `sectionNum()`, so adding or reordering a nav entry renumbers the headings automatically. `src/data/logo.ts` exports the logo path, shared by the nav SVG and the Open Graph image.
+**Styling is CSS modules only.** No inline `style` objects, no Tailwind or other utility framework. Per-item values that would need a style prop (animation delays, stack offsets) come from `:nth-child` rules instead. `globals.css` keeps just what can't be scoped: a small reset, the color tokens, the `--sans`/`--display` font stacks, `.sr-only`, focus and selection styles, and the route-transition rules. When a shared component accepts `className`, the caller's class must not set a property the component's own class sets, because equal-specificity module classes resolve by chunk order. `UnderlineLink` inherits its color from its parent for this reason.
 
-**The OG image is generated at build time.** `src/app/opengraph-image.tsx` uses `next/og` `ImageResponse` with the same logo constants, so the social preview and the nav mark never drift apart.
+**Colors are tokens.** `globals.css` defines the palette on `:root` (`--bg`, `--surface*`, `--text*`, `--line*`, `--accent` and `--on-accent`). Never hardcode a hex in a component. The OG images are the one exception, because `ImageResponse` can't read CSS variables; they repeat the hexes with a comment.
 
-**Fonts** are loaded through `next/font/google` in `layout.tsx` (Manrope, JetBrains Mono) and exposed as CSS variables on `<body>`. `globals.css` wraps them into the `--sans` and `--mono` stacks, also on `body`, which modules use as `font-family: var(--mono)`.
+**Content is separated from markup.** `src/data/index.tsx` holds everything editable: `profile` (name, role, intro, summary, email; the years of experience in the intro and summary are computed from the earliest job in `experience`, and `layout.tsx` sets `revalidate = 86400` so the prerendered pages pick up a new year without a deploy), `socials`, `navLinks`, `experience` (the full resume, word for word), `projects` (card text and the case-study content), `skillGroups`, `marqueeItems`, and the `SHOW_HERO_TILE` flag that currently hides the hero's yellow logo tile. `src/data/logo.ts` exports the logo path, shared by the nav, the hero tile and the OG images.
 
-### Performance decisions already made here
+**SEO.** `layout.tsx` sets `metadataBase`, the title template, description, canonical, Open Graph and Twitter tags. Each case study adds its own through `generateMetadata`. The home page renders `WebSite` and `Person` structured data and each case study `CreativeWork` and `BreadcrumbList`, linked by `@id`, through `json-ld`. `SITE_URL` in `src/data` is the www host, because the bare domain redirects to it (308); canonicals, the sitemap and OG URLs all derive from it, so keep it on the host that answers 200. OG images are generated at build time: `src/app/opengraph-image.tsx` and one per case study in `src/app/work/[slug]/opengraph-image.tsx`. The hero `h1` keeps the plain name in an `.sr-only` span, because the visible name is split into one span per letter.
 
-These carry comments in `globals.css` and `src/components/nav/styles.module.css` and are deliberate — don't undo them without a reason:
+**Motion.** All scroll motion is CSS scroll-driven animations (`animation-timeline: scroll()` / `view()`), wrapped in `@supports` and `prefers-reduced-motion: no-preference`, so browsers without support get the static page. No animation library. The pinned sideways Experience row and the stacking Work panels run only above 760px; on mobile they are a swipeable row (with a peek, a nudge and a scroll-linked slider so the sideways scroll is obvious) and plain cards. Route changes use React's `<ViewTransition>` (works in the App Router with no config): Links set `nav-forward`/`nav-back` types; `page-transition` only wraps an empty marker so every page change starts a transition, and `globals.css` slides the `root` snapshot by type. Don't wrap `<main>` in a `<ViewTransition>`: that snapshots the whole page (the home page is ~7800px tall) and dropped frames on phones. Each project's screenshot and title share a `name` with the case study so they morph. Scroll-driven animations animate only `transform` and `opacity` (the nav's solid background fades in on a pseudo-element), because other properties repaint on every scroll frame. The header is held in place through `[data-site-header]` in `globals.css`, because a `view-transition-name` written in a CSS module gets renamed.
 
-- The dot-grid background is a cached SVG data URI tile, because a repeated `radial-gradient` repaints slowly in WebKit.
-- `backdrop-filter` on the nav is disabled below 720px and on touch devices, where it costs more than it's worth.
-- Scroll reveal animations were removed on purpose (commit `33e2409`) for smoother mobile scrolling.
+**Fonts** are loaded through `next/font/google` in `layout.tsx` (Barlow Condensed for headings, set in uppercase, and Barlow for text) and exposed as CSS variables on `<body>`. `globals.css` wraps them into the `--display` and `--sans` stacks.
+
+## Docs
+
+`README.md` (setup, pages, layout) and `DEVELOPMENT.md` (the reasoning behind the structure, motion and performance decisions, gotchas). When a change affects what they describe, update them in the same PR.
 
 ## Git conventions
 
 Branches follow **Conventional Branch** (https://conventional-branch.github.io): `feature/`, `bugfix/`, `hotfix/`, `release/`, `chore/` plus a short kebab-case description, e.g. `feature/redesign-v3`. History contains a few older `feat/…` branches; use `feature/` for new ones.
 
-Commits follow **Conventional Commits** (https://www.conventionalcommits.org): `type(optional scope): description`, written in the imperative and lowercase after the colon. Types in use here, by frequency: `chore`, `feat`, `perf`, `fix`, and `content` for copy-only changes.
+Commits follow **Conventional Commits** (https://www.conventionalcommits.org): `type(optional scope): description`, written in the imperative and lowercase after the colon. Types in use here: `chore`, `feat`, `perf`, `fix`, `docs`, and `content` for copy-only changes.
 
 Releases are marked by a version bump in `package.json` with a `chore: bump version to X.Y.Z` commit.
 

@@ -1,93 +1,219 @@
-.heading {
-  margin: 0 0 40px;
-  font-size: clamp(26px, 4vw, 38px);
-  letter-spacing: -0.03em;
-  font-weight: 800;
+.track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.track::-webkit-scrollbar {
+  display: none;
 }
 
-.list {
+.card {
+  flex: 0 0 440px;
+  height: 480px;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
+  gap: 18px;
+  padding: 32px;
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: border-color 200ms, transform 300ms var(--ease-out);
+}
+.card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-4px);
 }
 
-.job {
-  display: grid;
-  grid-template-columns: 170px 1fr;
-  gap: 28px;
-  padding: 30px 0;
-  border-top: 1px solid var(--border);
+.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.current:hover {
+  border-color: var(--accent);
 }
 
 .meta {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.period {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--accent);
-}
-
-.type {
-  font-family: var(--mono);
-  font-size: 12px;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
   color: var(--text-faint);
 }
-
-.title {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.role {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.separator {
-  color: var(--text-faint);
+.current .meta,
+.current .role {
+  color: var(--on-accent-dim);
 }
 
 .company {
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 16px;
+  font-family: var(--display);
+  font-size: 60px;
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+}
+
+.role {
+  font-weight: 500;
+  color: var(--text-faint);
 }
 
 .bullets {
-  margin: 16px 0 0;
-  padding: 0;
-  list-style: none;
+  list-style: disc;
+  padding-left: 18px;
   display: flex;
   flex-direction: column;
-  gap: 11px;
-}
-
-.bullet {
-  display: flex;
-  gap: 12px;
-  font-size: 15.5px;
-  line-height: 1.6;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--text-dim);
+  /* Gives way to the button when a card runs out of room. */
+  min-height: 0;
+  overflow: hidden;
+}
+.current .bullets {
+  color: var(--on-accent);
 }
 
-.arrow {
-  color: var(--accent);
+/* Up to three lines per bullet on the card; the dialog shows the full text. */
+.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.more {
+  margin-top: auto;
+  align-self: flex-start;
   flex-shrink: 0;
-  font-family: var(--mono);
-  font-size: 13px;
-  padding-top: 2px;
 }
 
-@media (max-width: 640px) {
-  .job {
-    grid-template-columns: 1fr;
-    gap: 12px;
+/* Desktop: pin the row and pan it sideways while the page scrolls down. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 761px) {
+  @supports (animation-timeline: view()) {
+    /* The heading stays in view above the pinned row. */
+    .section > h2 {
+      position: sticky;
+      top: 96px;
+    }
+    .pinArea {
+      height: 2000px;
+      view-timeline-name: --experience;
+    }
+    .pin {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 56px;
+    }
+    .track {
+      width: max-content;
+      overflow: visible;
+      animation: pan linear both;
+      animation-timeline: --experience;
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}
+/* Ends with the last card's right edge on the content edge. */
+@keyframes pan {
+  to {
+    transform: translateX(
+      calc(-100% + min(var(--page-width) - 2 * var(--gutter), 100vw - 2 * var(--gutter)))
+    );
+  }
+}
+
+/* Desktop pins and pans the row, so the slider is phones-only. */
+.scrollbar {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .track {
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 var(--gutter) 4px;
+    scroll-padding: 0 var(--gutter);
+  }
+  /* Narrow enough that ~48px of the next card peeks in at the right edge. */
+  .card {
+    flex-basis: calc(100vw - 88px);
+    height: 440px;
+    padding: 24px;
+    border-radius: 24px;
+  }
+  .company {
+    font-size: 52px;
+  }
+
+  @supports (animation-timeline: view()) {
+    /* The row's sideways scroll, shared with the slider below it. */
+    .pin {
+      timeline-scope: --experience-row;
+    }
+    .track {
+      scroll-timeline: --experience-row inline;
+    }
+
+    /* Slider: the thumb travels the track as the row scrolls. 100cqw is the
+       track's width, so it works for any number of cards. */
+    .scrollbar {
+      display: block;
+      container-type: inline-size;
+      width: 96px;
+      height: 4px;
+      margin-top: 20px;
+      border-radius: 999px;
+      background: var(--line-strong);
+    }
+    .thumb {
+      display: block;
+      width: 32px;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      animation: slide linear both;
+      animation-timeline: --experience-row;
+    }
+  }
+}
+@keyframes slide {
+  to {
+    translate: calc(100cqw - 100%) 0;
+  }
+}
+
+/* Phones: as the row scrolls into view, it slides left and springs back once,
+   showing that it moves sideways before anyone swipes. */
+@media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .track {
+      animation: nudge linear both;
+      animation-timeline: view();
+      animation-range: entry 60% cover 45%;
+    }
+  }
+}
+@keyframes nudge {
+  45% {
+    translate: -56px 0;
+  }
+  55% {
+    translate: -56px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
   }
 }

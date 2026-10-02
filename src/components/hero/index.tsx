@@ -1,46 +1,46 @@
-import SocialLinks from "@/components/social-links";
+import Logo from "@/components/logo";
+import { SHOW_HERO_TILE, profile } from "@/data";
 import styles from "./styles.module.css";
 
-const NAME = "Mohammad Reza Ghasemi";
-const RESUME_URL = "/resume-final-2026.09.17-17.23.pdf";
-const RESUME_FILENAME = "Mohammad-Reza-Ghasemi-Frontend-Engineer-Resume.pdf";
+/** One line per word and one span per letter, for the drop-in animation. */
+function SplitName({ name }: { name: string }) {
+  return name.split(" ").map((word) => (
+    <span key={word} className={styles.line}>
+      {[...word].map((char, i) => (
+        <span key={i} className={styles.char}>
+          {char}
+        </span>
+      ))}
+    </span>
+  ));
+}
 
 export default function Hero() {
   return (
-    <header className={styles.hero}>
-      <h1 className={styles.name}>{NAME}</h1>
-      <p className={styles.tagline}>
-        Frontend Engineer building web interfaces with React &amp; Next.js.
-      </p>
-      <p className={styles.intro}>
-        Over six years building production React and Next.js apps in fintech,
-        insurance, and e-commerce — from step-by-step migrations of live
-        applications to internal tools that make the team&apos;s daily work
-        easier.
-      </p>
-      <div className={styles.actions}>
-        <a href="#contact" className={styles.button}>
-          Get in touch
-        </a>
-        <a href={RESUME_URL} download={RESUME_FILENAME} className={styles.button}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Resume
-        </a>
+    <section id="top" className={styles.hero}>
+      <div className={styles.text}>
+        <div className={styles.nameWrap}>
+          <h1 className={styles.name}>
+            <span className="sr-only">{profile.name}</span>
+            <span aria-hidden="true">
+              <SplitName name={profile.name} />
+            </span>
+          </h1>
+        </div>
+        <div className={styles.tag}>
+          <p className={styles.role}>
+            {profile.role}
+            <br />
+            <span className={styles.stack}>{profile.stack}</span>
+          </p>
+          <p className={styles.intro}>{profile.intro}</p>
+        </div>
       </div>
-      <SocialLinks className={styles.socials} />
-    </header>
+      {SHOW_HERO_TILE && (
+        <div className={styles.mark} aria-hidden="true">
+          <Logo className={styles.markLogo} />
+        </div>
+      )}
+    </section>
   );
 }

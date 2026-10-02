@@ -1,0 +1,218 @@
+.page {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 40px var(--gutter) 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--raised);
+  font-size: 15px;
+  transition: background 200ms;
+}
+.back:hover {
+  background: var(--line);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+/* The header's parts rise in one after another on arrival. The title is left
+   out: it morphs in from the home page instead. */
+.head > :not(.title) {
+  animation: rise 700ms var(--ease-out) both;
+}
+.head > :nth-child(2) { animation-delay: 60ms; }
+.head > :nth-child(3) { animation-delay: 120ms; }
+.head > :nth-child(4) { animation-delay: 180ms; }
+
+.status {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.title {
+  font-family: var(--display);
+  font-size: clamp(96px, 16vw, 220px);
+  font-weight: 800;
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.intro {
+  max-width: 44ch;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 200ms;
+}
+.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.primary:hover {
+  background: var(--accent-hover);
+}
+.secondary {
+  background: var(--raised);
+  border: 1px solid var(--line);
+}
+.secondary:hover {
+  background: var(--line);
+}
+
+.shot {
+  aspect-ratio: 2 / 1;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+}
+
+.subhead {
+  margin-bottom: 20px;
+  font-family: var(--display);
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.list {
+  list-style: disc;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.next {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 40px;
+  border-radius: 32px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: border-color 250ms, transform 400ms var(--ease-out);
+}
+.next:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+.nextLabel {
+  font-size: 15px;
+  color: var(--text-faint);
+}
+.nextName {
+  font-family: var(--display);
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (max-width: 760px) {
+  .page {
+    padding-top: 24px;
+    gap: 36px;
+  }
+  .intro {
+    font-size: 19px;
+  }
+  .shot {
+    aspect-ratio: 4 / 3;
+  }
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+  .subhead {
+    font-size: 36px;
+  }
+  .next {
+    padding: 24px;
+    border-radius: 24px;
+  }
+  .nextName {
+    font-size: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head > :not(.title) {
+    animation: none;
+  }
+  .next {
+    transition: none;
+  }
+}

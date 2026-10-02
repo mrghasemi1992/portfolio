@@ -1,38 +1,58 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { SHOW_PROJECTS } from "@/data";
-import Nav from "@/components/nav";
-import Hero from "@/components/hero";
 import About from "@/components/about";
+import Contact from "@/components/contact";
 import Experience from "@/components/experience";
+import Footer from "@/components/footer";
+import Hero from "@/components/hero";
+import JsonLd from "@/components/json-ld";
+import Marquee from "@/components/marquee";
+import Nav from "@/components/nav";
+import PageTransition from "@/components/page-transition";
 import Projects from "@/components/projects";
 import Skills from "@/components/skills";
-import Contact from "@/components/contact";
-import Footer from "@/components/footer";
+import { SITE_URL, profile, skillGroups, socials } from "@/data";
 import styles from "./page.module.css";
 
+const structured = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: profile.name,
+      inLanguage: "en",
+      publisher: { "@id": `${SITE_URL}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: profile.name,
+      jobTitle: profile.role,
+      description: profile.summary,
+      url: SITE_URL,
+      email: `mailto:${profile.email}`,
+      sameAs: socials.map((s) => s.href),
+      knowsAbout: skillGroups.flatMap((g) => g.items),
+    },
+  ],
+};
+
 export default function Home() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
-
   return (
-    <div data-theme={theme} data-accent="cyan" className={styles.page}>
-      <Nav theme={theme} onToggleTheme={toggleTheme} />
-      <main id="top" className={styles.main}>
+    <>
+      <JsonLd data={structured} />
+      <Nav />
+      <PageTransition />
+      <main id="main" className={styles.main}>
         <Hero />
+        <Marquee />
         <About />
         <Experience />
-        {SHOW_PROJECTS && <Projects />}
+        <Projects />
         <Skills />
         <Contact />
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

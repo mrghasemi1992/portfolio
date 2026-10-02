@@ -1,22 +1,19 @@
+/* An underline in the current text color sweeps in from the left on hover. */
 .link {
-  position: relative;
-  text-decoration: none;
-  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 8px) / 0 2px
+    no-repeat;
+  transition: background-size 300ms var(--ease-out);
+}
+.link:hover {
+  background-size: 100% 2px;
 }
 
-.link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -3px;
-  height: 1.5px;
-  width: 100%;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.link:hover::after {
-  transform: scaleX(1);
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
 }

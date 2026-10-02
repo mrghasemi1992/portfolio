@@ -1,16 +1,21 @@
 import UnderlineLink from "@/components/underline-link";
+import { profile } from "@/data";
 import styles from "./styles.module.css";
 
-export default function Footer() {
+type Props = {
+  /** Where "Back to top" points; the case studies have no #top section. */
+  topHref?: string;
+};
+
+export default function Footer({ topHref = "#top" }: Props) {
   return (
     <footer className={styles.footer}>
-      <div className={styles.inner}>
-        <span>
-          © {new Date().getFullYear()} Mohammad Reza Ghasemi — built with React
-          &amp; Next.js
-        </span>
-        <UnderlineLink href="#top">back to top ↑</UnderlineLink>
-      </div>
+      <span>
+        © {new Date().getFullYear()} {profile.name}
+      </span>
+      <UnderlineLink href={topHref}>
+        Back to top <span aria-hidden="true">↑</span>
+      </UnderlineLink>
     </footer>
   );
 }

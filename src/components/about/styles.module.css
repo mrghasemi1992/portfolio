@@ -1,25 +1,35 @@
-.body {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  max-width: 760px;
-}
-
-.heading {
-  margin: 0;
-  font-size: clamp(26px, 4vw, 38px);
-  letter-spacing: -0.03em;
-  font-weight: 800;
-  line-height: 1.15;
-}
-
 .text {
-  margin: 0;
-  font-size: 17px;
-  line-height: 1.75;
-  color: var(--text-dim);
+  margin-top: 80px;
+  max-width: 28ch;
+  font-family: var(--display);
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.005em;
 }
 
 .highlight {
-  color: var(--text);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .word {
+      animation: light linear both;
+      animation-timeline: view();
+      animation-range: cover 25% cover 45%;
+    }
+  }
+}
+@keyframes light {
+  from {
+    opacity: 0.2;
+  }
+}
+
+@media (max-width: 760px) {
+  .text {
+    margin-top: 40px;
+    font-size: 36px;
+  }
 }

@@ -1,17 +1,12 @@
 .footer {
-  border-top: 1px solid var(--border);
-}
-
-.inner {
-  max-width: 1080px;
+  max-width: var(--page-width);
   margin: 0 auto;
-  padding: 26px 28px;
+  padding: 40px var(--gutter) 48px;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  font-family: var(--mono);
-  font-size: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 14px;
   color: var(--text-faint);
 }

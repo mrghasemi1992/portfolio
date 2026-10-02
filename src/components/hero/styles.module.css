@@ -1,61 +1,195 @@
 .hero {
-  padding: clamp(70px, 14vh, 150px) 0 clamp(60px, 10vh, 110px);
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 40px var(--gutter) 64px;
+  min-height: clamp(560px, calc(100dvh - 72px), 960px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 40px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.nameWrap {
+  transform-origin: 0 100%;
 }
 
 .name {
-  margin: 0;
-  font-size: clamp(42px, 7.5vw, 78px);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
+  font-family: var(--display);
   font-weight: 800;
+  font-size: clamp(72px, 14vw, 200px);
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
-.tagline {
-  margin: 18px 0 0;
-  font-size: clamp(20px, 3vw, 30px);
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  font-weight: 600;
-  color: var(--text-dim);
-  max-width: 760px;
+.line {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Letters drop in one after another. --n is the letter's place in its word,
+   --b offsets each word so the lines cascade. */
+.char {
+  display: inline-block;
+  animation: drop 900ms var(--ease-spring) both;
+  animation-delay: calc((var(--b, 0) + var(--n, 0)) * 32ms);
+}
+.line:nth-child(2) { --b: 5; }
+.line:nth-child(3) { --b: 10; }
+.line:nth-child(4) { --b: 15; }
+.char:nth-child(2) { --n: 1; }
+.char:nth-child(3) { --n: 2; }
+.char:nth-child(4) { --n: 3; }
+.char:nth-child(5) { --n: 4; }
+.char:nth-child(6) { --n: 5; }
+.char:nth-child(7) { --n: 6; }
+.char:nth-child(8) { --n: 7; }
+.char:nth-child(9) { --n: 8; }
+.char:nth-child(10) { --n: 9; }
+.char:nth-child(n + 11) { --n: 10; }
+
+.tag {
+  display: flex;
+  gap: 48px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  animation: fade-up 700ms 500ms var(--ease-out) both;
+}
+
+.role {
+  font-family: var(--display);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.stack {
+  color: var(--accent);
 }
 
 .intro {
-  margin: 22px 0 0;
-  font-size: 17px;
-  line-height: 1.7;
+  max-width: 38ch;
+  font-size: 18px;
+  line-height: 1.55;
   color: var(--text-dim);
-  max-width: 600px;
 }
 
-.actions {
+.mark {
+  width: 300px;
+  height: 300px;
+  border-radius: 40px;
+  background: var(--accent);
+  color: var(--bg);
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 34px;
-}
-
-.button {
-  display: inline-flex;
   align-items: center;
-  gap: 9px;
-  height: 48px;
-  padding: 0 22px;
-  border-radius: 11px;
-  border: 1px solid var(--border);
-  background: var(--bg-elev);
-  color: var(--text);
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  justify-content: center;
+  animation: pop 1100ms 150ms var(--ease-out) both;
+  /* Hover uses `scale` so it doesn't fight the transform and rotate animations. */
+  transition: scale 400ms var(--ease-spring);
+}
+.mark:hover {
+  scale: 1.05;
 }
 
-.button:hover {
-  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
-  transform: translateY(-2px);
+.markLogo {
+  width: 210px;
+  height: 148px;
 }
 
-.socials {
-  margin-top: 40px;
+@keyframes drop {
+  from {
+    transform: translateY(-70%) rotate(-8deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes pop {
+  from {
+    transform: scale(0.5) rotate(-18deg);
+    opacity: 0;
+  }
+}
+
+/* While scrolling away, the name shrinks and fades and the tile turns. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .nameWrap {
+      animation: shrink linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 640px;
+    }
+    .mark {
+      animation: pop 1100ms 150ms var(--ease-out) both, turn linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 800px;
+    }
+  }
+}
+@keyframes shrink {
+  to {
+    transform: translateY(-12%) scale(0.72);
+    opacity: 0.15;
+  }
+}
+@keyframes turn {
+  to {
+    rotate: -24deg;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    gap: 28px;
+    padding-top: 24px;
+    padding-bottom: 48px;
+  }
+  .mark {
+    order: -1;
+    width: 112px;
+    height: 112px;
+    border-radius: 24px;
+  }
+  .markLogo {
+    width: 80px;
+    height: 56px;
+  }
+  .name {
+    font-size: clamp(64px, 19vw, 96px);
+  }
+  .tag {
+    gap: 16px;
+  }
+  .role {
+    font-size: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .char,
+  .tag,
+  .mark {
+    animation: none;
+  }
+  .mark {
+    transition: none;
+  }
 }

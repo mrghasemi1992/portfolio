@@ -1,44 +1,69 @@
-.heading {
-  margin: 0 0 40px;
-  font-size: clamp(26px, 4vw, 38px);
-  letter-spacing: -0.03em;
-  font-weight: 800;
-}
-
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px 32px;
 }
 
 .group {
-  padding: 22px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--bg-elev);
-}
-
-.groupTitle {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text-faint);
   margin-bottom: 14px;
-  letter-spacing: 0.04em;
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
+  color: var(--text-faint);
 }
 
-.items {
+.chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.skill {
-  font-size: 13.5px;
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  font-size: 15px;
   font-weight: 500;
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--accent) 9%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
-  color: var(--text);
+  color: var(--text-dim);
+}
+
+/* Chips rise in one after another as each group scrolls into view. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .chip {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--s, 0) * 5%) entry calc(50% + var(--s, 0) * 5%);
+    }
+    .chip:nth-child(2) { --s: 1; }
+    .chip:nth-child(3) { --s: 2; }
+    .chip:nth-child(4) { --s: 3; }
+    .chip:nth-child(5) { --s: 4; }
+    .chip:nth-child(6) { --s: 5; }
+    .chip:nth-child(n + 7) { --s: 6; }
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
 }

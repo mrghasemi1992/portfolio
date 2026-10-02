@@ -1,0 +1,21 @@
+.frame {
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px dashed var(--line-strong);
+}
+
+.placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-faint);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--surface-3) 0 14px,
+    var(--raised) 14px 28px
+  );
+}

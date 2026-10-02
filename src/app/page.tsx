@@ -12,22 +12,35 @@ import Skills from "@/components/skills";
 import { SITE_URL, profile, skillGroups, socials } from "@/data";
 import styles from "./page.module.css";
 
-const person = {
+const structured = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  jobTitle: profile.role,
-  description: profile.summary,
-  url: SITE_URL,
-  email: `mailto:${profile.email}`,
-  sameAs: socials.map((s) => s.href),
-  knowsAbout: skillGroups.flatMap((g) => g.items),
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: profile.name,
+      inLanguage: "en",
+      publisher: { "@id": `${SITE_URL}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: profile.name,
+      jobTitle: profile.role,
+      description: profile.summary,
+      url: SITE_URL,
+      email: `mailto:${profile.email}`,
+      sameAs: socials.map((s) => s.href),
+      knowsAbout: skillGroups.flatMap((g) => g.items),
+    },
+  ],
 };
 
 export default function Home() {
   return (
     <>
-      <JsonLd data={person} />
+      <JsonLd data={structured} />
       <Nav />
       <PageTransition>
         <main id="main" className={styles.main}>

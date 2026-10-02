@@ -1,4 +1,5 @@
-export const SITE_URL = "https://mrghasemi1992.ir";
+// The www host is the primary one: the bare domain redirects to it (308).
+export const SITE_URL = "https://www.mrghasemi1992.ir";
 
 export const profile = {
   name: "Mohammad Reza Ghasemi",

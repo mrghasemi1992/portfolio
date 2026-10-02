@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev     # dev server on port 3002 (not 3000 — see .claude/launch.json)
 npm run build   # production build
-npm run start   # serve the production build
+npm run start   # serve the production build (the `prod` entry in .claude/launch.json runs it on 3003)
 npm run lint       # eslint (flat config; `next lint` was removed in Next 16)
 npm run type-check # tsc --noEmit
 ```
@@ -32,7 +32,7 @@ A portfolio on Next.js 16 (App Router) with React 19, deployed on Vercel at mrgh
 
 **Content is separated from markup.** `src/data/index.tsx` holds everything editable: `profile` (name, role, intro, summary, email), `socials`, `navLinks`, `experience` (the full resume, word for word), `projects` (card text and the case-study content), `skillGroups` and `marqueeItems`. `src/data/logo.ts` exports the logo path, shared by the nav, the hero tile and the OG images.
 
-**SEO.** `layout.tsx` sets `metadataBase`, the title template, description, canonical, Open Graph and Twitter tags. Each case study adds its own through `generateMetadata`. The home page renders `Person` structured data and each case study `CreativeWork`, through `json-ld`. OG images are generated at build time: `src/app/opengraph-image.tsx` and one per case study in `src/app/work/[slug]/opengraph-image.tsx`. The hero `h1` keeps the plain name in an `.sr-only` span, because the visible name is split into one span per letter.
+**SEO.** `layout.tsx` sets `metadataBase`, the title template, description, canonical, Open Graph and Twitter tags. Each case study adds its own through `generateMetadata`. The home page renders `WebSite` and `Person` structured data and each case study `CreativeWork` and `BreadcrumbList`, linked by `@id`, through `json-ld`. `SITE_URL` in `src/data` is the www host, because the bare domain redirects to it (308); canonicals, the sitemap and OG URLs all derive from it, so keep it on the host that answers 200. OG images are generated at build time: `src/app/opengraph-image.tsx` and one per case study in `src/app/work/[slug]/opengraph-image.tsx`. The hero `h1` keeps the plain name in an `.sr-only` span, because the visible name is split into one span per letter.
 
 **Motion.** All scroll motion is CSS scroll-driven animations (`animation-timeline: scroll()` / `view()`), wrapped in `@supports` and `prefers-reduced-motion: no-preference`, so browsers without support get the static page. No animation library. The pinned sideways Experience row and the stacking Work panels run only above 760px; on mobile they are a swipeable row and plain cards. Route changes use React's `<ViewTransition>` (works in the App Router with no config): `page-transition` slides content by the `nav-forward`/`nav-back` types set on links, and each project's screenshot and title share a `name` with the case study so they morph. The header is held in place through `[data-site-header]` in `globals.css`, because a `view-transition-name` written in a CSS module gets renamed.
 

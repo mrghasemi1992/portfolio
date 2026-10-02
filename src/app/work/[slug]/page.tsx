@@ -52,17 +52,32 @@ export default async function WorkPage({ params }: Props) {
 
   const code = project.links.find((l) => l.label === "Code");
   const live = project.links.find((l) => l.label === "Live site");
+  const url = `${SITE_URL}/work/${project.slug}`;
   const structured = {
     "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    name: project.name,
-    description: project.intro,
-    url: `${SITE_URL}/work/${project.slug}`,
-    keywords: project.stack.join(", "),
-    author: { "@type": "Person", name: profile.name, url: SITE_URL },
-    ...(code && { codeRepository: code.href }),
-    ...(live && { sameAs: live.href }),
-    ...(project.status && { creativeWorkStatus: project.status }),
+    "@graph": [
+      {
+        "@type": "CreativeWork",
+        "@id": `${url}#work`,
+        name: project.name,
+        description: project.intro,
+        url,
+        keywords: project.stack.join(", "),
+        // Same @id as the Person on the home page.
+        author: { "@type": "Person", "@id": `${SITE_URL}/#person`, name: profile.name },
+        ...(code && { codeRepository: code.href }),
+        ...(live && { sameAs: live.href }),
+        ...(project.status && { creativeWorkStatus: project.status }),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Work", item: `${SITE_URL}/#work` },
+          { "@type": "ListItem", position: 3, name: project.name, item: url },
+        ],
+      },
+    ],
   };
 
   return (

@@ -84,11 +84,10 @@ export default async function WorkPage({ params }: Props) {
     <>
       <JsonLd data={structured} />
       <Nav />
-      <PageTransition>
-        <main id="main">
-          <CaseStudy project={project} next={next} />
-        </main>
-      </PageTransition>
+      <PageTransition />
+      <main id="main">
+        <CaseStudy project={project} next={next} />
+      </main>
       <Footer topHref="#main" />
     </>
   );

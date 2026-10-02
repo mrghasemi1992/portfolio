@@ -42,17 +42,16 @@ export default function Home() {
     <>
       <JsonLd data={structured} />
       <Nav />
-      <PageTransition>
-        <main id="main" className={styles.main}>
-          <Hero />
-          <Marquee />
-          <About />
-          <Experience />
-          <Projects />
-          <Skills />
-          <Contact />
-        </main>
-      </PageTransition>
+      <PageTransition />
+      <main id="main" className={styles.main}>
+        <Hero />
+        <Marquee />
+        <About />
+        <Experience />
+        <Projects />
+        <Skills />
+        <Contact />
+      </main>
       <Footer />
     </>
   );

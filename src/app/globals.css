@@ -115,9 +115,11 @@ dialog {
   white-space: nowrap;
 }
 
-/* Route transitions (React <ViewTransition>). The nav stays put while the
-   page content slides; a project's screenshot and title morph between the
-   home page and its case study. */
+/* Route transitions (React <ViewTransition>). The page slides by its root
+   snapshot, which is one screen in size; the nav stays put; a project's
+   screenshot and title morph between the home page and its case study.
+   Nothing here snapshots the full page or animates a filter, both of which
+   dropped frames on phones. */
 ::view-transition {
   pointer-events: none;
 }
@@ -139,33 +141,27 @@ dialog {
   animation-duration: 450ms;
   animation-timing-function: var(--ease-out);
 }
-::view-transition-image-pair(.morph) {
-  animation-name: via-blur;
-}
-::view-transition-old(.nav-forward) {
+/* The link sets the type (transitionTypes); page-transition makes sure every
+   page change starts a transition that carries it. */
+html:active-view-transition-type(nav-forward)::view-transition-old(root) {
   --slide-offset: -60px;
   animation: 150ms ease-in both vt-fade reverse,
     400ms ease-in-out both vt-slide reverse;
 }
-::view-transition-new(.nav-forward) {
+html:active-view-transition-type(nav-forward)::view-transition-new(root) {
   --slide-offset: 60px;
   animation: 210ms ease-out 150ms both vt-fade,
     400ms ease-in-out both vt-slide;
 }
-::view-transition-old(.nav-back) {
+html:active-view-transition-type(nav-back)::view-transition-old(root) {
   --slide-offset: 60px;
   animation: 150ms ease-in both vt-fade reverse,
     400ms ease-in-out both vt-slide reverse;
 }
-::view-transition-new(.nav-back) {
+html:active-view-transition-type(nav-back)::view-transition-new(root) {
   --slide-offset: -60px;
   animation: 210ms ease-out 150ms both vt-fade,
     400ms ease-in-out both vt-slide;
-}
-@keyframes via-blur {
-  30% {
-    filter: blur(3px);
-  }
 }
 @keyframes vt-fade {
   from {

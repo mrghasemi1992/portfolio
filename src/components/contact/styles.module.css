@@ -42,10 +42,10 @@
     }
   }
 }
+/* Transform only: animating border-radius repainted on every scroll frame. */
 @keyframes grow {
   from {
     transform: scale(0.9);
-    border-radius: 80px;
   }
 }
 

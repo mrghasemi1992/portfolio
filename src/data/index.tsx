@@ -115,29 +115,343 @@ export const profile = {
   email: "mrghasemi1992@gmail.com",
 };
 
+export type Shot = {
+  /** Path under public/, e.g. "/work/money/reports.png". */
+  src: string;
+  /** What the image shows, for screen readers. */
+  alt: string;
+  /** One sentence under the image. */
+  caption: string;
+  /** A phone screenshot (390 x 844): shown narrow and tall. */
+  phone?: boolean;
+};
+
 export type Project = {
   slug: string;
   name: string;
   status?: "In progress";
+  /** Leaves the project off the site (card, page, sitemap) without deleting it. */
+  hidden?: boolean;
   /** One or two sentences for the card on the home page. */
   summary: string;
   /** Short tech list for the card. */
   tags: string[];
-  /** Text for the screenshot slot until a real image is added. */
+  /** The main image's alt text, or the text in the empty slot when there's no image. */
   screenshot: string;
+  /** The main image, 1600 x 1200 (4:3), under public/. */
+  image?: string;
   links: { label: string; href: string }[];
-  /** Opening paragraph of the case study. */
+  /** Opening paragraph of the case study. Also its meta description. */
   intro: string;
-  scope: string[];
+  /** Short label/value pairs under the links: role, year, platform... */
+  facts: { label: string; value: string }[];
+  /** What the project does, in groups with a heading each. */
+  features: { title: string; items: string[] }[];
+  /** Screenshots after the features. Desktop ones first, then phone ones. */
+  gallery?: Shot[];
   decisions: string[];
   stack: string[];
 };
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
+  {
+    slug: "money",
+    name: "Money",
+    status: "In progress",
+    summary:
+      "A personal and family accounting app in Persian and English. Record money by hand, from a CSV file, or by telling Claude or ChatGPT, and see where it goes.",
+    tags: ["Next.js", "Postgres", "Drizzle", "Better Auth", "MCP"],
+    screenshot:
+      "The Money dashboard: total balance, this month's income and expense, recent transactions and budgets",
+    image: "/work/money/dashboard.png",
+    links: [
+      { label: "Code", href: "https://github.com/mrghasemi1992/money" },
+      { label: "Storybook", href: "https://money-storybook.vercel.app" },
+    ],
+    intro:
+      "A personal accounting app for a person or a family, in Persian (right to left) and English. Record income, expenses and transfers by hand, from a CSV file, or by telling Claude or ChatGPT, which save them through the app's own MCP connector.",
+    facts: [
+      { label: "Role", value: "Solo: product, design, code and docs" },
+      { label: "Year", value: "2026" },
+      { label: "Platform", value: "Web app for desktop and phone" },
+      { label: "Languages", value: "Persian (RTL) and English" },
+      { label: "Availability", value: "Self-hosted, no public site yet" },
+    ],
+    features: [
+      {
+        title: "The book",
+        items: [
+          "One shared book for a person or a family: accounts, categories, transactions and budgets.",
+          "Accounts with a starting balance and a live balance, in the order you drag them into.",
+          "Income and expense categories with subcategories, a color and an icon.",
+          "Items still in use are archived instead of deleted, so history stays intact. Every add, delete and archive can be undone.",
+        ],
+      },
+      {
+        title: "Transactions",
+        items: [
+          "Income, expense, and transfers between your own accounts. Transfers never count as income or expense.",
+          "Listed by day for a month or a date range, with totals, filters, search and tags.",
+          "One add and edit form, opened from every page, and as a bottom sheet on phones.",
+          "Transactions without a category are marked unknown, with a notice to sort them later.",
+        ],
+      },
+      {
+        title: "Budgets and reports",
+        items: [
+          "A monthly limit per expense category that repeats every month. Warns from 80% and shows the state in words and icons, not color alone.",
+          "Reports compare a period with the one before: by category, by account and month by month.",
+          "Insights: biggest changes, savings rate, recurring spending, largest transactions and budget record.",
+          "Every chart has a table view with the same figures.",
+          "A dashboard with balances, this month, budgets, top spending and recent transactions.",
+        ],
+      },
+      {
+        title: "Claude and ChatGPT",
+        items: [
+          "Money is a remote MCP server. Add its URL to Claude or ChatGPT, sign in once and allow access.",
+          "Paste a bank SMS or write a sentence, like “Spent 850k toman on groceries yesterday”, and the assistant records it in the right account and category.",
+          "Ask about your spending: totals by category, unknown transactions, this month against last.",
+          "Tools to read the book, add up to 100 transactions at once, edit and delete. Viewers get only the read tools.",
+          "Everything an assistant adds carries a Claude or ChatGPT badge, and access can be revoked from settings.",
+        ],
+      },
+      {
+        title: "Languages and money",
+        items: [
+          "Persian, right to left and the default, and English. Each user picks their own.",
+          "Jalali or Gregorian calendar per user, on the same shared book.",
+          "Books in rial, dollar, euro or pound. Rial books can be shown and typed in toman.",
+          "Amounts accepted in Persian, Arabic or Latin digits. Light and dark themes.",
+        ],
+      },
+      {
+        title: "Users, data and hosting",
+        items: [
+          "Invite only, with admin, editor and viewer roles, checked on the server on every request.",
+          "CSV import in five steps (upload, columns, names, review, result), saved all or nothing. CSV export in both calendars that opens in Excel with Persian intact.",
+          "Self-hosted: each family forks the repository and deploys it on free Vercel and Neon accounts in about 15 minutes, with no terminal.",
+          "Updates with one click, and settings show when a new release is out.",
+          "A user guide in English and Persian, with annotated screenshots of every screen.",
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/work/money/transactions.png",
+        alt: "The transactions page for October 2026, grouped by day, with income, expense and net totals",
+        caption:
+          "Transactions by day, with the month's totals. The sparkle badge marks the ones Claude recorded.",
+      },
+      {
+        src: "/work/money/reports.png",
+        alt: "The reports overview: income, expenses and net against the previous period, biggest changes and recurring spending",
+        caption:
+          "Reports compare the period with the one before and point out what changed.",
+      },
+      {
+        src: "/work/money/breakdown.png",
+        alt: "The reports breakdown: expenses and income by category and spending by account, as bar lists",
+        caption: "Spending and income by category and by account. Every chart switches to a table.",
+      },
+      {
+        src: "/work/money/budgets.png",
+        alt: "The budget page: total spent against the total budget, and each category's progress and status",
+        caption: "Monthly budgets, with near-limit and over-budget states in words, not color alone.",
+      },
+      {
+        src: "/work/money/connector.png",
+        alt: "The connector settings page: the connector URL, setup steps for Claude and ChatGPT, and example prompts",
+        caption: "The connector page: the URL to add, the steps for Claude and ChatGPT, and things to say.",
+      },
+      {
+        src: "/work/money/import.png",
+        alt: "The CSV import on step two of five: amount type, date calendar and column mapping",
+        caption: "CSV import, step two of five: map the file's columns and its calendar.",
+      },
+      {
+        src: "/work/money/phone-dashboard.png",
+        alt: "The dashboard on a phone, with the floating tab bar",
+        caption: "The dashboard on a phone, with the floating tab bar.",
+        phone: true,
+      },
+      {
+        src: "/work/money/phone-form.png",
+        alt: "The new transaction form as a bottom sheet on a phone",
+        caption: "Adding a transaction opens a bottom sheet.",
+        phone: true,
+      },
+      {
+        src: "/work/money/phone-reports.png",
+        alt: "The reports page on a phone, with period options and income, expense and net cards",
+        caption: "Reports on a phone.",
+        phone: true,
+      },
+      {
+        src: "/work/money/phone-consent.png",
+        alt: "The consent screen where Claude asks to access a Money account, listing what it will be able to do",
+        caption: "Claude asks for access, and Money lists exactly what it will be able to do.",
+        phone: true,
+      },
+    ],
+    decisions: [
+      "One Next.js project and no separate backend: pages, Server Actions, sign-in, the OAuth server and the MCP endpoint all deploy together on Vercel.",
+      "Money is its own OAuth 2.1 server for the connector, built on Better Auth. Assistants identify with a Client ID Metadata Document and only claude.ai and chatgpt.com are accepted, so nothing has to be registered and no look-alike app can connect. Every MCP request checks the grant, the user and their role again in the database.",
+      "Dates are stored in Gregorian and converted to the viewer's calendar only where they're shown or typed. At the MCP boundary the year tells the calendar, because language models are unreliable at Jalali arithmetic; Claude copies a bank SMS date as it is.",
+      "Amounts are integers in the smallest unit of the book's one currency and are summed in Postgres. Rules that must hold at write time, like “delete only while unused” or “never demote the last admin”, are part of the SQL statement itself.",
+      "Postgres on Neon over HTTP with Drizzle. Every preview deployment gets its own database branch, the database migrates only after the build succeeds, and migrations stay compatible with the previous release.",
+      "Zod validates every form, Server Action, MCP tool input and CSV row, with the same schema in the browser and on the server.",
+      "Its own design system: tokens and CSS Modules over unstyled Base UI parts, no component library. Logical CSS properties flip every screen with the text direction. About 40 components, each documented in Storybook with toolbars for theme, language, calendar and currency.",
+      "Charts are hand-written in HTML and CSS and rendered on the server, with no chart library.",
+      "Pages render on the server and stream each section with a skeleton that matches the final layout.",
+      "Built with Claude Code, working from architecture, decision and convention docs that live in the repository and change with every pull request. Releases are cut by release-please from Conventional Commits.",
+    ],
+    stack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Postgres (Neon)",
+      "Drizzle ORM",
+      "Better Auth",
+      "MCP",
+      "OAuth 2.1",
+      "Zod",
+      "next-intl",
+      "Base UI",
+      "CSS Modules",
+      "Papa Parse",
+      "Storybook",
+      "Playwright",
+      "Vercel",
+    ],
+  },
+  {
+    slug: "portfolio",
+    name: "This portfolio",
+    summary:
+      "The site you are reading. Server-rendered with Next.js, with scroll-driven motion in plain CSS.",
+    tags: ["Next.js", "React", "CSS Modules", "View Transitions"],
+    screenshot: "The portfolio's home page: the hero with the name in large condensed letters",
+    image: "/work/portfolio/home.png",
+    links: [{ label: "Code", href: "https://github.com/mrghasemi1992/portfolio" }],
+    intro:
+      "The site you are reading. It is server-rendered with Next.js, so every page arrives as finished HTML for readers and search engines, and its motion runs on CSS that follows the scroll.",
+    facts: [
+      { label: "Role", value: "Solo: design and code" },
+      { label: "Year", value: "2024, redesigned in 2026" },
+      { label: "Platform", value: "Web, desktop and phone" },
+      { label: "Hosting", value: "Vercel" },
+    ],
+    features: [
+      {
+        title: "Pages",
+        items: [
+          "A home page with About, Experience, Work, Skills and Contact.",
+          "A case study for each project, with its features, screenshots, decisions and stack.",
+          "Every page is built ahead of time. Adding a project to the data creates its page, social image and sitemap entry.",
+        ],
+      },
+      {
+        title: "Motion",
+        items: [
+          "The letters of the name drop in, then the name shrinks and fades as the page scrolls.",
+          "The About text lights up line by line as it scrolls into view.",
+          "On desktop the Experience row pins and pans sideways. On phones it's a swipeable row with a small slider.",
+          "Work panels stack on top of each other, each sinking back as the next one covers it.",
+          "Opening a case study slides the page and morphs the project's screenshot and title into place.",
+        ],
+      },
+      {
+        title: "Search and sharing",
+        items: [
+          "Each page has its own title, description and canonical URL.",
+          "Social preview images are drawn in code for each page at build time.",
+          "Structured data (WebSite, Person, CreativeWork, BreadcrumbList) linked by id, plus a sitemap and robots.txt.",
+          "The years of experience are counted from the resume dates and go up by themselves, with a daily rebuild.",
+        ],
+      },
+      {
+        title: "Accessibility",
+        items: [
+          "Every animation turns off when the system's reduced-motion setting is on, and the page still looks finished.",
+          "Dialogs use the native dialog element, which traps focus and closes on Escape.",
+          "Text split up for animation keeps a readable copy for screen readers.",
+          "Contrast tuned even for the dimmed About words, and visible focus styles.",
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/work/portfolio/experience.png",
+        alt: "The Experience section: job cards in a row, the current job in the accent color",
+        caption: "The Experience row pins on desktop and pans sideways as you scroll.",
+      },
+      {
+        src: "/work/portfolio/work.png",
+        alt: "The Work section: a project panel with its name, summary, tags and screenshot",
+        caption: "Work panels stack and sink back as the next one slides over.",
+      },
+      {
+        src: "/work/portfolio/case-study.png",
+        alt: "The top of the Money case study: title, intro, links and facts",
+        caption: "Each project gets a case study, built ahead of time from the same data.",
+      },
+      {
+        src: "/work/portfolio/skills.png",
+        alt: "The Skills and Contact sections: skill groups as chips and a large email link",
+        caption: "Skills as chips that rise in turn, then the contact block.",
+      },
+      {
+        src: "/work/portfolio/phone-home.png",
+        alt: "The home page on a phone",
+        caption: "The hero on a phone.",
+        phone: true,
+      },
+      {
+        src: "/work/portfolio/phone-experience.png",
+        alt: "The Experience section on a phone, a swipeable row of cards with a slider",
+        caption: "On phones, Experience is a swipeable row.",
+        phone: true,
+      },
+      {
+        src: "/work/portfolio/phone-menu.png",
+        alt: "The mobile menu open, with the section links and social links",
+        caption: "The mobile menu, a native dialog.",
+        phone: true,
+      },
+      {
+        src: "/work/portfolio/phone-case-study.png",
+        alt: "The Money case study on a phone",
+        caption: "A case study on a phone.",
+        phone: true,
+      },
+    ],
+    decisions: [
+      "Server Components by default. Only the mobile menu and the experience dialog ship client-side JavaScript.",
+      "All the text lives in one data file, so a copy change never touches a component.",
+      "Scroll motion runs on CSS scroll-driven animations, with no animation library. It animates only transform and opacity, after phones dropped frames on anything else.",
+      "Page changes use React's ViewTransition. Only the screen-sized root is animated, never the whole ~7,800px page, which stuttered on iPhones.",
+      "The nav highlight slides between links with CSS anchor positioning, and falls back to a plain fill where it isn't supported.",
+      "Pages are static and Vercel regenerates them once a day, which keeps the years of experience current without a deploy.",
+      "Built with Claude Code, under written rules (CLAUDE.md) and a developer guide that are updated with every change.",
+    ],
+    stack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "CSS Modules",
+      "Scroll-driven animations",
+      "View Transitions",
+      "next/og",
+      "Vercel",
+    ],
+  },
   {
     slug: "orange",
     name: "Orange",
     status: "In progress",
+    // Off the site for now. Delete this line to bring it back (and add an image).
+    hidden: true,
     summary:
       "A modern, read-only Hacker News reader with its own design system, documented in Storybook.",
     tags: ["Next.js", "TanStack Query", "Zod", "Base UI"],
@@ -149,13 +463,19 @@ export const projects: Project[] = [
     ],
     intro:
       "A modern, read-only Hacker News reader. Built to show clean architecture, a custom design system and good UX.",
-    scope: [
-      "Story lists: Top, New, Best, Ask, Show and Jobs",
-      "Story page with the full comment tree, including polls",
-      "User profiles and search",
-      "Saved stories and read tracking, stored in the browser only",
-      "Keyboard shortcuts, for example j/k navigation",
-      "PWA and offline support",
+    facts: [],
+    features: [
+      {
+        title: "Scope",
+        items: [
+          "Story lists: Top, New, Best, Ask, Show and Jobs",
+          "Story page with the full comment tree, including polls",
+          "User profiles and search",
+          "Saved stories and read tracking, stored in the browser only",
+          "Keyboard shortcuts, for example j/k navigation",
+          "PWA and offline support",
+        ],
+      },
     ],
     decisions: [
       "Every API request runs on the Next.js server, so the browser never calls Firebase or Algolia directly and first loads stay fast.",
@@ -175,69 +495,10 @@ export const projects: Project[] = [
       "Storybook",
     ],
   },
-  {
-    slug: "money",
-    name: "Money",
-    status: "In progress",
-    summary:
-      "A Persian, right-to-left personal accounting app. Record transactions by hand, or by talking to Claude through the app's MCP connector.",
-    tags: ["Next.js", "Postgres", "Drizzle", "Better Auth", "MCP"],
-    screenshot: "Money screenshot, 1600 x 1200",
-    links: [{ label: "Code", href: "https://github.com/mrghasemi1992/money" }],
-    intro:
-      "A personal accounting app with a Persian, right-to-left interface. Users record income, expenses and transfers by hand, or by talking to Claude, which saves them through the app's MCP connector.",
-    scope: [
-      "Sign in with username and password, by invite only",
-      "Accounts with a starting balance and a live current balance",
-      "Income, expense and transfer transactions with categories, tags and notes",
-      "A Claude connector (MCP) with OAuth sign-in, so Claude can add, find, edit and delete the user's transactions",
-      "Monthly budgets per category, repeating every Jalali month",
-      "Reports, a dashboard, and CSV import and export",
-    ],
-    decisions: [
-      "Next.js over Vite, because the MCP endpoint, the OAuth server, sign-in and database access all live in one project as Route Handlers and Server Actions, with no separate backend.",
-      "Dates are stored as Gregorian and converted to the Jalali calendar only at the edges: in the UI and at the MCP boundary.",
-      "Every row belongs to a user, and the user id always comes from the session or the OAuth token, never from client input.",
-      "Zod validates every form, Server Action input, MCP tool input and CSV row.",
-    ],
-    stack: [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Postgres",
-      "Drizzle ORM",
-      "Better Auth",
-      "MCP",
-      "Zod",
-      "Base UI",
-      "CSS Modules",
-      "Storybook",
-    ],
-  },
-  {
-    slug: "portfolio",
-    name: "This portfolio",
-    summary: "The site you are reading. Server-rendered with Next.js.",
-    tags: ["Next.js", "React", "CSS Modules"],
-    screenshot: "Portfolio screenshot, 1600 x 1200",
-    links: [{ label: "Code", href: "https://github.com/mrghasemi1992/portfolio" }],
-    intro:
-      "The site you are reading. It is server-rendered with Next.js, so every page arrives as finished HTML for readers and search engines.",
-    scope: [
-      "A home page with About, Experience, Work, Skills and Contact",
-      "A case-study page for each project, built ahead of time",
-      "Layouts for desktop and mobile",
-    ],
-    decisions: [
-      "Server Components by default. Only the mobile menu and the experience dialog ship client-side JavaScript.",
-      "Scroll motion runs on CSS scroll-driven animations, with no animation library.",
-      "Page changes use React's ViewTransition to carry a project's screenshot and title into its case study.",
-      "Every animation turns off when the system's reduced-motion setting is on.",
-      "Each page has its own title, description and social preview image, plus a sitemap and structured data.",
-    ],
-    stack: ["Next.js", "React", "TypeScript", "CSS Modules", "View Transitions"],
-  },
 ];
+
+/** The projects on the site, in order. Hidden ones are left out everywhere. */
+export const projects = allProjects.filter((p) => !p.hidden);
 
 export const getProject = (slug: string) =>
   projects.find((p) => p.slug === slug);

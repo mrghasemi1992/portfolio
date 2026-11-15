@@ -3,6 +3,23 @@
   border-radius: 20px;
   border: 1px dashed var(--line-strong);
 }
+/* A real image gets a solid hairline instead of the placeholder's dashes. */
+.frame:has(.media) {
+  border-style: solid;
+  border-color: var(--line);
+  background: var(--surface-3);
+}
+
+.media {
+  position: relative;
+  height: 100%;
+}
+
+/* Screenshots are taller than some slots: keep the top, crop the bottom. */
+.image {
+  object-fit: cover;
+  object-position: top;
+}
 
 .placeholder {
   height: 100%;

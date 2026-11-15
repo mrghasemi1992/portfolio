@@ -109,7 +109,7 @@ Shared pieces:
 | --- | --- |
 | `section` | A `<section>` with an id and the big uppercase heading. **The id is the title in lowercase**, which is what the nav links point at (`title="Work"` → `#work`). |
 | `role-sheet` | The "Read all" button and the full-screen dialog with a job's bullets. **Client component.** |
-| `screenshot` | The image slot. A striped placeholder until real images exist |
+| `screenshot` | A project's main image (`next/image`, cropped from the top), or a striped placeholder when the project has no `image` |
 | `page-transition` | An empty marker that makes every page change start a view transition (see §3) |
 | `json-ld` | Writes structured data for search engines into a `<script>` tag |
 | `logo` | The logo as an inline SVG, drawn in the current text color |
@@ -329,8 +329,10 @@ Each of these fixed a measured problem on phones:
 
 ### Add a fourth project
 
-Add the entry to `projects` (see README), then in
-`src/components/projects/styles.module.css`:
+The Work section handles two or three panels by itself: `.stack` sets
+`--share` (each panel's slice of the sink animation) to 50%, and to 33.33%
+when it has a third child. For a fourth, add the entry to `projects` (see
+README), then in `src/components/projects/styles.module.css`:
 
 1. Add a slot for the new panel, below the existing ones:
 
@@ -341,12 +343,12 @@ Add the entry to `projects` (see README), then in
    }
    ```
 
-2. Change the sink range so each panel gets an equal share. It's `33%` per
-   panel for three; for four, use `25%`:
+2. Give four panels a quarter each:
 
    ```css
-   animation-range: contain calc(var(--n, 0) * 25%)
-     contain calc((var(--n, 0) + 1) * 25%);
+   .stack:has(> :nth-child(4)) {
+     --share: 25%;
+   }
    ```
 
 3. Check the Work section on desktop: each panel should sit 28px lower than the
@@ -399,16 +401,24 @@ Change the value in `:root` in `globals.css`. If it's `--bg`, `--text`,
 and `themeColor` in `layout.tsx` for `--bg`. Check contrast: unlit About words
 at 0.4 opacity are tuned to stay at 3.5:1 against `--bg`.
 
-### Add real screenshots
+### Screenshots
 
-1. Put the images in `public/`, for example `public/work/orange.png` (1600 ×
-   1200, 4:3).
-2. Add an image path to the `Project` type and each project in `src/data`.
-3. In `src/components/screenshot/index.tsx`, render `next/image` with that path
-   instead of the placeholder `<div>`, keeping `label` as the `alt` text. The
-   file has a `TODO` at that spot.
-4. Keep the `<ViewTransition name="shot-...">` wrappers in `projects` and
-   `case-study` as they are, so the morph still works.
+The sizes and where each image goes are in the README ("Screenshots"). How it's
+wired:
+
+- `Screenshot` (`src/components/screenshot`) renders the main image with
+  `next/image` and `fill`, `object-fit: cover` and `object-position: top`, so
+  the frame decides the shape: the Work panel's height on desktop, 2:1 on a
+  case study, 4:3 on phones. Without `src` it draws the striped placeholder.
+  It takes `sizes`, so the browser downloads a file that fits the slot, and
+  `preload` for the case study's image, which is the largest thing on screen.
+- The `<ViewTransition name="shot-...">` wrappers in `projects` and
+  `case-study` stay around `Screenshot`, so the morph still works with real
+  images.
+- The gallery is in `case-study`: desktop and phone shots go in two separate
+  grids (two and four columns, one and two on phones). Their images use fixed
+  `width`/`height` (1600 × 1000 and 780 × 1688), so a gallery image of another
+  size would be stretched. Each links to its file, opening in a new tab.
 
 ### Hidden limits
 
@@ -417,7 +427,8 @@ build; it just looks wrong.
 
 | What | Styled for | Where to extend |
 | --- | --- | --- |
-| Projects in the Work stack | 3 | `projects/styles.module.css` (see above) |
+| Projects in the Work stack | 2 or 3 | `projects/styles.module.css` (see above) |
+| Gallery image sizes | 1600 × 1000 desktop, 780 × 1688 phone | `width`/`height` in `case-study/index.tsx` |
 | Words in your name (hero lines) | 4 | `.line:nth-child` in `hero/styles.module.css` |
 | Letters per word with their own delay | 10 (the rest drop together) | `.char:nth-child` in the same file |
 | Skill chips per group with their own delay | 7 | `.chip:nth-child` in `skills/styles.module.css` |

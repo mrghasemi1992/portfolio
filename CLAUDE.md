@@ -23,6 +23,7 @@ Don't run `npm run build` while the dev server is up: it overwrites `.next` and 
 ## Architecture
 
 - **Content is data.** All copy lives in `src/data/index.tsx` (`profile`, `experience`, `projects`, `skillGroups`, `marqueeItems`, `socials`, `navLinks`, `SITE_URL`, `SHOW_HERO_TILE`). Components only lay it out. A copy change should touch only that file.
+- **Projects.** `projects` is `allProjects` minus entries with `hidden: true` (Orange, for now); everything (cards, pages, sitemap, OG images) reads `projects`. Screenshots live in `public/work/<slug>/`: main `image` 1600×1200 (cropped from the top), gallery 1600×1000 or 780×1688 with `phone: true` (sizes in README "Screenshots").
 - **Computed copy.** The years of experience in `profile.intro`/`summary` come from the earliest `experience[].period`, parsed as `Mon YYYY - …`. `layout.tsx` sets `revalidate = 86400` so prerendered pages pick up the new number daily without a deploy.
 - **Rendering.** Every page is a Server Component, prerendered at build time. `/work/[slug]` is built from `projects` via `generateStaticParams` with `dynamicParams = false`, so adding a project creates its page, OG image (`work/[slug]/opengraph-image.tsx`) and sitemap entry; unknown slugs 404.
 - **Client components:** only `nav` (mobile menu `<dialog>`, active-section `IntersectionObserver`) and `role-sheet` (experience `<dialog>`). Keep it that way unless interactivity requires otherwise.
@@ -40,7 +41,7 @@ Don't run `npm run build` while the dev server is up: it overwrites `.next` and 
 - **Never wrap `<main>` in `<ViewTransition>`** (snapshots the ~7800px page, drops frames on phones). `page-transition` wraps an empty marker; `globals.css` slides the `root` snapshot by `nav-forward`/`nav-back` type, set by `<Link transitionTypes>`. Project screenshot and title share `shot-<slug>`/`title-<slug>` names for the morph.
 - **Desktop-only motion:** the pinned Experience row and stacking Work panels run above 760px only (the single breakpoint).
 - Keep `data-scroll-behavior="smooth"` on `<html>`, `inline-block` on About words, and `.sr-only` copies next to visually split text (hero `h1`).
-- **Fixed-count styles:** Work panels are styled for 3 projects, hero for 4 name words, skill chip stagger for 7. Extending past them needs CSS changes (DEVELOPMENT §5, "Hidden limits").
+- **Fixed-count styles:** Work panels are styled for 2 or 3 projects, hero for 4 name words, skill chip stagger for 7. Extending past them needs CSS changes (DEVELOPMENT §5, "Hidden limits").
 
 ## Docs
 
@@ -60,3 +61,4 @@ Never run `git commit` without the user's approval. Before each commit, show the
 2. the exact commit message you intend to use.
 
 Then wait. Commit only after they approve, and apply any wording they change. This is per commit, not per session — approving one commit does not authorize the next one. It applies to amends and to commits made as part of a larger task; when a task produces several commits, walk through them one at a time.
+

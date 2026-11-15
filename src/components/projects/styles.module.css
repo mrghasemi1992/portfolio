@@ -3,6 +3,12 @@
   flex-direction: column;
   gap: 32px;
   view-timeline-name: --work;
+  /* Each panel's share of the stack's scroll, for the sink animation:
+     a half for two panels, a third for three. */
+  --share: 50%;
+}
+.stack:has(> :nth-child(3)) {
+  --share: 33.33%;
 }
 
 .panel {
@@ -126,8 +132,8 @@
     .panel {
       animation: sink linear both;
       animation-timeline: --work;
-      animation-range: contain calc(var(--n, 0) * 33%)
-        contain calc((var(--n, 0) + 1) * 33%);
+      animation-range: contain calc(var(--n, 0) * var(--share))
+        contain calc((var(--n, 0) + 1) * var(--share));
     }
     .panel:last-child {
       animation: none;

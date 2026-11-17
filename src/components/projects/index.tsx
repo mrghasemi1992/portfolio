@@ -37,7 +37,12 @@ export default function Projects() {
               </Link>
             </div>
             <ViewTransition name={`shot-${project.slug}`} share="morph" default="none">
-              <Screenshot label={project.screenshot} className={styles.shot} />
+              <Screenshot
+                label={project.screenshot}
+                src={project.image}
+                sizes="(max-width: 760px) 100vw, (max-width: 1360px) 56vw, 760px"
+                className={styles.shot}
+              />
             </ViewTransition>
           </article>
         ))}

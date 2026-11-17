@@ -65,6 +65,7 @@ export default async function WorkPage({ params }: Props) {
         keywords: project.stack.join(", "),
         // Same @id as the Person on the home page.
         author: { "@type": "Person", "@id": `${SITE_URL}/#person`, name: profile.name },
+        ...(project.image && { image: `${SITE_URL}${project.image}` }),
         ...(code && { codeRepository: code.href }),
         ...(live && { sameAs: live.href }),
         ...(project.status && { creativeWorkStatus: project.status }),

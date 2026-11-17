@@ -51,8 +51,7 @@ and you look at the result in the browser.
 | URL | What it is | Built from |
 | --- | --- | --- |
 | `/` | Home page | `src/app/page.tsx` |
-| `/work/orange` | Case study: Orange, a Hacker News reader | `src/app/work/[slug]/page.tsx` |
-| `/work/money` | Case study: Money, a Persian accounting app | same file, one page per project |
+| `/work/money` | Case study: Money, a Persian and English accounting app | `src/app/work/[slug]/page.tsx` |
 | `/work/portfolio` | Case study: this site | same file |
 | `/sitemap.xml` | Sitemap for search engines | `src/app/sitemap.ts` |
 | `/robots.txt` | Crawler rules | `src/app/robots.ts` |
@@ -119,11 +118,19 @@ section, the page at `/work/<slug>`, its social image and its sitemap entry.
   for them.
 - `status: "In progress"` adds the badge. Leave it out when the project is
   done.
-- `screenshot` is the text shown in the empty image slot (see below).
+- `image` is the main screenshot and `screenshot` its alt text (see
+  "Screenshots" below). Without `image`, a striped placeholder shows the
+  `screenshot` text.
+- `facts` are the short label/value pairs under the links (role, year,
+  platform...). `features` are groups of bullets, each with a heading; they
+  make the Features section. `gallery` is the Screens section (optional).
+- `hidden: true` takes the project off the site (its card, page and sitemap
+  entry) without deleting its text. Orange is hidden this way for now; delete
+  the `hidden` line to bring it back.
 
-**The Work section is styled for three projects.** A fourth needs one more CSS
-rule, or it lands at the wrong height and the stacking animation goes wrong.
-See "Add a fourth project" in [DEVELOPMENT.md](DEVELOPMENT.md#add-a-fourth-project).
+**The Work section is styled for two or three projects.** A fourth needs one
+more CSS rule, or it lands at the wrong height and the stacking animation goes
+wrong. See "Add a fourth project" in [DEVELOPMENT.md](DEVELOPMENT.md#add-a-fourth-project).
 
 ### Add or remove a skill
 
@@ -138,9 +145,25 @@ logo.
 
 ### Screenshots
 
-Project images are still placeholders: a striped box with the `screenshot`
-text in it. Swapping in real images is a code change in
-`src/components/screenshot`; see DEVELOPMENT.md.
+Images live in `public/work/<slug>/`. To change one, replace the file with
+another of the same size and keep the name; to add one, put the file there and
+add its path to the project.
+
+| Image | Size | Where it goes in `projects` |
+| --- | --- | --- |
+| Main screenshot | 1600 × 1200 (4:3) | `image`, with `screenshot` as its alt text |
+| Gallery, desktop | 1600 × 1000 (16:10) | `gallery`: `{ src, alt, caption }` |
+| Gallery, phone | 780 × 1688 (a 390 × 844 screen at 2×) | `gallery`: `{ src, alt, caption, phone: true }` |
+
+The main screenshot is cropped from the top: to 2:1 on a case study on
+desktop, and to the panel's shape in the Work section, so keep what matters in
+its top half. In the gallery, desktop shots come two to a row and phone shots
+four to a row, so an even number of each looks best. Each image opens full size
+when clicked.
+
+Money's screenshots are taken from its Storybook (sample data, English, dark
+theme), and the portfolio's from a production build of this site, with reduced
+motion on so every section looks finished.
 
 ### Files in `public/`
 

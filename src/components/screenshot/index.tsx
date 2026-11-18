@@ -15,19 +15,21 @@ type Props = {
   className?: string;
 };
 
+// The frame is a dark well; the image sits inside it, inset from the top and
+// left, and runs off the right and bottom edges (the "bleed").
 export default function Screenshot({ label, src, sizes, preload, className }: Props) {
   return (
     <div className={className ? `${styles.frame} ${className}` : styles.frame}>
-      {src ? (
-        // The wrapper is what the Work panel scales on hover.
-        <div className={styles.media}>
+      {/* The wrapper is what the Work panel moves on hover. */}
+      <div className={styles.media}>
+        {src ? (
           <Image src={src} alt={label} fill sizes={sizes} preload={preload} className={styles.image} />
-        </div>
-      ) : (
-        <div className={styles.placeholder} role="img" aria-label={label}>
-          {label}
-        </div>
-      )}
+        ) : (
+          <div className={styles.placeholder} role="img" aria-label={label}>
+            {label}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

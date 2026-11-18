@@ -424,6 +424,10 @@ wired:
   grids (two and four columns, one and two on phones). Their images use fixed
   `width`/`height` (1600 × 1000 and 780 × 1688), so a gallery image of another
   size would be stretched. Each links to its file, opening in a new tab.
+- Gallery shots are matted, not bled: the whole screen has to show. The link
+  is the mat (`--surface-3`, light enough to stand out from the dark
+  screenshots) and its padding; the image's corner is `--corner` minus
+  `--mat`, so the curves stay parallel. Change both variables together.
 
 ### Hidden limits
 

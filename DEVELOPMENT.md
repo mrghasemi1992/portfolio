@@ -66,8 +66,11 @@ src/
     styles.module.css           its styles, when it has any
   data/
     index.tsx                   all editable content (see README)
-    logo.ts                     the logo's SVG path, used by the nav, the hero
-                                tile and the social images
+    logo.ts                     the logo's SVG path, used by the nav and the
+                                social images
+  assets/
+    profile/portrait.png        the hero portrait, cut out (transparent PNG)
+    work/<slug>/                each project's screenshots
 public/                         files served as-is from the site root
 .claude/launch.json             dev (3002) and prod (3003) servers for Claude
                                 Code's browser preview
@@ -93,7 +96,7 @@ Page sections, in the order they appear on the home page:
 | Component | What it is |
 | --- | --- |
 | `nav` | Sticky header: logo, section links with a sliding highlight, Contact button, and the mobile menu. **Client component.** |
-| `hero` | Name (letters drop in), role, intro, and the optional logo tile |
+| `hero` | Name (letters drop in), role, intro, and the black-and-white portrait standing in the right half (above the name on phones) |
 | `marquee` | Strip of skills scrolling sideways. Decorative, hidden from screen readers |
 | `about` | The summary, lit up line by line as you scroll |
 | `experience` | One row per job, the company as a big headline. A click opens its bullets; one job is open at a time, and the current job starts open |
@@ -174,6 +177,16 @@ in uppercase in CSS, not in the text.
   and that's hidden from screen readers. The plain name sits next to it in an
   `.sr-only` span, so screen readers and search engines read the name as a
   whole.
+- **The hero portrait** is `profile.portrait`, a cut-out PNG (transparent
+  background) imported from `src/assets/profile/`. The file stays in color; the
+  hero turns it black and white, adds a little contrast and film grain with an
+  SVG filter (`#portrait-grain`, drawn inside the hero), and fades its bottom
+  into the page with a `mask-image`. The grain hides that the source is a phone
+  photo; keep it if you swap the photo for one of similar quality. The filter's
+  `<svg>` is sized 0, not `display: none`, which would switch the filter off.
+  On desktop it stands on the hero's bottom edge, under the name; on phones it
+  sits above the name and runs off the right edge (`overflow-x: clip` on the
+  hero).
 
 ## 3. The browser features this site relies on
 
@@ -216,7 +229,7 @@ Where each one lives:
 
 | Effect | File |
 | --- | --- |
-| Hero name shrinks and fades, tile rotates | `hero/styles.module.css` |
+| Hero name shrinks and fades, portrait sinks and fades | `hero/styles.module.css` |
 | Nav background fades in after 160px | `nav/styles.module.css` (on `::after`) |
 | About words light up | `about/styles.module.css` |
 | Section headings rise | `section/styles.module.css` |

@@ -22,7 +22,7 @@ Don't run `npm run build` while the dev server is up: it overwrites `.next` and 
 
 ## Architecture
 
-- **Content is data.** All copy lives in `src/data/index.tsx` (`profile`, `experience`, `projects`, `skillGroups`, `marqueeItems`, `socials`, `navLinks`, `SITE_URL`, `SHOW_HERO_TILE`). Components only lay it out. A copy change should touch only that file.
+- **Content is data.** All copy lives in `src/data/index.tsx` (`profile`, `experience`, `projects`, `skillGroups`, `marqueeItems`, `socials`, `navLinks`, `SITE_URL`; the hero photo is `profile.portrait`, a cut-out PNG in `src/assets/profile/`). Components only lay it out. A copy change should touch only that file.
 - **Projects.** `projects` is `allProjects` minus entries with `hidden: true` (Orange, for now); everything (cards, pages, sitemap, OG images) reads `projects`. Screenshots live in `src/assets/work/<slug>/` and are imported in `src/data/index.tsx` (never linked from `public/`: the import gives them a hashed, year-long-cached URL and a blur placeholder): main `image` 1600×1200 (cropped from the top), gallery 1600×1000 or 780×1688 with `phone: true` (sizes in README "Screenshots").
 - **Computed copy.** The years of experience in `profile.intro`/`summary` come from the earliest `experience[].period`, parsed as `Mon YYYY - …`. `layout.tsx` sets `revalidate = 86400` so prerendered pages pick up the new number daily without a deploy.
 - **Rendering.** Every page is a Server Component, prerendered at build time. `/work/[slug]` is built from `projects` via `generateStaticParams` with `dynamicParams = false`, so adding a project creates its page, OG image (`work/[slug]/opengraph-image.tsx`) and sitemap entry; unknown slugs 404.

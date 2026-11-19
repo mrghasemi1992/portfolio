@@ -1,5 +1,8 @@
 import type { StaticImageData } from "next/image";
 
+// The hero portrait: a cut-out PNG with a transparent background, 1100 x 1060.
+import portrait from "@/assets/profile/portrait.png";
+
 // Screenshots. Importing them (rather than linking to public/) gives each a
 // fingerprinted URL that browsers can cache for a year, its size, and a blur preview.
 import moneyBreakdown from "@/assets/work/money/breakdown.png";
@@ -25,10 +28,6 @@ import portfolioWork from "@/assets/work/portfolio/work.png";
 
 // The www host is the primary one: the bare domain redirects to it (308).
 export const SITE_URL = "https://www.mrghasemi1992.ir";
-
-// Temporarily hides the yellow logo tile in the hero. Flip to true to bring it
-// back (it is waiting for a photo to replace the logo).
-export const SHOW_HERO_TILE = false;
 
 export const socials = [
   { label: "GitHub", href: "https://github.com/mrghasemi1992" },
@@ -138,6 +137,11 @@ export const profile = {
   // Words of the summary drawn in the accent color.
   summaryHighlight: ["internal", "tools"],
   email: "mrghasemi1992@gmail.com",
+  // Stands in the hero's right half (above the name on phones), in black and white.
+  portrait: {
+    src: portrait,
+    alt: "Mohammad Reza Ghasemi, smiling, arms crossed",
+  },
 };
 
 export type Shot = {

@@ -356,7 +356,7 @@ const allProjects: Project[] = [
         items: [
           "The letters of the name drop in, then the name shrinks and fades as the page scrolls.",
           "The About text lights up line by line as it scrolls into view.",
-          "On desktop the Experience row pins and pans sideways. On phones it's a swipeable row with a small slider.",
+          "Experience opens one job at a time, and the row you click stays where it is while the one above it closes.",
           "Work panels stack on top of each other, each sinking back as the next one covers it.",
           "Opening a case study slides the page and morphs the project's screenshot and title into place.",
         ],
@@ -374,7 +374,7 @@ const allProjects: Project[] = [
         title: "Accessibility",
         items: [
           "Every animation turns off when the system's reduced-motion setting is on, and the page still looks finished.",
-          "Dialogs use the native dialog element, which traps focus and closes on Escape.",
+          "The mobile menu is a native dialog, which traps focus and closes on Escape. Experience rows are native details elements, usable by keyboard.",
           "Text split up for animation keeps a readable copy for screen readers.",
           "Contrast tuned even for the dimmed About words, and visible focus styles.",
         ],
@@ -383,8 +383,8 @@ const allProjects: Project[] = [
     gallery: [
       {
         src: "/work/portfolio/experience.png",
-        alt: "The Experience section: job cards in a row, the current job in the accent color",
-        caption: "The Experience row pins on desktop and pans sideways as you scroll.",
+        alt: "The Experience section: company names as large rows, the current job open with its highlights in two columns",
+        caption: "Experience lists each job as a big headline, with the current one open.",
       },
       {
         src: "/work/portfolio/work.png",
@@ -409,8 +409,8 @@ const allProjects: Project[] = [
       },
       {
         src: "/work/portfolio/phone-experience.png",
-        alt: "The Experience section on a phone, a swipeable row of cards with a slider",
-        caption: "On phones, Experience is a swipeable row.",
+        alt: "The Experience section on a phone: company names stacked, with SADAD open showing its highlights",
+        caption: "On phones, the same list, one job open at a time.",
         phone: true,
       },
       {
@@ -427,7 +427,7 @@ const allProjects: Project[] = [
       },
     ],
     decisions: [
-      "Server Components by default. Only the mobile menu and the experience dialog ship client-side JavaScript.",
+      "Server Components by default. Only the mobile menu and a small helper that keeps an Experience row in place ship client-side JavaScript.",
       "All the text lives in one data file, so a copy change never touches a component.",
       "Scroll motion runs on CSS scroll-driven animations, with no animation library. It animates only transform and opacity, after phones dropped frames on anything else.",
       "Page changes use React's ViewTransition. Only the screen-sized root is animated, never the whole ~7,800px page, which stuttered on iPhones.",

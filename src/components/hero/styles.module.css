@@ -1,45 +1,15 @@
 .hero {
-  position: relative;
   max-width: var(--page-width);
   margin: 0 auto;
   padding: 40px var(--gutter) 64px;
   min-height: clamp(560px, calc(100dvh - 72px), 960px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
-}
-
-/* Holds the SVG filter. Not display: none, which would switch the filter off. */
-.defs {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-/* The portrait stands in the hero's right half, on its bottom edge, and fades
-   into the page toward the bottom. The name and intro sit above it. */
-.portrait {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  height: min(50vw, 92%, 760px);
-  aspect-ratio: 1100 / 1060;
-  pointer-events: none;
-  mask-image: linear-gradient(to bottom, black 62%, transparent 98%);
-}
-
-.portraitImage {
-  display: block;
-  width: 100%;
-  height: 100%;
-  filter: url(#portrait-grain);
-  animation: rise 1100ms 200ms var(--ease-out) both;
+  gap: 40px;
 }
 
 .text {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 36px;
@@ -112,6 +82,42 @@
   color: var(--text-dim);
 }
 
+/* The portrait: a wide lime tile (4:3) with the photo standing in it. The
+   photo is wider than the tile and its head rises above the top edge; .clip
+   cuts it at the tile's sides and rounded bottom but leaves the top open. */
+.portrait {
+  --tile-radius: 40px;
+  width: clamp(300px, 30vw, 440px);
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--tile-radius);
+  background: var(--accent);
+  animation: pop 1100ms 150ms var(--ease-out) both;
+  /* Hover uses `scale` so it doesn't fight the transform of the pop. */
+  transition: scale 400ms var(--ease-spring);
+}
+.tile:hover {
+  scale: 1.04;
+}
+
+.clip {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(-60% 0 0 0 round 0 0 var(--tile-radius) var(--tile-radius));
+}
+
+.photo {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 112.5%;
+  height: auto;
+  transform: translateX(-50%);
+}
+
 @keyframes drop {
   from {
     transform: translateY(-70%) rotate(-8deg);
@@ -128,10 +134,10 @@
     transform: translateY(16px);
   }
 }
-@keyframes rise {
+@keyframes pop {
   from {
+    transform: scale(0.6) rotate(-10deg);
     opacity: 0;
-    transform: translateY(6%);
   }
 }
 
@@ -146,7 +152,7 @@
     .portrait {
       animation: sink linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 640px;
+      animation-range: 0 800px;
     }
   }
 }
@@ -158,26 +164,25 @@
 }
 @keyframes sink {
   to {
-    transform: translateY(10%);
-    opacity: 0.2;
+    transform: translateY(16%) rotate(-6deg);
+    opacity: 0.3;
   }
 }
 
-/* Phones: the portrait moves above the name, running off the right edge, and
-   the name starts over its faded lower part. */
+/* Phones: the tile comes first, above the name, with room for the head. */
 @media (max-width: 760px) {
   .hero {
-    overflow-x: clip;
+    grid-template-columns: minmax(0, 1fr);
     min-height: 0;
-    padding-top: calc(min(69vw, 330px) + 24px);
+    gap: 28px;
+    padding-top: 24px;
     padding-bottom: 48px;
   }
   .portrait {
-    top: 24px;
-    bottom: auto;
-    right: -14vw;
-    width: min(92vw, 440px);
-    height: auto;
+    --tile-radius: 24px;
+    order: -1;
+    width: 220px;
+    margin-top: 80px;
   }
   .name {
     font-size: clamp(64px, 19vw, 96px);
@@ -193,7 +198,10 @@
 @media (prefers-reduced-motion: reduce) {
   .char,
   .tag,
-  .portraitImage {
+  .tile {
     animation: none;
+  }
+  .tile {
+    transition: none;
   }
 }

@@ -146,9 +146,9 @@ Replace `src/assets/profile/portrait.png` with a new photo and keep the name.
 It needs a transparent background (on a Mac, open the photo in Preview or
 Photos and use "Remove Background", or drag the subject out of the photo), a
 roughly square crop tight around your head and shoulders, and at least 1000
-pixels across. Leave it in color: the site turns it black and white and adds
-grain. If the new photo isn't 1100 × 1060, update the `aspect-ratio` of
-`.portrait` in `src/components/hero/styles.module.css` to its width / height.
+pixels across. It's shown in color, standing in the lime tile with your head
+above its top edge, so leave a little room above your head and none below the
+crop's bottom edge.
 
 ### Screenshots
 

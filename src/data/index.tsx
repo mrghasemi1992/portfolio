@@ -137,7 +137,7 @@ export const profile = {
   // Words of the summary drawn in the accent color.
   summaryHighlight: ["internal", "tools"],
   email: "mrghasemi1992@gmail.com",
-  // Stands in the hero's right half (above the name on phones), in black and white.
+  // Stands in the lime tile at the hero's bottom right (above the name on phones).
   portrait: {
     src: portrait,
     alt: "Mohammad Reza Ghasemi, smiling, arms crossed",

@@ -468,6 +468,8 @@ build; it just looks wrong.
 | The nav highlight doesn't move to a new section | The `navLinks` href doesn't match the section id | The id is the `Section` title in lowercase |
 | A style from `className` sometimes wins, sometimes not | The caller and the component set the same property | Set it on only one of them (see §4) |
 | The years of experience are wrong | A `period` isn't in `Mon YYYY - ...` format | Fix the format in `experience` |
+| Clicking an Experience row makes it jump up, off screen | The rows aren't inside `<Accordion>`, or its scroll correction was moved into `requestAnimationFrame` or the `toggle` event | Keep the rows inside `<Accordion>` and correct the scroll in the click handler itself (see §3) |
+| Several Experience jobs stay open at once | The browser is older than Chrome 120, Safari 17.2 or Firefox 130, or the rows no longer share one `name` | Old browsers: expected. Otherwise give every `<details>` the same `name` |
 | `/work/new-thing` is a 404 | The slug isn't in `projects` | Add it; every page is built from that list |
 
 ## 7. Workflow: branch, commit, PR, release

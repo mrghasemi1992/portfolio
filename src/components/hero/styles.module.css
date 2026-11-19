@@ -1,15 +1,45 @@
 .hero {
+  position: relative;
   max-width: var(--page-width);
   margin: 0 auto;
   padding: 40px var(--gutter) 64px;
   min-height: clamp(560px, calc(100dvh - 72px), 960px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   align-items: end;
-  gap: 40px;
+}
+
+/* Holds the SVG filter. Not display: none, which would switch the filter off. */
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* The portrait stands in the hero's right half, on its bottom edge, and fades
+   into the page toward the bottom. The name and intro sit above it. */
+.portrait {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: min(50vw, 92%, 760px);
+  aspect-ratio: 1100 / 1060;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, black 62%, transparent 98%);
+}
+
+.portraitImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: url(#portrait-grain);
+  animation: rise 1100ms 200ms var(--ease-out) both;
 }
 
 .text {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 36px;
@@ -82,28 +112,6 @@
   color: var(--text-dim);
 }
 
-.mark {
-  width: 300px;
-  height: 300px;
-  border-radius: 40px;
-  background: var(--accent);
-  color: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: pop 1100ms 150ms var(--ease-out) both;
-  /* Hover uses `scale` so it doesn't fight the transform and rotate animations. */
-  transition: scale 400ms var(--ease-spring);
-}
-.mark:hover {
-  scale: 1.05;
-}
-
-.markLogo {
-  width: 210px;
-  height: 148px;
-}
-
 @keyframes drop {
   from {
     transform: translateY(-70%) rotate(-8deg);
@@ -120,14 +128,14 @@
     transform: translateY(16px);
   }
 }
-@keyframes pop {
+@keyframes rise {
   from {
-    transform: scale(0.5) rotate(-18deg);
     opacity: 0;
+    transform: translateY(6%);
   }
 }
 
-/* While scrolling away, the name shrinks and fades and the tile turns. */
+/* While scrolling away, the name shrinks and fades and the portrait sinks. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: scroll()) {
     .nameWrap {
@@ -135,10 +143,10 @@
       animation-timeline: scroll(root);
       animation-range: 0 640px;
     }
-    .mark {
-      animation: pop 1100ms 150ms var(--ease-out) both, turn linear both;
-      animation-timeline: auto, scroll(root);
-      animation-range: normal, 0 800px;
+    .portrait {
+      animation: sink linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 640px;
     }
   }
 }
@@ -148,29 +156,28 @@
     opacity: 0.15;
   }
 }
-@keyframes turn {
+@keyframes sink {
   to {
-    rotate: -24deg;
+    transform: translateY(10%);
+    opacity: 0.2;
   }
 }
 
+/* Phones: the portrait moves above the name, running off the right edge, and
+   the name starts over its faded lower part. */
 @media (max-width: 760px) {
   .hero {
-    grid-template-columns: minmax(0, 1fr);
+    overflow-x: clip;
     min-height: 0;
-    gap: 28px;
-    padding-top: 24px;
+    padding-top: calc(min(69vw, 330px) + 24px);
     padding-bottom: 48px;
   }
-  .mark {
-    order: -1;
-    width: 112px;
-    height: 112px;
-    border-radius: 24px;
-  }
-  .markLogo {
-    width: 80px;
-    height: 56px;
+  .portrait {
+    top: 24px;
+    bottom: auto;
+    right: -14vw;
+    width: min(92vw, 440px);
+    height: auto;
   }
   .name {
     font-size: clamp(64px, 19vw, 96px);
@@ -186,10 +193,7 @@
 @media (prefers-reduced-motion: reduce) {
   .char,
   .tag,
-  .mark {
+  .portraitImage {
     animation: none;
-  }
-  .mark {
-    transition: none;
   }
 }

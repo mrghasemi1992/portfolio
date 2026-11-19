@@ -75,7 +75,7 @@ save, and check the page.
 | The scrolling strip under the hero | `marqueeItems` |
 | GitHub and LinkedIn links | `socials` |
 | Links in the top nav | `navLinks`, `contactLink` |
-| The yellow logo tile in the hero | `SHOW_HERO_TILE` |
+| Your photo in the hero, and its description for screen readers | `profile.portrait` |
 | The site's address | `SITE_URL` |
 
 ### Edit your intro or About text
@@ -140,10 +140,15 @@ Edit `skillGroups`. Every chip there is also listed for search engines as
 something you know (`knowsAbout` in the structured data). `marqueeItems` is
 only decoration and can differ.
 
-### Bring back the hero tile
+### Change your photo
 
-Set `SHOW_HERO_TILE = true`. It's hidden until there's a photo to replace the
-logo.
+Replace `src/assets/profile/portrait.png` with a new photo and keep the name.
+It needs a transparent background (on a Mac, open the photo in Preview or
+Photos and use "Remove Background", or drag the subject out of the photo), a
+roughly square crop tight around your head and shoulders, and at least 1000
+pixels across. Leave it in color: the site turns it black and white and adds
+grain. If the new photo isn't 1100 × 1060, update the `aspect-ratio` of
+`.portrait` in `src/components/hero/styles.module.css` to its width / height.
 
 ### Screenshots
 

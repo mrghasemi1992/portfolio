@@ -76,6 +76,7 @@ save, and check the page.
 | GitHub and LinkedIn links | `socials` |
 | Links in the top nav | `navLinks`, `contactLink` |
 | Your photo in the hero, and its description for screen readers | `profile.portrait` |
+| Show or hide the photo tile in the hero | `SHOW_HERO_PHOTO` |
 | The site's address | `SITE_URL` |
 
 ### Edit your intro or About text
@@ -149,6 +150,9 @@ roughly square crop tight around your head and shoulders, and at least 1000
 pixels across. It's shown in color, standing in the lime tile with your head
 above its top edge, so leave a little room above your head and none below the
 crop's bottom edge.
+
+The tile is hidden for now, waiting for a sharper photo. Once you've replaced
+the file, set `SHOW_HERO_PHOTO = true` in `src/data/index.tsx` to show it.
 
 ### Screenshots
 

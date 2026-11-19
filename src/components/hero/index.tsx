@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { profile } from "@/data";
+import { SHOW_HERO_PHOTO, profile } from "@/data";
 import styles from "./styles.module.css";
 
 /** One line per word and one span per letter, for the drop-in animation. */
@@ -37,19 +37,21 @@ export default function Hero() {
         </div>
       </div>
       {/* The photo stands in the lime tile, its head breaking out of the top edge. */}
-      <div className={styles.portrait}>
-        <div className={styles.tile}>
-          <div className={styles.clip}>
-            <Image
-              className={styles.photo}
-              src={profile.portrait.src}
-              alt={profile.portrait.alt}
-              sizes="(max-width: 760px) 248px, 495px"
-              preload
-            />
+      {SHOW_HERO_PHOTO && (
+        <div className={styles.portrait}>
+          <div className={styles.tile}>
+            <div className={styles.clip}>
+              <Image
+                className={styles.photo}
+                src={profile.portrait.src}
+                alt={profile.portrait.alt}
+                sizes="(max-width: 760px) 248px, 495px"
+                preload
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

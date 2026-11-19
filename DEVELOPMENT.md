@@ -177,7 +177,8 @@ in uppercase in CSS, not in the text.
   and that's hidden from screen readers. The plain name sits next to it in an
   `.sr-only` span, so screen readers and search engines read the name as a
   whole.
-- **The hero portrait** is `profile.portrait`, a cut-out PNG (transparent
+- **The hero portrait** (hidden while `SHOW_HERO_PHOTO` is `false`; the hero
+  is then the name and intro alone) is `profile.portrait`, a cut-out PNG (transparent
   background) imported from `src/assets/profile/`, shown in color in a wide
   lime tile (4:3, no logo). The photo is 112.5% of the tile's width and stands
   on its bottom edge, so the head rises above the tile. `.clip` cuts it with

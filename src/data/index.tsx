@@ -1,3 +1,28 @@
+import type { StaticImageData } from "next/image";
+
+// Screenshots. Importing them (rather than linking to public/) gives each a
+// fingerprinted URL that browsers can cache for a year, its size, and a blur preview.
+import moneyBreakdown from "@/assets/work/money/breakdown.png";
+import moneyBudgets from "@/assets/work/money/budgets.png";
+import moneyConnector from "@/assets/work/money/connector.png";
+import moneyDashboard from "@/assets/work/money/dashboard.png";
+import moneyImport from "@/assets/work/money/import.png";
+import moneyPhoneConsent from "@/assets/work/money/phone-consent.png";
+import moneyPhoneDashboard from "@/assets/work/money/phone-dashboard.png";
+import moneyPhoneForm from "@/assets/work/money/phone-form.png";
+import moneyPhoneReports from "@/assets/work/money/phone-reports.png";
+import moneyReports from "@/assets/work/money/reports.png";
+import moneyTransactions from "@/assets/work/money/transactions.png";
+import portfolioCaseStudy from "@/assets/work/portfolio/case-study.png";
+import portfolioExperience from "@/assets/work/portfolio/experience.png";
+import portfolioHome from "@/assets/work/portfolio/home.png";
+import portfolioPhoneCaseStudy from "@/assets/work/portfolio/phone-case-study.png";
+import portfolioPhoneExperience from "@/assets/work/portfolio/phone-experience.png";
+import portfolioPhoneHome from "@/assets/work/portfolio/phone-home.png";
+import portfolioPhoneMenu from "@/assets/work/portfolio/phone-menu.png";
+import portfolioSkills from "@/assets/work/portfolio/skills.png";
+import portfolioWork from "@/assets/work/portfolio/work.png";
+
 // The www host is the primary one: the bare domain redirects to it (308).
 export const SITE_URL = "https://www.mrghasemi1992.ir";
 
@@ -116,8 +141,8 @@ export const profile = {
 };
 
 export type Shot = {
-  /** Path under public/, e.g. "/work/money/reports.png". */
-  src: string;
+  /** An image imported from src/assets/work/<slug>/, e.g. moneyReports. */
+  src: StaticImageData;
   /** What the image shows, for screen readers. */
   alt: string;
   /** One sentence under the image. */
@@ -138,8 +163,8 @@ export type Project = {
   tags: string[];
   /** The main image's alt text, or the text in the empty slot when there's no image. */
   screenshot: string;
-  /** The main image, 1600 x 1200 (4:3), under public/. */
-  image?: string;
+  /** The main image, 1600 x 1200 (4:3), imported from src/assets/work/<slug>/. */
+  image?: StaticImageData;
   links: { label: string; href: string }[];
   /** Opening paragraph of the case study. Also its meta description. */
   intro: string;
@@ -163,7 +188,7 @@ const allProjects: Project[] = [
     tags: ["Next.js", "Postgres", "Drizzle", "Better Auth", "MCP"],
     screenshot:
       "The Money dashboard: total balance, this month's income and expense, recent transactions and budgets",
-    image: "/work/money/dashboard.png",
+    image: moneyDashboard,
     links: [
       { label: "Code", href: "https://github.com/mrghasemi1992/money" },
       { label: "Storybook", href: "https://money-storybook.vercel.app" },
@@ -238,57 +263,57 @@ const allProjects: Project[] = [
     ],
     gallery: [
       {
-        src: "/work/money/transactions.png",
+        src: moneyTransactions,
         alt: "The transactions page for October 2026, grouped by day, with income, expense and net totals",
         caption:
           "Transactions by day, with the month's totals. The sparkle badge marks the ones Claude recorded.",
       },
       {
-        src: "/work/money/reports.png",
+        src: moneyReports,
         alt: "The reports overview: income, expenses and net against the previous period, biggest changes and recurring spending",
         caption:
           "Reports compare the period with the one before and point out what changed.",
       },
       {
-        src: "/work/money/breakdown.png",
+        src: moneyBreakdown,
         alt: "The reports breakdown: expenses and income by category and spending by account, as bar lists",
         caption: "Spending and income by category and by account. Every chart switches to a table.",
       },
       {
-        src: "/work/money/budgets.png",
+        src: moneyBudgets,
         alt: "The budget page: total spent against the total budget, and each category's progress and status",
         caption: "Monthly budgets, with near-limit and over-budget states in words, not color alone.",
       },
       {
-        src: "/work/money/connector.png",
+        src: moneyConnector,
         alt: "The connector settings page: the connector URL, setup steps for Claude and ChatGPT, and example prompts",
         caption: "The connector page: the URL to add, the steps for Claude and ChatGPT, and things to say.",
       },
       {
-        src: "/work/money/import.png",
+        src: moneyImport,
         alt: "The CSV import on step two of five: amount type, date calendar and column mapping",
         caption: "CSV import, step two of five: map the file's columns and its calendar.",
       },
       {
-        src: "/work/money/phone-dashboard.png",
+        src: moneyPhoneDashboard,
         alt: "The dashboard on a phone, with the floating tab bar",
         caption: "The dashboard on a phone, with the floating tab bar.",
         phone: true,
       },
       {
-        src: "/work/money/phone-form.png",
+        src: moneyPhoneForm,
         alt: "The new transaction form as a bottom sheet on a phone",
         caption: "Adding a transaction opens a bottom sheet.",
         phone: true,
       },
       {
-        src: "/work/money/phone-reports.png",
+        src: moneyPhoneReports,
         alt: "The reports page on a phone, with period options and income, expense and net cards",
         caption: "Reports on a phone.",
         phone: true,
       },
       {
-        src: "/work/money/phone-consent.png",
+        src: moneyPhoneConsent,
         alt: "The consent screen where Claude asks to access a Money account, listing what it will be able to do",
         caption: "Claude asks for access, and Money lists exactly what it will be able to do.",
         phone: true,
@@ -332,7 +357,7 @@ const allProjects: Project[] = [
       "The site you are reading. Server-rendered with Next.js, with scroll-driven motion in plain CSS.",
     tags: ["Next.js", "React", "CSS Modules", "View Transitions"],
     screenshot: "The portfolio's home page: the hero with the name in large condensed letters",
-    image: "/work/portfolio/home.png",
+    image: portfolioHome,
     links: [{ label: "Code", href: "https://github.com/mrghasemi1992/portfolio" }],
     intro:
       "The site you are reading. It is server-rendered with Next.js, so every page arrives as finished HTML for readers and search engines, and its motion runs on CSS that follows the scroll.",
@@ -382,45 +407,45 @@ const allProjects: Project[] = [
     ],
     gallery: [
       {
-        src: "/work/portfolio/experience.png",
+        src: portfolioExperience,
         alt: "The Experience section: company names as large rows, the current job open with its highlights in two columns",
         caption: "Experience lists each job as a big headline, with the current one open.",
       },
       {
-        src: "/work/portfolio/work.png",
+        src: portfolioWork,
         alt: "The Work section: a project panel with its name, summary, tags and screenshot",
         caption: "Work panels stack and sink back as the next one slides over.",
       },
       {
-        src: "/work/portfolio/case-study.png",
+        src: portfolioCaseStudy,
         alt: "The top of the Money case study: title, intro, links and facts",
         caption: "Each project gets a case study, built ahead of time from the same data.",
       },
       {
-        src: "/work/portfolio/skills.png",
+        src: portfolioSkills,
         alt: "The Skills and Contact sections: skill groups as chips and a large email link",
         caption: "Skills as chips that rise in turn, then the contact block.",
       },
       {
-        src: "/work/portfolio/phone-home.png",
+        src: portfolioPhoneHome,
         alt: "The home page on a phone",
         caption: "The hero on a phone.",
         phone: true,
       },
       {
-        src: "/work/portfolio/phone-experience.png",
+        src: portfolioPhoneExperience,
         alt: "The Experience section on a phone: company names stacked, with SADAD open showing its highlights",
         caption: "On phones, the same list, one job open at a time.",
         phone: true,
       },
       {
-        src: "/work/portfolio/phone-menu.png",
+        src: portfolioPhoneMenu,
         alt: "The mobile menu open, with the section links and social links",
         caption: "The mobile menu, a native dialog.",
         phone: true,
       },
       {
-        src: "/work/portfolio/phone-case-study.png",
+        src: portfolioPhoneCaseStudy,
         alt: "The Money case study on a phone",
         caption: "A case study on a phone.",
         phone: true,

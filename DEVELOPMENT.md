@@ -419,10 +419,23 @@ at 0.4 opacity are tuned to stay at 3.5:1 against `--bg`.
 The sizes and where each image goes are in the README ("Screenshots"). How it's
 wired:
 
+- Every screenshot is a static import (`src/assets/work/<slug>/`, imported in
+  `src/data/index.tsx`), so `image` and `Shot.src` are `StaticImageData`, not
+  strings. Files in `public/` are served with `max-age=0, must-revalidate`
+  (Next can't know they won't change), and the optimized copies inherit that,
+  so the browser re-checks every image on every visit. An imported file gets a
+  content hash in its URL, which lets the optimized copies be cached for a
+  year, and Next generates a tiny blur preview for `placeholder="blur"` at
+  build time. Need the plain URL (the JSON-LD `image`, the gallery link)? Use
+  `.src`.
+
 - `Screenshot` (`src/components/screenshot`) renders the main image with
   `next/image` and `fill`, `object-fit: cover` and `object-position: top left`,
   so the frame decides the shape: the Work panel's height on desktop, 2:1 on a
   case study, 4:3 on phones. Without `src` it draws the striped placeholder.
+  The blur preview is a background that `next/image` centers with an inline
+  style; `.image` pins it top-left with `!important` so it lines up with the
+  crop.
 - The frame is a bleed: a dark well (`--bg`, so it reads on every Work panel
   shade) with the image wrapper (`.media`) inset from the top and left and
   running 16px past the right and bottom edges. Only its top-left corner shows,
@@ -434,9 +447,10 @@ wired:
   `case-study` stay around `Screenshot`, so the morph still works with real
   images.
 - The gallery is in `case-study`: desktop and phone shots go in two separate
-  grids (two and four columns, one and two on phones). Their images use fixed
-  `width`/`height` (1600 × 1000 and 780 × 1688), so a gallery image of another
-  size would be stretched. Each links to its file, opening in a new tab.
+  grids (two and four columns, one and two on phones). Their width and height
+  come from the imported file, so an image of another size keeps its own
+  shape (and makes its row uneven). Each links to its file (`shot.src.src`),
+  opening in a new tab.
 - Gallery shots are matted, not bled: the whole screen has to show. The link
   is the mat (`--surface-3`, light enough to stand out from the dark
   screenshots) and its padding; the image's corner is `--corner` minus

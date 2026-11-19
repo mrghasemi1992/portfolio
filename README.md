@@ -147,14 +147,21 @@ logo.
 
 ### Screenshots
 
-Images live in `public/work/<slug>/`. To change one, replace the file with
-another of the same size and keep the name; to add one, put the file there and
-add its path to the project.
+Images live in `src/assets/work/<slug>/` and are imported at the top of
+`src/data/index.tsx` (`import moneyReports from "@/assets/work/money/reports.png"`),
+then used by that name in the project. To change one, replace the file with
+another of the same size and keep the name; to add one, put the file there, add
+an import line, and use its name in the project.
+
+Importing them, instead of linking to a file in `public/`, is what makes them
+load fast: each build gives every image a new URL when its file changes, so
+browsers can keep it for a year without asking again, and each one shows a
+blurred preview while the sharp version loads.
 
 | Image | Size | Where it goes in `projects` |
 | --- | --- | --- |
 | Main screenshot | 1600 × 1200 (4:3) | `image`, with `screenshot` as its alt text |
-| Gallery, desktop | 1600 × 1000 (16:10) | `gallery`: `{ src, alt, caption }` |
+| Gallery, desktop | 1600 × 1000 (16:10) | `gallery`: `{ src, alt, caption }`, `src` being the imported name |
 | Gallery, phone | 780 × 1688 (a 390 × 844 screen at 2×) | `gallery`: `{ src, alt, caption, phone: true }` |
 
 The main screenshot is cropped from the top: to 2:1 on a case study on

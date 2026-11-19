@@ -96,7 +96,7 @@ Page sections, in the order they appear on the home page:
 | Component | What it is |
 | --- | --- |
 | `nav` | Sticky header: logo, section links with a sliding highlight, Contact button, and the mobile menu. **Client component.** |
-| `hero` | Name (letters drop in), role, intro, and the black-and-white portrait standing in the right half (above the name on phones) |
+| `hero` | Name (letters drop in), role, intro, and the photo standing in a wide lime tile at the bottom right (above the name on phones) |
 | `marquee` | Strip of skills scrolling sideways. Decorative, hidden from screen readers |
 | `about` | The summary, lit up line by line as you scroll |
 | `experience` | One row per job, the company as a big headline. A click opens its bullets; one job is open at a time, and the current job starts open |
@@ -177,16 +177,17 @@ in uppercase in CSS, not in the text.
   and that's hidden from screen readers. The plain name sits next to it in an
   `.sr-only` span, so screen readers and search engines read the name as a
   whole.
-- **The hero portrait** is `profile.portrait`, a cut-out PNG (transparent
-  background) imported from `src/assets/profile/`. The file stays in color; the
-  hero turns it black and white, adds a little contrast and film grain with an
-  SVG filter (`#portrait-grain`, drawn inside the hero), and fades its bottom
-  into the page with a `mask-image`. The grain hides that the source is a phone
-  photo; keep it if you swap the photo for one of similar quality. The filter's
-  `<svg>` is sized 0, not `display: none`, which would switch the filter off.
-  On desktop it stands on the hero's bottom edge, under the name; on phones it
-  sits above the name and runs off the right edge (`overflow-x: clip` on the
-  hero).
+- **The hero portrait** (hidden while `SHOW_HERO_PHOTO` is `false`; the hero
+  is then the name and intro alone) is `profile.portrait`, a cut-out PNG (transparent
+  background) imported from `src/assets/profile/`, shown in color in a wide
+  lime tile (4:3, no logo). The photo is 112.5% of the tile's width and stands
+  on its bottom edge, so the head rises above the tile. `.clip` cuts it with
+  `clip-path: inset(-60% 0 0 0 round …)`: the tile's sides and rounded bottom
+  corners clip the shoulders, while the negative top inset leaves room for the
+  head. Keeping the photo small is deliberate: the source is a soft phone
+  photo, and at this size it reads sharp. Desktop: bottom right, 300–440px
+  wide (`clamp`, so the name keeps its room at narrow desktop widths). Phones:
+  220px, above the name, with a top margin for the head.
 
 ## 3. The browser features this site relies on
 
@@ -229,7 +230,7 @@ Where each one lives:
 
 | Effect | File |
 | --- | --- |
-| Hero name shrinks and fades, portrait sinks and fades | `hero/styles.module.css` |
+| Hero name shrinks and fades, photo tile sinks, tilts and fades | `hero/styles.module.css` |
 | Nav background fades in after 160px | `nav/styles.module.css` (on `::after`) |
 | About words light up | `about/styles.module.css` |
 | Section headings rise | `section/styles.module.css` |

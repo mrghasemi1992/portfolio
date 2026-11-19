@@ -76,6 +76,7 @@ save, and check the page.
 | GitHub and LinkedIn links | `socials` |
 | Links in the top nav | `navLinks`, `contactLink` |
 | Your photo in the hero, and its description for screen readers | `profile.portrait` |
+| Show or hide the photo tile in the hero | `SHOW_HERO_PHOTO` |
 | The site's address | `SITE_URL` |
 
 ### Edit your intro or About text
@@ -146,9 +147,12 @@ Replace `src/assets/profile/portrait.png` with a new photo and keep the name.
 It needs a transparent background (on a Mac, open the photo in Preview or
 Photos and use "Remove Background", or drag the subject out of the photo), a
 roughly square crop tight around your head and shoulders, and at least 1000
-pixels across. Leave it in color: the site turns it black and white and adds
-grain. If the new photo isn't 1100 × 1060, update the `aspect-ratio` of
-`.portrait` in `src/components/hero/styles.module.css` to its width / height.
+pixels across. It's shown in color, standing in the lime tile with your head
+above its top edge, so leave a little room above your head and none below the
+crop's bottom edge.
+
+The tile is hidden for now, waiting for a sharper photo. Once you've replaced
+the file, set `SHOW_HERO_PHOTO = true` in `src/data/index.tsx` to show it.
 
 ### Screenshots
 

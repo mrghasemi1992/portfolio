@@ -29,6 +29,10 @@ import portfolioWork from "@/assets/work/portfolio/work.png";
 // The www host is the primary one: the bare domain redirects to it (308).
 export const SITE_URL = "https://www.mrghasemi1992.ir";
 
+// Temporarily hides the photo tile in the hero, until there's a sharper photo
+// for `profile.portrait`. Flip to true to show it.
+export const SHOW_HERO_PHOTO = false;
+
 export const socials = [
   { label: "GitHub", href: "https://github.com/mrghasemi1992" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/mrghasemi1992/" },
@@ -137,7 +141,7 @@ export const profile = {
   // Words of the summary drawn in the accent color.
   summaryHighlight: ["internal", "tools"],
   email: "mrghasemi1992@gmail.com",
-  // Stands in the hero's right half (above the name on phones), in black and white.
+  // Stands in the lime tile at the hero's bottom right (above the name on phones).
   portrait: {
     src: portrait,
     alt: "Mohammad Reza Ghasemi, smiling, arms crossed",

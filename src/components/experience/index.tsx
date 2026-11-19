@@ -1,56 +1,48 @@
-import RoleSheet from "@/components/role-sheet";
+import Accordion from "@/components/accordion";
 import Section from "@/components/section";
 import { experience } from "@/data";
 import styles from "./styles.module.css";
 
+/**
+ * One row per job: the company as a big headline that opens its bullets.
+ * Native <details> sharing one `name`, so opening a job closes the one that
+ * was open; `Accordion` keeps the clicked row from jumping when that happens.
+ * The current job (the first) starts open.
+ */
 export default function Experience() {
   return (
-    <Section title="Experience" className={styles.section}>
-      {/* On desktop the row pins while vertical scrolling pans it sideways;
-          elsewhere it is a swipeable row that snaps to each card. */}
-      <div className={styles.pinArea}>
-        <div className={styles.pin}>
-          <ol className={styles.track}>
-            {experience.map((job, i) => {
-              const count = job.bullets.length;
-              // The first card is the current job, drawn in the accent color.
-              const preview = job.bullets.slice(0, i === 0 ? 2 : 3);
-              return (
-                <li
-                  key={job.company}
-                  className={i === 0 ? `${styles.card} ${styles.current}` : styles.card}
-                >
-                  <div className={styles.meta}>
-                    <span>{job.period}</span>
-                    <span>
-                      {count} {count === 1 ? "highlight" : "highlights"}
-                    </span>
-                  </div>
-                  <h3 className={styles.company}>{job.company}</h3>
-                  <span className={styles.role}>{job.role}</span>
-                  <ul className={styles.bullets}>
-                    {preview.map((bullet) => (
-                      <li key={bullet}>
-                        <span className={styles.clamp}>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <RoleSheet
-                    job={job}
-                    label={count > 2 ? `Read all ${count}` : "Read more"}
-                    className={styles.more}
-                  />
-                </li>
-              );
-            })}
-          </ol>
-          {/* Phones only: a small slider that follows the row's sideways
-              scroll, so it's clear there are more cards to the right. */}
-          <div className={styles.scrollbar} aria-hidden="true">
-            <span className={styles.thumb} />
-          </div>
-        </div>
-      </div>
+    <Section title="Experience">
+      <Accordion className={styles.list}>
+        {experience.map((job, i) => (
+          <details
+            key={job.company}
+            name="experience"
+            open={i === 0}
+            className={styles.item}
+          >
+            <summary className={styles.summary}>
+              <h3 className={styles.company}>{job.company}</h3>
+              <span className={styles.meta}>
+                <span className={styles.role}>{job.role}</span>
+                <span>{job.period}</span>
+              </span>
+              <span className={styles.icon} aria-hidden="true" />
+            </summary>
+            {/* Long lists split into two columns on desktop. */}
+            <ul
+              className={
+                job.bullets.length > 3
+                  ? `${styles.bullets} ${styles.columns}`
+                  : styles.bullets
+              }
+            >
+              {job.bullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </Accordion>
     </Section>
   );
 }

@@ -96,7 +96,7 @@ Page sections, in the order they appear on the home page:
 | `hero` | Name (letters drop in), role, intro, and the optional logo tile |
 | `marquee` | Strip of skills scrolling sideways. Decorative, hidden from screen readers |
 | `about` | The summary, lit up line by line as you scroll |
-| `experience` | One card per job. Pins and pans sideways on desktop, a swipeable row on phones |
+| `experience` | One row per job, the company as a big headline. A click opens its bullets; one job is open at a time, and the current job starts open |
 | `projects` | The Work section: one panel per project, stacking on desktop |
 | `skills` | Skill groups as chips |
 | `contact` | Email and social links |
@@ -108,7 +108,7 @@ Shared pieces:
 | Component | What it is |
 | --- | --- |
 | `section` | A `<section>` with an id and the big uppercase heading. **The id is the title in lowercase**, which is what the nav links point at (`title="Work"` → `#work`). |
-| `role-sheet` | The "Read all" button and the full-screen dialog with a job's bullets. **Client component.** |
+| `accordion` | Wraps the Experience rows and keeps a clicked row in place when the open row above it closes (see §3). **Client component.** |
 | `screenshot` | A project's main image (`next/image`, cropped from the top), or a striped placeholder when the project has no `image` |
 | `page-transition` | An empty marker that makes every page change start a view transition (see §3) |
 | `json-ld` | Writes structured data for search engines into a `<script>` tag |
@@ -118,11 +118,12 @@ Shared pieces:
 
 **Why only two client components.** `nav` needs the browser to open the mobile
 menu and to watch which section is on screen (an `IntersectionObserver` watches
-a thin band 40% down the screen). `role-sheet` needs it to open and close its
-dialog. Everything else is static. Both use the native `<dialog>` element with
-`showModal()`, which traps focus and closes on Escape with no extra code.
-`globals.css` stops the page behind from scrolling while a dialog is open
-(`html:has(dialog[open])`).
+a thin band 40% down the screen). The menu is a native `<dialog>` opened with
+`showModal()`, which traps focus and closes on Escape with no extra code;
+`globals.css` stops the page behind from scrolling while it's open
+(`html:has(dialog[open])`). `accordion` only corrects the scroll position when
+an Experience row opens; the rows themselves are plain HTML and open and close
+without it. Everything else is static.
 
 ### Styling
 
@@ -197,9 +198,8 @@ back, it plays backwards.
   name and the nav background use it.
 - `view()` ties progress to the element moving through the viewport. Headings,
   About, skills and Contact use it.
-- A **named timeline** lets one element drive another. The Experience row
-  publishes `--experience` (or `--experience-row` on phones), and the cards or
-  the little slider read it.
+- A **named timeline** lets one element drive another. The Work section
+  publishes `--work`, and the panels inside it read it.
 
 Every one of these is wrapped like this, so unsupported browsers and people who
 turn motion off get a still page:
@@ -220,14 +220,12 @@ Where each one lives:
 | Nav background fades in after 160px | `nav/styles.module.css` (on `::after`) |
 | About words light up | `about/styles.module.css` |
 | Section headings rise | `section/styles.module.css` |
-| Experience row pins and pans (desktop) | `experience/styles.module.css` |
-| Experience row nudges and slider follows (phones) | `experience/styles.module.css` |
 | Work panels stack and sink (desktop) | `projects/styles.module.css` |
 | Skill chips rise in turn | `skills/styles.module.css` |
 | Contact block grows | `contact/styles.module.css` |
 
-The hero letters, the marquee and the dialogs use ordinary time-based
-animations.
+The hero letters, the marquee, the menu dialog and the Experience rows
+(bullets rise in when a row opens) use ordinary time-based animations.
 
 ### View transitions (page changes)
 
@@ -262,9 +260,25 @@ Browsers without anchor positioning just fill the active link instead.
 ### The `<dialog>` element
 
 `dialog.showModal()` opens the element above everything, makes the rest of the
-page inert, moves focus into it and closes it on Escape. `role-sheet` catches
-Escape (`onCancel`) so the closing animation still plays, unless reduced motion
-is on.
+page inert, moves focus into it and closes it on Escape. The mobile menu uses
+it.
+
+### One open at a time: `<details name>`
+
+Each Experience row is a `<details>` with its `<summary>`, all sharing
+`name="experience"`. Giving them one name makes the browser keep only one open:
+opening a row closes the others, with no JavaScript (Chrome 120, Safari 17.2,
+Firefox 130; older browsers just let several stay open). They work by keyboard
+and screen readers announce them as expandable.
+
+The catch: when the open row is above the one you click, closing it shrinks the
+page above your row, and the row jumps up, often off screen. `accordion`
+handles the click itself: it notes where the row is, opens it (which closes the
+other one), measures again and scrolls the page back by the difference, all in
+the same frame, so nothing visibly moves. It uses `behavior: "instant"`,
+because `<html>` has smooth scrolling and a smooth scroll would show the jump.
+Don't do the correction in `requestAnimationFrame` or the `toggle` event: both
+run after the jump, and the first doesn't run at all in a background tab.
 
 ## 4. Rules
 
@@ -316,8 +330,7 @@ Each of these fixed a measured problem on phones:
   `filter: brightness()`, on desktop only.
 - **No `filter: blur()` in transitions.** It's one of the most expensive
   effects on phone GPUs.
-- **The pinned Experience row and the stacking Work panels are desktop-only**
-  (above 760px).
+- **The stacking Work panels are desktop-only** (above 760px).
 - **About words are `inline-block`.** An inline span takes its `view()`
   position from the whole paragraph, so every line would light up at once.
 - **Keep `data-scroll-behavior="smooth"` on `<html>`.** It lets Next.js turn

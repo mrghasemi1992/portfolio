@@ -20,7 +20,7 @@ html {
   background: var(--bg);
   color-scheme: dark;
 }
-/* A modal dialog (menu, experience details) locks the page behind it. */
+/* The mobile menu (a modal dialog) locks the page behind it. */
 html:has(dialog[open]) {
   overflow: hidden;
 }

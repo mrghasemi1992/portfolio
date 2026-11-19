@@ -90,14 +90,13 @@ export default function CaseStudy({ project, next }: Props) {
           {desktopShots.length > 0 && (
             <ul className={styles.gallery}>
               {desktopShots.map((shot) => (
-                <li key={shot.src}>
+                <li key={shot.src.src}>
                   <figure className={styles.figure}>
-                    <a href={shot.src} target="_blank" rel="noopener noreferrer" className={styles.shotLink}>
+                    <a href={shot.src.src} target="_blank" rel="noopener noreferrer" className={styles.shotLink}>
                       <Image
                         src={shot.src}
                         alt={shot.alt}
-                        width={1600}
-                        height={1000}
+                        placeholder="blur"
                         sizes="(max-width: 760px) 100vw, (max-width: 1360px) 50vw, 640px"
                         className={styles.galleryImage}
                       />
@@ -112,14 +111,13 @@ export default function CaseStudy({ project, next }: Props) {
           {phoneShots.length > 0 && (
             <ul className={styles.phones}>
               {phoneShots.map((shot) => (
-                <li key={shot.src}>
+                <li key={shot.src.src}>
                   <figure className={styles.figure}>
-                    <a href={shot.src} target="_blank" rel="noopener noreferrer" className={styles.shotLink}>
+                    <a href={shot.src.src} target="_blank" rel="noopener noreferrer" className={styles.shotLink}>
                       <Image
                         src={shot.src}
                         alt={shot.alt}
-                        width={780}
-                        height={1688}
+                        placeholder="blur"
                         sizes="(max-width: 760px) 50vw, 320px"
                         className={styles.galleryImage}
                       />

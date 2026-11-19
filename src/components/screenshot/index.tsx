@@ -1,12 +1,12 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 
 import styles from "./styles.module.css";
 
 type Props = {
   /** The image's alt text, or the text in the empty slot when there's no image. */
   label: string;
-  /** Path under public/. Without it, a striped placeholder shows `label`. */
-  src?: string;
+  /** An imported image. Without it, a striped placeholder shows `label`. */
+  src?: StaticImageData;
   /** How wide the slot is at each screen size, so the browser picks the right file. */
   sizes: string;
   /** Load it right away: for the main image at the top of a page. */
@@ -23,7 +23,15 @@ export default function Screenshot({ label, src, sizes, preload, className }: Pr
       {/* The wrapper is what the Work panel moves on hover. */}
       <div className={styles.media}>
         {src ? (
-          <Image src={src} alt={label} fill sizes={sizes} preload={preload} className={styles.image} />
+          <Image
+            src={src}
+            alt={label}
+            fill
+            sizes={sizes}
+            preload={preload}
+            placeholder="blur"
+            className={styles.image}
+          />
         ) : (
           <div className={styles.placeholder} role="img" aria-label={label}>
             {label}

@@ -26,7 +26,7 @@ Don't run `npm run build` while the dev server is up: it overwrites `.next` and 
 - **Projects.** `projects` is `allProjects` minus entries with `hidden: true` (Orange, for now); everything (cards, pages, sitemap, OG images) reads `projects`. Screenshots live in `public/work/<slug>/`: main `image` 1600×1200 (cropped from the top), gallery 1600×1000 or 780×1688 with `phone: true` (sizes in README "Screenshots").
 - **Computed copy.** The years of experience in `profile.intro`/`summary` come from the earliest `experience[].period`, parsed as `Mon YYYY - …`. `layout.tsx` sets `revalidate = 86400` so prerendered pages pick up the new number daily without a deploy.
 - **Rendering.** Every page is a Server Component, prerendered at build time. `/work/[slug]` is built from `projects` via `generateStaticParams` with `dynamicParams = false`, so adding a project creates its page, OG image (`work/[slug]/opengraph-image.tsx`) and sitemap entry; unknown slugs 404.
-- **Client components:** only `nav` (mobile menu `<dialog>`, active-section `IntersectionObserver`) and `role-sheet` (experience `<dialog>`). Keep it that way unless interactivity requires otherwise.
+- **Client components:** only `nav` (mobile menu `<dialog>`, active-section `IntersectionObserver`) and `accordion` (keeps a clicked Experience row in place when the open one above it closes). Keep it that way unless interactivity requires otherwise.
 - **Section ids** come from `<Section title>` lowercased; `navLinks` hrefs (`/#work`) must match them for the nav highlight to work.
 - **Components:** one folder each, `src/components/<kebab-name>/index.tsx` + `styles.module.css`. Import via `@/`.
 - **SEO:** metadata in `layout.tsx`, overridden per case study in `generateMetadata`. JSON-LD (`WebSite`+`Person` on home, `CreativeWork`+`BreadcrumbList` per case study) linked by `@id`. Project link labels `"Code"` and `"Live site"` are read by the JSON-LD. `SITE_URL` must stay the `www` host (the bare domain 308s to it).
@@ -39,7 +39,7 @@ Don't run `npm run build` while the dev server is up: it overwrites `.next` and 
 - **`view-transition-name` goes in `globals.css`** on a data attribute (`[data-site-header]`), never in a module (it gets renamed).
 - **Motion is CSS only**, no animation library. Scroll-driven animations (`animation-timeline: scroll()`/`view()`) must be wrapped in `@media (prefers-reduced-motion: no-preference)` + `@supports (animation-timeline: …)` and animate only `transform`/`opacity` (the Work `sink` keyframe's `filter: brightness()` is the one existing exception — don't add more).
 - **Never wrap `<main>` in `<ViewTransition>`** (snapshots the ~7800px page, drops frames on phones). `page-transition` wraps an empty marker; `globals.css` slides the `root` snapshot by `nav-forward`/`nav-back` type, set by `<Link transitionTypes>`. Project screenshot and title share `shot-<slug>`/`title-<slug>` names for the morph.
-- **Desktop-only motion:** the pinned Experience row and stacking Work panels run above 760px only (the single breakpoint).
+- **Desktop-only motion:** the stacking Work panels run above 760px only (the single breakpoint).
 - Keep `data-scroll-behavior="smooth"` on `<html>`, `inline-block` on About words, and `.sr-only` copies next to visually split text (hero `h1`).
 - **Fixed-count styles:** Work panels are styled for 2 or 3 projects, hero for 4 name words, skill chip stagger for 7. Extending past them needs CSS changes (DEVELOPMENT §5, "Hidden limits").
 

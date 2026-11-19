@@ -89,8 +89,8 @@ own. The site rebuilds once a day to pick that up.
 
 ### Add a job
 
-Add an entry to the **top** of `experience`. The first card is drawn as your
-current job, in the accent color.
+Add an entry to the **top** of `experience`. The first job is treated as your
+current one: it starts open, with its name in the accent color.
 
 ```ts
 {
@@ -105,7 +105,9 @@ Write `period` exactly like this: a three-letter English month, the year, then
 ` - ` with a space on each side. The years-of-experience count reads the start
 date from it, and it can't read another format.
 
-The card shows the first two or three bullets. "Read all" opens the full list.
+Each job is a row with the company name, role and dates. Clicking it opens
+all its bullets, in two columns on desktop when there are more than three.
+Only one job is open at a time.
 
 ### Add a project
 

@@ -171,24 +171,33 @@
   flex-direction: column;
   gap: 12px;
 }
+/* A light mat around each shot: the screenshots are dark, so a dark mat would
+   vanish into them. The image's corner is the frame's minus the mat, so the
+   two curves stay parallel. Phone shots get a thinner mat and rounder corners,
+   which reads as the phone's bezel. */
 .shotLink {
+  --mat: 10px;
+  --corner: 18px;
   display: block;
-  overflow: hidden;
-  border-radius: 16px;
-  border: 1px solid var(--line);
+  padding: var(--mat);
+  border-radius: var(--corner);
+  border: 1px solid var(--line-strong);
   background: var(--surface-3);
-  transition: border-color 250ms;
+  transition: background 250ms;
 }
 .shotLink:hover {
-  border-color: var(--line-strong);
+  background: var(--raised);
 }
 .phones .shotLink {
-  border-radius: 24px;
+  --mat: 8px;
+  --corner: 28px;
 }
 .galleryImage {
   display: block;
   width: 100%;
   height: auto;
+  border-radius: calc(var(--corner) - var(--mat));
+  outline: 1px solid var(--line);
 }
 .caption {
   font-size: 15px;
@@ -317,7 +326,8 @@
     gap: 24px 12px;
   }
   .phones .shotLink {
-    border-radius: 16px;
+    --mat: 6px;
+    --corner: 20px;
   }
   .caption {
     font-size: 14px;

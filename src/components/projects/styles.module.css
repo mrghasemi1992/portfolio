@@ -119,11 +119,13 @@
 .shot {
   height: 100%;
 }
+/* The screenshot slides up and left, out of its well. Screenshot's image
+   overshoots the right and bottom edges by 16px, so up to that is safe. */
 .shot > div {
   transition: transform 700ms var(--ease-out);
 }
 .panel:hover .shot > div {
-  transform: scale(1.04);
+  transform: translate(-10px, -10px);
 }
 
 /* Each panel sinks back while the next one slides over it. */

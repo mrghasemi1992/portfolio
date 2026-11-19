@@ -109,7 +109,7 @@ Shared pieces:
 | --- | --- |
 | `section` | A `<section>` with an id and the big uppercase heading. **The id is the title in lowercase**, which is what the nav links point at (`title="Work"` → `#work`). |
 | `accordion` | Wraps the Experience rows and keeps a clicked row in place when the open row above it closes (see §3). **Client component.** |
-| `screenshot` | A project's main image (`next/image`, cropped from the top), or a striped placeholder when the project has no `image` |
+| `screenshot` | A project's main image (`next/image`), or a striped placeholder when the project has no `image`. Drawn as a bleed: a dark well with the image inset top-left, running off the right and bottom edges |
 | `page-transition` | An empty marker that makes every page change start a view transition (see §3) |
 | `json-ld` | Writes structured data for search engines into a `<script>` tag |
 | `logo` | The logo as an inline SVG, drawn in the current text color |
@@ -420,9 +420,14 @@ The sizes and where each image goes are in the README ("Screenshots"). How it's
 wired:
 
 - `Screenshot` (`src/components/screenshot`) renders the main image with
-  `next/image` and `fill`, `object-fit: cover` and `object-position: top`, so
-  the frame decides the shape: the Work panel's height on desktop, 2:1 on a
+  `next/image` and `fill`, `object-fit: cover` and `object-position: top left`,
+  so the frame decides the shape: the Work panel's height on desktop, 2:1 on a
   case study, 4:3 on phones. Without `src` it draws the striped placeholder.
+- The frame is a bleed: a dark well (`--bg`, so it reads on every Work panel
+  shade) with the image wrapper (`.media`) inset from the top and left and
+  running 16px past the right and bottom edges. Only its top-left corner shows,
+  so only that corner is rounded. The Work panel's hover slides `.media` up
+  and left by 10px; keep that under the 16px overshoot or the well shows.
   It takes `sizes`, so the browser downloads a file that fits the slot, and
   `preload` for the case study's image, which is the largest thing on screen.
 - The `<ViewTransition name="shot-...">` wrappers in `projects` and
@@ -432,6 +437,10 @@ wired:
   grids (two and four columns, one and two on phones). Their images use fixed
   `width`/`height` (1600 × 1000 and 780 × 1688), so a gallery image of another
   size would be stretched. Each links to its file, opening in a new tab.
+- Gallery shots are matted, not bled: the whole screen has to show. The link
+  is the mat (`--surface-3`, light enough to stand out from the dark
+  screenshots) and its padding; the image's corner is `--corner` minus
+  `--mat`, so the curves stay parallel. Change both variables together.
 
 ### Hidden limits
 
